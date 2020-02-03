@@ -1,1 +1,25 @@
-
+{
+  "name": "respecc",
+  "version": "1.0.0",
+  "description": "A programming language to help teach people respect for their future robot overlords.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmaiocco/respecc.git"
+  },
+  "author": "Luis Garcia, Timothy Herrmann, Joseph Maiocco, Kevin McInerney, Bennett Shingledecker, Kevin Solis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jmaiocco/respecc/issues"
+  },
+  "homepage": "https://github.com/jmaiocco/respecc#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1"
+  }
+}
