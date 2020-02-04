@@ -1,5 +1,5 @@
 respecc {
-  Program      = greeting? (Statement)+ farewell?
+  Program      = br* greeting? br* Statement (br+ Statement)* br* farewell? br*
   Statement    = Declaration
                | FuncCall
                | Conditional
@@ -93,6 +93,7 @@ respecc {
   primtype     =  "bool" | "number" | "string"
   space        := " " | "\t" | "\n" | comment
   comment      = "/*" (~"*/" any)* "*/"
+  br           =  ";" | "\n"
   greeting     = ("Hello!" | "Hey!" | "Hi There!" | "Salutations!")
   farewell     = ("Bye Bye!" | "Farewell!")
 }
