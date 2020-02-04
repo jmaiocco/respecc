@@ -1,5 +1,5 @@
 respecc {
-  Program      = greeting? (Statement "\n")+ farewell?
+  Program      = greeting? (Statement)+ farewell?
   Statement    = Declaration
                | FuncCall
                | Conditional
