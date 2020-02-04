@@ -1,5 +1,5 @@
 respecc {
-  Program      = greeting? Statement+ farewell?
+  Program      = greeting? (Statement "\n")+ farewell?
   Statement    = Declaration
                | FuncCall
                | Conditional
@@ -31,9 +31,9 @@ respecc {
   //Field        = id ":" typeId
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id (":" Type)?
-  Block       =  Statement*                                    -- impolite
-              |  "could you..." Statement* "Thank You."        -- polite
-              |  "could you..." Statement*                     -- polite_short
+  Block       =  "could you..." (Statement "\n")* "Thank You."        -- polite
+              |  "could you..." (Statement "\n")*                     -- polite_short
+              |  (Statement "\n")*                                     -- impolite
   Exp         =  NonemptyListOf<Exp1, orop>                    -- binary
   Exp1        =  NonemptyListOf<Exp2, andop>                   -- binary
   Exp2        =  Exp3 (compareop Exp3)?                        -- binary
