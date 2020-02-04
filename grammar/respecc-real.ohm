@@ -66,13 +66,13 @@ respecc {
   orop         = "||" | "or"
   mulop        = "*" | "/" | "%" | "times" | "divided by" | "modded with"
   addop        = "+" | "-" | "plus" | "minus"
-  compareop    = "<=" | "<" | ">=" | ">" | "==" | "!=" | "less than or equal to"
-               | "less than" | "greater than or equal to" | "greater than" |
-               | "equal to" | "not equal to"
+  compareop    = "<=" | "<" | ">=" | ">" | "==" | "!=" | "is less than or equal to"
+               | "is less than" | "is greater than or equal to" | "is greater than" |
+               | "is equal to" | "is not equal to"
   incop        =  "++" | "--"
   prefixop     =  ~"--" "-" | "!" | "not"
   type         =  "bool" | "number" | "string" | id
-  space        = " " | "\t" | "\n" | comment
+  space        := " " | "\t" | "\n" | comment
   comment      = "/*" (~"*/" any)* "*/"
   greeting     = ("Hello!" | "Hey!" | "Hi There!" | "Salutations!")
   farewell     = ("Bye Bye!" | "Farewell!")
