@@ -1,0 +1,79 @@
+respecc {
+  Program      = greeting? "\n" Statement+ "\n" farewell?
+  Statement    = Declaration
+               | FuncCall
+               | Conditional
+               | Loop
+               | Assignment
+  Conditional  =
+  Loop         =
+  FuncCall     =
+  Assignment   = id "=" Exp                                   -- impolite
+               | "Please populate " id " with " Exp "."       -- polite
+  Declaration  = VarDec | TypeDec | FunDec
+  //TypeDec      = "type" typeId "=" Type
+  //Type         = typeId                                     -- named
+  //             | ArrayType
+  //             | RecordType
+  //ArrayType    = "array" "of" typeId
+  //RecordType   = "{" ListOf<Field, ","> "}"
+  //FunDec       = "function" id Params (":" typeId)? "=" Exp
+  VarDec       = "gimmeh" id (":" type)? "=" Exp                     -- impolite
+               | "Please declare " id (" as a " type)? (" as " Exp)? -- polite
+
+
+  //Field        = id ":" typeId
+  //Params       = "(" ListOf<Param, ","> ")"
+  //Param        = id ":" typeId
+  Block       =  "Excuse me...\n" Statement* "\nThank You.\n"
+  Exp         =  NonemptyListOf<Exp1, orop>                    -- binary
+  Exp1        =  NonemptyListOf<Exp2, andop>                   -- binary
+  Exp2        =  Exp3 (compareop Exp3)?                        -- binary
+  Exp3        =  NonemptyListOf<Exp4, addop>                   -- binary
+  Exp4        =  NonemptyListOf<Exp5, mulop>                   -- binary
+  Exp5        =  NonemptyListOf<Exp6, expoop>                  -- binary
+  Exp6        =  prefixop? Exp7                                -- prefix
+  Exp7       =  Literal
+              |  Increment
+              |  Var
+              |  NewObject
+              |  NewArray
+              |  EmptyArray
+              |  "(" Exp ")"                                   -- parens
+//  Exp7         = Call | ArrayExp | RecordExp | ExpSeq | Literal | Lvalue
+//  Literal      = intlit
+//               | stringlit
+//               | "nil"                                      -- nil
+//Lvalue       = Lvalue "[" Exp "]"                         -- subscripted
+//               | Lvalue "." id                              -- field
+//               | id                                         -- id
+  //ArrayExp     = typeId "[" Exp "]" "of" Exp
+  //RecordExp    = typeId "{" ListOf<Binding, ","> "}"
+  //Call         = id "(" ListOf<Exp, ","> ")"
+  //ExpSeq       = "(" ListOf<Exp, ";"> ")"
+  //keyword      = ("array" | "break" | "do" | "else" | "end" | "for"
+  //             | "function" | "if" | "in" | "let" | "nil" | "of"
+  //             | "then" | "to" | "type" | "var" | "while") ~idrest
+  id           = ~keyword letter idrest*
+  idrest       = letter | digit | "_"
+  //typeId       = id
+  intlit       = digit+
+  stringlit    = "\"" char* "\"" | "\'" char* "\'"
+  //char         = ~"\\" ~"\"" ~"\n" any | escape
+  //escape       = "\\" ("\\" | "\"" | "n" | "t" | codepoint)
+  //codepoint    = "u{" hexDigit+ "}"
+  andop        = "&&" | "and"
+  orop         = "||" | "or"
+  mulop        = "*" | "/" | "%" | "times" | "divided by" | "modded with"
+  addop        = "+" | "-" | "plus" | "minus"
+  compareop    = "<=" | "<" | ">=" | ">" | "==" | "!=" | "less than or equal to"
+               | "less than" | "greater than or equal to" | "greater than" |
+               | "equal to" | "not equal to"
+  incop        =  "++" | "--"
+  prefixop     =  ~"--" "-" | "!" | "not"
+  type         =  "bool" | "number" | "string" | id
+  space        = " " | "\t" | "\n" | comment
+  comment      = "/*" (~"*/" any)* "*/"
+  greeting     = ("Hello!" | "Hey!" | "Hi There!" | "Salutations!")
+  farewell     = ("Bye Bye!" | "Farewell!")
+}
