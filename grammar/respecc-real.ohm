@@ -1,5 +1,5 @@
 respecc {
-  Program      = greeting? "\n" Statement+ "\n" farewell?
+  Program      = greeting? Statement+ farewell?
   Statement    = Declaration
                | FuncCall
                | Conditional
@@ -9,11 +9,11 @@ respecc {
                | "Excuse me, if " Exp "," Block ("Otherwise, if " Exp "," Block)* ("Otherwise," Block)? -- if_polite
   Loop         = "while" "(" Exp ")" Block          -- while_impolite
                | "for"  "(" (Type? id "=" Exp)? ";" Exp? ";" Assignment? ")" Block  -- for_impolite
-               | "Excuse me, while " Exp "," Block
-  FuncCall     =
+               | "Excuse me, while " Exp "," Block            -- while_polite
+  FuncCall     = id Params
   Assignment   = id "=" Exp                                   -- impolite
-               | "Please populate " id " with " Exp "."       -- polite
-  Declaration  = VarDec | TypeDec | FunDec
+               | "Please populate " id "with " Exp "."       -- polite
+  Declaration  = VarDec //| TypeDec | FunDec
   Type         =  Type "[" "]"               -- array
                |  primtype
                |  id
@@ -25,15 +25,15 @@ respecc {
   //RecordType   = "{" ListOf<Field, ","> "}"
   //FunDec       = "function" id Params (":" typeId)? "=" Exp
   VarDec       = "gimmeh" id (":" Type)? "=" Exp                     -- impolite
-               | "Please declare " id (" as a " Type)? (" as " Exp)? -- polite
+               | "Please declare " id ("as a " Type)? ("as " Exp)? "." -- polite
 
 
   //Field        = id ":" typeId
-  //Params       = "(" ListOf<Param, ","> ")"
-  //Param        = id ":" typeId
-  Block       =  Statement*
-              |  "could you..." Statement* "Thank You."
-              |  "could you..." Statement*
+  Params       = "(" ListOf<Param, ","> ")"
+  Param        = id (":" Type)?
+  Block       =  Statement*                                    -- impolite
+              |  "could you..." Statement* "Thank You."        -- polite
+              |  "could you..." Statement*                     -- polite_short
   Exp         =  NonemptyListOf<Exp1, orop>                    -- binary
   Exp1        =  NonemptyListOf<Exp2, andop>                   -- binary
   Exp2        =  Exp3 (compareop Exp3)?                        -- binary
@@ -41,16 +41,22 @@ respecc {
   Exp4        =  NonemptyListOf<Exp5, mulop>                   -- binary
   Exp5        =  NonemptyListOf<Exp6, expoop>                  -- binary
   Exp6        =  prefixop? Exp7                                -- prefix
-  Exp7       =  Literal
+  Exp7        =  Literal
               |  Increment
               |  Var
-              |  NewObject
-              |  NewArray
-              |  EmptyArray
+              //|  NewObject
+              //|  NewArray
+              //|  EmptyArray
               |  "(" Exp ")"                                   -- parens
 //  Exp7         = Call | ArrayExp | RecordExp | ExpSeq | Literal | Lvalue
-//  Literal      = intlit
-//               | stringlit
+  Increment   =  incop Var                                     -- prefix
+              |  Var incop                                     -- postfix
+  Var         =  Var "[" Exp "]"            -- subscript
+              |  Var "." id                 -- select
+              |  FuncCall
+              |  id
+  Literal     = intlit
+              | stringlit
 //               | "nil"                                      -- nil
 //Lvalue       = Lvalue "[" Exp "]"                         -- subscripted
 //               | Lvalue "." id                              -- field
@@ -59,6 +65,10 @@ respecc {
   //RecordExp    = typeId "{" ListOf<Binding, ","> "}"
   //Call         = id "(" ListOf<Exp, ","> ")"
   //ExpSeq       = "(" ListOf<Exp, ";"> ")"
+  keyword     =  ("boolean" | "if" | "break" | "else" | "int"
+              |  "for" | "new" | "return" | "char" | "struct"
+              |  "null" | "while" | "real" | "true" | "string"
+              |  "void" | "false" | "length" | "print") ~idrest
   //keyword      = ("array" | "break" | "do" | "else" | "end" | "for"
   //             | "function" | "if" | "in" | "let" | "nil" | "of"
   //             | "then" | "to" | "type" | "var" | "while" | respecc) ~idrest
@@ -67,15 +77,16 @@ respecc {
   //typeId       = id
   intlit       = digit+
   stringlit    = "\"" char* "\"" | "\'" char* "\'"
-  //char         = ~"\\" ~"\"" ~"\n" any | escape
-  //escape       = "\\" ("\\" | "\"" | "n" | "t" | codepoint)
-  //codepoint    = "u{" hexDigit+ "}"
+  char         = ~"\\" ~"\"" ~"\n" any | escape
+  escape       = "\\" ("\\" | "\"" | "n" | "t" | codepoint)
+  codepoint    = "u{" hexDigit+ "}"
   andop        = "&&" | "and"
   orop         = "||" | "or"
   mulop        = "*" | "/" | "%" | "times" | "divided by" | "modded with"
   addop        = "+" | "-" | "plus" | "minus"
-  compareop    = "<=" | "<" | ">=" | ">" | "==" | "!=" | "is less than or equal to"
-               | "is less than" | "is greater than or equal to" | "is greater than" |
+  expoop       = "**" | "raised to the power of"
+  compareop    = "<=" | "<" | ">=" | ">" | "==" | "!="  | "is less than or equal to"
+               | "is greater than or equal to" | "is less than" | "is greater than"
                | "is equal to" | "is not equal to"
   incop        =  "++" | "--"
   prefixop     =  ~"--" "-" | "!" | "not"
