@@ -5,12 +5,18 @@ respecc {
                | Conditional
                | Loop
                | Assignment
-  Conditional  =
-  Loop         =
+  Conditional  = "if" "(" Exp ")" Block ("else" "if" "(" Exp ")" Block)* ("else" Block)?            -- if_impolite
+               | "Excuse me, if " Exp "," Block ("Otherwise, if " Exp "," Block)* ("Otherwise," Block)? -- if_polite
+  Loop         = "while" "(" Exp ")" Block          -- while_impolite
+               | "for"  "(" (Type? id "=" Exp)? ";" Exp? ";" Assignment? ")" Block  -- for_impolite
+               | "Excuse me, while " Exp "," Block
   FuncCall     =
   Assignment   = id "=" Exp                                   -- impolite
                | "Please populate " id " with " Exp "."       -- polite
   Declaration  = VarDec | TypeDec | FunDec
+  Type         =  Type "[" "]"               -- array
+               |  primtype
+               |  id
   //TypeDec      = "type" typeId "=" Type
   //Type         = typeId                                     -- named
   //             | ArrayType
@@ -18,14 +24,16 @@ respecc {
   //ArrayType    = "array" "of" typeId
   //RecordType   = "{" ListOf<Field, ","> "}"
   //FunDec       = "function" id Params (":" typeId)? "=" Exp
-  VarDec       = "gimmeh" id (":" type)? "=" Exp                     -- impolite
-               | "Please declare " id (" as a " type)? (" as " Exp)? -- polite
+  VarDec       = "gimmeh" id (":" Type)? "=" Exp                     -- impolite
+               | "Please declare " id (" as a " Type)? (" as " Exp)? -- polite
 
 
   //Field        = id ":" typeId
   //Params       = "(" ListOf<Param, ","> ")"
   //Param        = id ":" typeId
-  Block       =  "Excuse me...\n" Statement* "\nThank You.\n"
+  Block       =  Statement*
+              |  "could you..." Statement* "Thank You."
+              |  "could you..." Statement*
   Exp         =  NonemptyListOf<Exp1, orop>                    -- binary
   Exp1        =  NonemptyListOf<Exp2, andop>                   -- binary
   Exp2        =  Exp3 (compareop Exp3)?                        -- binary
@@ -53,7 +61,7 @@ respecc {
   //ExpSeq       = "(" ListOf<Exp, ";"> ")"
   //keyword      = ("array" | "break" | "do" | "else" | "end" | "for"
   //             | "function" | "if" | "in" | "let" | "nil" | "of"
-  //             | "then" | "to" | "type" | "var" | "while") ~idrest
+  //             | "then" | "to" | "type" | "var" | "while" | respecc) ~idrest
   id           = ~keyword letter idrest*
   idrest       = letter | digit | "_"
   //typeId       = id
@@ -71,7 +79,7 @@ respecc {
                | "is equal to" | "is not equal to"
   incop        =  "++" | "--"
   prefixop     =  ~"--" "-" | "!" | "not"
-  type         =  "bool" | "number" | "string" | id
+  primtype     =  "bool" | "number" | "string"
   space        := " " | "\t" | "\n" | comment
   comment      = "/*" (~"*/" any)* "*/"
   greeting     = ("Hello!" | "Hey!" | "Hi There!" | "Salutations!")
