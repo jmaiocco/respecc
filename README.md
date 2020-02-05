@@ -10,3 +10,9 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 ## List of Features
 
 ## Example Programs
+
+### Hello World
+
+| Respecc++ (Polite) | Respecc++ (Rude) | JavaScript |
+| ------------------ | ---------------- | ---------- |
+|Hello!<br>print "Hello world!"<br>Bye Bye! | print "Hello world!" | console.log("Hello world!")
