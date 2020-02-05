@@ -1,28 +1,30 @@
 respecc {
   Program      = br* greeting? br* Statement (br+ Statement)* br* farewell? br*
   Statement    = Declaration
-               | FuncCall
                | Conditional
                | Loop
+               | FuncCall
                | Assignment
-               | PrintStmt
-  Conditional  = "if" "(" Exp ")" Block br*
-                 ("else" "if" "(" Exp ")" Block)* br*
-                 ("else" Block)?                                -- if_impolite
-               | "Excuse me, if " Exp "," Block br*
-                 ("Otherwise, if " Exp "," Block)* br*
-                 ("Otherwise," Block)?                          -- if_polite
-  Loop         = "while" "(" Exp ")" Block                      -- while_impolite
+               | SimpleStmt
+  SimpleStmt   = "print" "(" Exp? ")"                            -- print
+               | "return" Exp?                                   -- return
+               | "break"                                         -- break
+  Conditional  = "if" "(" Exp ")" Block
+                 (br* "else" "if" "(" Exp ")" Block)*
+                 (br* "else" Block)?                             -- if_impolite
+               | "Excuse me, if " Exp "," Block
+                 (br* "Otherwise, if " Exp "," Block)*
+                 (br* "Otherwise," Block)?                       -- if_polite
+  Loop         = "while" "(" Exp ")" Block                       -- while_impolite
                | "for"  "(" (Type? id "=" Exp)? ";" Exp?
-                 ";" Assignment? ")" Block                      -- for_impolite
-               | "Excuse me, while " Exp "," Block              -- while_polite
+                 ";" Assignment? ")" Block                       -- for_impolite
+               | "Excuse me, while " Exp "," Block               -- while_polite
   FuncCall     = id Params
   Assignment   = Var "=" Exp                                     -- impolite
                | Increment
                | "Please populate " Var "with " Exp "."          -- polite
   Declaration  = VarDec | FunDec// | TypeDec
-  PrintStmt    = "print" "(" Exp ")"
-  Type         =  Type "[" "]"                                  -- array
+  Type         =  Type "[" "]"                                   -- array
                |  primtype
                |  id
   FunDec       = "Objective:" id Params (":" Type)? Block
@@ -53,11 +55,11 @@ respecc {
   Exp7         =  Literal
                |  FuncCall
                |  Var
-               |  "(" Exp ")"                                   -- parens
-  Increment    =  incop Var                                     -- prefix
-               |  Var incop                                     -- postfix
-  Var          =  Var "[" Exp "]"                               -- subscript
-               |  Var "." id                                    -- select
+               |  "(" Exp ")"                                    -- parens
+  Increment    =  incop Var                                      -- prefix
+               |  Var incop                                      -- postfix
+  Var          =  Var "[" Exp "]"                                -- subscript
+               |  Var "." id                                     -- select
                |  id
   Literal      = intlit
                | stringlit
