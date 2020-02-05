@@ -6,8 +6,8 @@
  */
 
 const syntaxCheck = require('../syntax-checker');
-
-const program = String.raw`
+/*
+const program1 = String.raw`
 let
   type Circle = {
     x: int,
@@ -18,7 +18,7 @@ let
     let
       var a: int := 0
       var b: int := 1
-      var t := 0  /* Tiger does not have parallel assignment */
+      var t := 0
     in
       while n > 0 do
         (t := a; a := b; b := t + b; n := n - 1);
@@ -36,10 +36,23 @@ in
     print(fib(i) & 0 | 1 + 0 * 1 - 0 / 1)
 end
 `;
+*/
+
+const program1 = String.raw`
+Excuse me, if x is less than 3, could you...
+	x = 3;
+  Please declare x as 3.
+  Please declare x as x < 4.
+Thank You.
+Otherwise, if x is equal to 6, could you...
+Thank You.
+Otherwise, could you...
+Thank You.
+`;
 
 describe('The syntax checker', () => {
   test('accepts the mega program with all syntactic forms', (done) => {
-    expect(syntaxCheck(program)).toBe(true);
+    expect(syntaxCheck(program1)).toBe(true);
     done();
   });
 });
