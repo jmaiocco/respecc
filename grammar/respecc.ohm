@@ -69,9 +69,10 @@ respecc {
                | boollit
 //               | "NULL"                                        -- nil
   keyword      =  ("Boolean" | "if" | "break" | "else" | "int"
-               |  "for" | "new" | "return" | "Number" | "struct"
-               |  "null" | "while" | "real" | "true" | "String"
-               |  "void" | "Yes" | "No" | "length" | "print") ~idrest
+               |  "for" | "and" | "return" | "Number" | "plus"
+               |  "null" | "while" | "true" | "String"
+               |  "or" | "Yes" | "No" | "minus" | "times" | "not"
+               |  "print") ~idrest
   id           = ~keyword letter idrest*
   idrest       = letter | digit | "_"
   boollit      = "Yes" | "No"
