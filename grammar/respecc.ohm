@@ -5,6 +5,7 @@ respecc {
                | Conditional
                | Loop
                | Assignment
+               | PrintStatement
   Conditional  = "if" "(" Exp ")" Block br*
                  ("else" "if" "(" Exp ")" Block)* br*
                  ("else" Block)?                                -- if_impolite
@@ -19,7 +20,9 @@ respecc {
   Assignment   = Var "=" Exp                                     -- impolite
                | Increment
                | "Please populate " Var "with " Exp "."          -- polite
-
+  PrintStatement = "print" stringlit+ br*                        --stringlit 
+               | "print" id br*                                  --id
+               | "print" Exp br*                                 --Exp
   Declaration  = VarDec //| TypeDec | FuncDec
   Type         =  Type "[" "]"                                  -- array
                |  primtype
