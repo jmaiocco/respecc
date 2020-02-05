@@ -32,10 +32,10 @@ respecc {
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id (":" Type)?
   Block       =  "could you..." br* (Statement br+)* "Thank You."        -- polite
-              |  (Statement "\n")*                                     -- impolite
+              |  "{" br* (Statement br+)* "}"                                    -- impolite
   Exp         =  NonemptyListOf<Exp1, orop>                    -- binary
   Exp1        =  NonemptyListOf<Exp2, andop>                   -- binary
-  Exp2        =  Exp3 (relop Exp3)?                        -- binary
+  Exp2        =  Exp3 (relop Exp3)?                            -- binary
   Exp3        =  NonemptyListOf<Exp4, addop>                   -- binary
   Exp4        =  NonemptyListOf<Exp5, mulop>                   -- binary
   Exp5        =  NonemptyListOf<Exp6, expoop>                  -- binary
@@ -90,7 +90,7 @@ respecc {
   incop        =  "++" | "--"
   prefixop     =  ~"--" "-" | "!" | "not"
   primtype     =  "bool" | "number" | "string"
-  space        := " " | "\t" | comment
+  space        := comment | " " | "\t"
   comment      = "/*" (~"*/" any)* "*/"
   br           =  ";" | "\n"
   greeting     = ("Hello!" | "Hey!" | "Hi There!" | "Salutations!")
