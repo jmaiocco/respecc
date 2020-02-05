@@ -16,8 +16,10 @@ respecc {
                  ";" Assignment? ")" Block                      -- for_impolite
                | "Excuse me, while " Exp "," Block              -- while_polite
   FuncCall     = id Params
-  Assignment   = id "=" Exp                                     -- impolite
-               | "Please populate " id "with " Exp "."          -- polite
+  Assignment   = Var "=" Exp                                     -- impolite
+               | Increment
+               | "Please populate " Var "with " Exp "."          -- polite
+
   Declaration  = VarDec //| TypeDec | FuncDec
   Type         =  Type "[" "]"                                  -- array
                |  primtype
@@ -27,16 +29,16 @@ respecc {
   //             | ArrayType
   //             | RecordType
   //ArrayType    = "array" "of" typeId
-  //Field        = id ":" typeId
+  //Field        = id (":" typeId)?
   //RecordType   = "{" ListOf<Field, ","> "}"
   //FunDec       = "function" id Params (":" typeId)? "=" Exp
   VarDec       = "Please declare " id
-                 ("as a " Type)? ("as " Exp)? "."               -- polite
-               | "gimme" id (":" Type)? "=" Exp                -- impolite
+                 ("as a " Type)? ("as " Exp)? "."                -- polite
+               | "gimme" id (":" Type)? "=" Exp                  -- impolite
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id (":" Type)?
   Block        =  "could you..." br* (Statement br+)*
-                 "Thank You."                                   -- polite
+                  "Thank You."                                   -- polite
                |  "{" br* (Statement br+)* "}"                   -- impolite
               //Lambda or ? :
   Exp          =  Exp orop Exp1                                  -- binary
@@ -55,7 +57,6 @@ respecc {
                |  "-" Exp7                                       -- negate
                |  Exp7
   Exp7         =  Literal
-               |  Increment
                |  Var
                |  "(" Exp ")"                                   -- parens
   Increment    =  incop Var                                     -- prefix
@@ -67,7 +68,7 @@ respecc {
   Literal      = intlit
                | stringlit
                | boollit
-//               | "NULL"                                        -- nil
+//               | "NULL"
   keyword      =  ("Boolean" | "if" | "break" | "else" | "int"
                |  "for" | "and" | "return" | "Number" | "plus"
                |  "null" | "while" | "true" | "String"
