@@ -20,18 +20,16 @@ respecc {
                | Increment
                | "Please populate " Var "with " Exp "."          -- polite
 
-  Declaration  = VarDec //| TypeDec | FuncDec
+  Declaration  = VarDec | FunDec// | TypeDec
   Type         =  Type "[" "]"                                  -- array
                |  primtype
                |  id
-  //TypeDec      = "type" typeId "=" Type
-  //Type         = typeId                                     -- named
   //             | ArrayType
   //             | RecordType
   //ArrayType    = "array" "of" typeId
   //Field        = id (":" typeId)?
   //RecordType   = "{" ListOf<Field, ","> "}"
-  //FunDec       = "function" id Params (":" typeId)? "=" Exp
+  FunDec       = "Objective:" id Params (":" Type)? Block
   VarDec       = "Please declare " id
                  ("as a " Type)? ("as " Exp)? "."                -- polite
                | "gimme" id (":" Type)? "=" Exp                  -- impolite
@@ -57,13 +55,13 @@ respecc {
                |  "-" Exp7                                       -- negate
                |  Exp7
   Exp7         =  Literal
+               |  FuncCall
                |  Var
                |  "(" Exp ")"                                   -- parens
   Increment    =  incop Var                                     -- prefix
                |  Var incop                                     -- postfix
   Var          =  Var "[" Exp "]"                               -- subscript
                |  Var "." id                                    -- select
-               |  FuncCall
                |  id
   Literal      = intlit
                | stringlit
@@ -73,7 +71,7 @@ respecc {
                |  "for" | "and" | "return" | "Number" | "plus"
                |  "null" | "while" | "true" | "String"
                |  "or" | "Yes" | "No" | "minus" | "times" | "not"
-               |  "print") ~idrest
+               |  "print" | "Objective") ~idrest
   id           = ~keyword letter idrest*
   idrest       = letter | digit | "_"
   boollit      = "Yes" | "No"
