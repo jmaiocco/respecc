@@ -19,16 +19,10 @@ respecc {
   Assignment   = Var "=" Exp                                     -- impolite
                | Increment
                | "Please populate " Var "with " Exp "."          -- polite
-
   Declaration  = VarDec | FunDec// | TypeDec
   Type         =  Type "[" "]"                                  -- array
                |  primtype
                |  id
-  //             | ArrayType
-  //             | RecordType
-  //ArrayType    = "array" "of" typeId
-  //Field        = id (":" typeId)?
-  //RecordType   = "{" ListOf<Field, ","> "}"
   FunDec       = "Objective:" id Params (":" Type)? Block
   VarDec       = "Please declare " id
                  ("as a " Type)? ("as " Exp)? "."                -- polite
