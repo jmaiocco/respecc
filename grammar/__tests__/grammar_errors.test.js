@@ -19,6 +19,7 @@ const syntaxCheck = require('../syntax-checker');
 const errors = [
 
     ['ambiguous statements', 'x = 3x = 3'],
+    ['negative power', 'x = -2 ** 3;'],
 ];
 
 describe('The syntax checker', () => {

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1580879676542" clover="3.2.0">
-  <project timestamp="1580879676542" name="All files">
+<coverage generated="1580884510350" clover="3.2.0">
+  <project timestamp="1580884510350" name="All files">
     <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1" elements="5" coveredelements="5" complexity="0" loc="4" ncloc="4" packages="1" files="1" classes="1"/>
     <file name="syntax-checker.js" path="C:\ComputerScience\CMSI 488\respecc\grammar\syntax-checker.js">
       <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <line num="1" count="2" type="stmt"/>
       <line num="2" count="2" type="stmt"/>
       <line num="4" count="2" type="stmt"/>
-      <line num="6" count="2" type="stmt"/>
+      <line num="6" count="3" type="stmt"/>
     </file>
   </project>
 </coverage>

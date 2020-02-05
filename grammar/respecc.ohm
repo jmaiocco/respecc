@@ -5,16 +5,21 @@ respecc {
                | Conditional
                | Loop
                | Assignment
-  Conditional  = "if" "(" Exp ")" Block ("else" "if" "(" Exp ")" Block)* ("else" Block)?            -- if_impolite
-               | "Excuse me, if " Exp "," Block br* ("Otherwise, if " Exp "," Block)* br* ("Otherwise," Block)? -- if_polite
-  Loop         = "while" "(" Exp ")" Block          -- while_impolite
-               | "for"  "(" (Type? id "=" Exp)? ";" Exp? ";" Assignment? ")" Block  -- for_impolite
-               | "Excuse me, while " Exp "," Block            -- while_polite
+  Conditional  = "if" "(" Exp ")" Block br*
+                 ("else" "if" "(" Exp ")" Block)* br*
+                 ("else" Block)?                                -- if_impolite
+               | "Excuse me, if " Exp "," Block br*
+                 ("Otherwise, if " Exp "," Block)* br*
+                 ("Otherwise," Block)?                          -- if_polite
+  Loop         = "while" "(" Exp ")" Block                      -- while_impolite
+               | "for"  "(" (Type? id "=" Exp)? ";" Exp?
+                 ";" Assignment? ")" Block                      -- for_impolite
+               | "Excuse me, while " Exp "," Block              -- while_polite
   FuncCall     = id Params
-  Assignment   = id "=" Exp                                   -- impolite
-               | "Please populate " id "with " Exp "."       -- polite
-  Declaration  = VarDec //| TypeDec | FunDec
-  Type         =  Type "[" "]"               -- array
+  Assignment   = id "=" Exp                                     -- impolite
+               | "Please populate " id "with " Exp "."          -- polite
+  Declaration  = VarDec //| TypeDec | FuncDec
+  Type         =  Type "[" "]"                                  -- array
                |  primtype
                |  id
   //TypeDec      = "type" typeId "=" Type
@@ -22,58 +27,54 @@ respecc {
   //             | ArrayType
   //             | RecordType
   //ArrayType    = "array" "of" typeId
+  //Field        = id ":" typeId
   //RecordType   = "{" ListOf<Field, ","> "}"
   //FunDec       = "function" id Params (":" typeId)? "=" Exp
-  VarDec       = "gimmeh" id (":" Type)? "=" Exp                     -- impolite
-               | "Please declare " id ("as a " Type)? ("as " Exp)? "." -- polite
-
-
-  //Field        = id ":" typeId
+  VarDec       = "Please declare " id
+                 ("as a " Type)? ("as " Exp)? "."               -- polite
+               | "gimme" id (":" Type)? "=" Exp                -- impolite
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id (":" Type)?
-  Block       =  "could you..." br* (Statement br+)* "Thank You."        -- polite
-              |  "{" br* (Statement br+)* "}"                                    -- impolite
-  Exp         =  NonemptyListOf<Exp1, orop>                    -- binary
-  Exp1        =  NonemptyListOf<Exp2, andop>                   -- binary
-  Exp2        =  Exp3 (relop Exp3)?                            -- binary
-  Exp3        =  NonemptyListOf<Exp4, addop>                   -- binary
-  Exp4        =  NonemptyListOf<Exp5, mulop>                   -- binary
-  Exp5        =  NonemptyListOf<Exp6, expoop>                  -- binary
-  Exp6        =  prefixop? Exp7                                -- prefix
-  Exp7        =  Literal
-              |  Increment
-              |  Var
-              //|  NewObject
-              //|  NewArray
-              //|  EmptyArray
-              |  "(" Exp ")"                                   -- parens
-//  Exp7         = Call | ArrayExp | RecordExp | ExpSeq | Literal | Lvalue
-  Increment   =  incop Var                                     -- prefix
-              |  Var incop                                     -- postfix
-  Var         =  Var "[" Exp "]"            -- subscript
-              |  Var "." id                 -- select
-              |  FuncCall
-              |  id
-  Literal     = intlit
-              | stringlit
-//               | "nil"                                      -- nil
-//Lvalue       = Lvalue "[" Exp "]"                         -- subscripted
-//               | Lvalue "." id                              -- field
-//               | id                                         -- id
-  //ArrayExp     = typeId "[" Exp "]" "of" Exp
-  //RecordExp    = typeId "{" ListOf<Binding, ","> "}"
-  //Call         = id "(" ListOf<Exp, ","> ")"
-  //ExpSeq       = "(" ListOf<Exp, ";"> ")"
-  keyword     =  ("boolean" | "if" | "break" | "else" | "int"
-              |  "for" | "new" | "return" | "char" | "struct"
-              |  "null" | "while" | "real" | "true" | "string"
-              |  "void" | "false" | "length" | "print") ~idrest
-  //keyword      = ("array" | "break" | "do" | "else" | "end" | "for"
-  //             | "function" | "if" | "in" | "let" | "nil" | "of"
-  //             | "then" | "to" | "type" | "var" | "while" | respecc) ~idrest
+  Block        =  "could you..." br* (Statement br+)*
+                 "Thank You."                                   -- polite
+               |  "{" br* (Statement br+)* "}"                   -- impolite
+              //Lambda or ? :
+  Exp          =  Exp orop Exp1                                  -- binary
+               |  Exp1
+  Exp1         =  Exp1 andop Exp2                                -- binary
+               |  Exp2
+  Exp2         =  Exp3 relop Exp3                                -- binary
+               |  Exp3
+  Exp3         =  Exp3 addop Exp4                                -- binary
+               |  Exp4
+  Exp4         =  Exp4 mulop Exp5                                -- binary
+               |  Exp5
+  Exp5         =  prefixop Exp7                                  -- prefix
+               |  Exp6
+  Exp6         =  Exp7 expoop Exp6                               -- binary
+               |  "-" Exp7                                       -- negate
+               |  Exp7
+  Exp7         =  Literal
+               |  Increment
+               |  Var
+               |  "(" Exp ")"                                   -- parens
+  Increment    =  incop Var                                     -- prefix
+               |  Var incop                                     -- postfix
+  Var          =  Var "[" Exp "]"                               -- subscript
+               |  Var "." id                                    -- select
+               |  FuncCall
+               |  id
+  Literal      = intlit
+               | stringlit
+               | boollit
+//               | "NULL"                                        -- nil
+  keyword      =  ("Boolean" | "if" | "break" | "else" | "int"
+               |  "for" | "new" | "return" | "Number" | "struct"
+               |  "null" | "while" | "real" | "true" | "String"
+               |  "void" | "Yes" | "No" | "length" | "print") ~idrest
   id           = ~keyword letter idrest*
   idrest       = letter | digit | "_"
-  //typeId       = id
+  boollit      = "Yes" | "No"
   intlit       = digit+
   stringlit    = "\"" char* "\"" | "\'" char* "\'"
   char         = ~"\\" ~"\"" ~"\n" any | escape
@@ -89,7 +90,7 @@ respecc {
                | "is equal to" | "is not equal to"
   incop        =  "++" | "--"
   prefixop     =  ~"--" "-" | "!" | "not"
-  primtype     =  "bool" | "number" | "string"
+  primtype     =  "Boolean" | "Number" | "String"
   space        := comment | " " | "\t"
   comment      = "/*" (~"*/" any)* "*/"
   br           =  ";" | "\n"
