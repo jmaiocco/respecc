@@ -22,8 +22,8 @@ respecc {
                  ";" Assignment? ")" Block                       -- for_impolite
                | "Excuse me, while " Exp "," Block               -- while_polite
   FuncCallStmt = id Params                                       -- call_impolite
-               | "Could you do me a favor and run" id
-                 ("with" Params)? "?"                            -- call_polite
+               | "Do me a favor and run" (id | "print")
+                 ("with" Params)? "."                            -- call_polite
   FuncCallExp  = id Params                                       -- call_impolite
                | "the result of running" id
                  ("with" Params)?                                -- call_polite
