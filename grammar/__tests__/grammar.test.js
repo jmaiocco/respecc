@@ -5,7 +5,7 @@
  * syntactic forms of the language.
  */
 
-const syntaxCheck = require('../syntax-checker');
+const syntaxCheck = require("../syntax-checker");
 /*
 const program1 = String.raw`
 let
@@ -39,6 +39,20 @@ end
 */
 
 const program1 = String.raw`
+Salutations!
+for( gimme i : Number = 0; i < 10; i++) could you...
+  print(i)
+Thank You.
+Farewell!
+`;
+
+describe("The syntax checker", () => {
+  test("accepts the mega program with all syntactic forms", done => {
+    expect(syntaxCheck(program1)).toBe(true);
+    done();
+  });
+});
+const program2 = String.raw`
 Excuse me, if x is less than 3, could you...
 	x = 3;
   Please declare x as 3.
@@ -50,9 +64,56 @@ Otherwise, could you...
 Thank You.
 `;
 
-describe('The syntax checker', () => {
-  test('accepts the mega program with all syntactic forms', (done) => {
-    expect(syntaxCheck(program1)).toBe(true);
+describe("The syntax checker", () => {
+  test("accepts the mega program with all syntactic forms", done => {
+    expect(syntaxCheck(program2)).toBe(true);
+    done();
+  });
+});
+
+const program3 = String.raw`
+Hello!
+if(x raised to the power of 3 is less than 6) {
+	x = 3;
+}
+
+Farewell!
+`;
+
+describe("The syntax checker", () => {
+  test("accepts the mega program with all syntactic forms", done => {
+    expect(syntaxCheck(program3)).toBe(true);
+    done();
+  });
+});
+
+const program4 = String.raw`
+y = func(x,y,z) or func();
+Please populate y with the result of running sum with (a,b).
+
+x =  the result of running sum with (a,b)
+
+You deserve a break!
+`;
+
+describe("The syntax checker", () => {
+  test("accepts the mega program with all syntactic forms", done => {
+    expect(syntaxCheck(program4)).toBe(true);
+    done();
+  });
+});
+
+const program5 = String.raw`
+gimme id : Number = 6
+Please declare id as a Number as 6.
+id = 7;
+Please populate id with 7.
+
+`;
+
+describe("The syntax checker", () => {
+  test("accepts the mega program with all syntactic forms", done => {
+    expect(syntaxCheck(program5)).toBe(true);
     done();
   });
 });
