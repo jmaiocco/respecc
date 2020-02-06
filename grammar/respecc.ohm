@@ -73,7 +73,7 @@ respecc {
   Var          =  Var "[" intlit "]"                                -- subscript
                |  Var "." id                                     -- select
                |  id
-  Literal      = intlit
+  Literal      = numlit
                | stringlit
                | boollit
   keyword      =  ("Boolean" | "if" | "break" | "else" | "int"
@@ -86,6 +86,7 @@ respecc {
   idrest       = letter | digit | "_"
   boollit      = "Yes" | "No"
   intlit       = digit+
+  numlit       = digit+ ("." digit+)?
   stringlit    = "\"" char* "\"" | "\'" char* "\'"
   char         = ~"\\" ~"\"" ~"\n" any | escape
   escape       = "\\" ("\\" | "\"" | "n" | "t" | codepoint)
@@ -103,6 +104,7 @@ respecc {
   primtype     =  "Boolean" | "Number" | "String"
   space        := comment | " " | "\t"
   comment      = "/*" (~"*/" any)* "*/"
+               | "//" (~"\n" any)* ("\n")?
   br           =  ";" | "\n"
   greeting     = ("Hello!" | "Hey!" | "Hi There!" | "Salutations!")
   farewell     = ("Bye Bye!" | "Farewell!")
