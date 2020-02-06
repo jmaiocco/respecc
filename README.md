@@ -15,4 +15,12 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 
 | Respecc++ (Polite) | Respecc++ (Rude) | JavaScript |
 | ------------------ | ---------------- | ---------- |
-|Hello!<br>print "Hello world!"<br>Bye Bye! | print "Hello world!" | console.log("Hello world!")
+|Hello!<br>print("Hello world!")<br>Bye Bye! | print("Hello world!") | console.log("Hello world!")
+
+### Basic for-loop functionality
+
+| Respecc++ (Polite) | Respecc++ (Rude) | JavaScript |
+| ------------------ | ---------------- | ---------- |
+| Salutations!<br>Please declare i as a Number as 0.<br>Excuse me, while i is less than 10, could you...<br>Do me a favor and run print with (i).<br>Thank You.<br>Farewell! | for( Number i = 0; i < 10; i++) {<br>  print(i)<br>} | for(i=0; i < 10; i++) {<br>  console.log(i);<br>}
+
+
