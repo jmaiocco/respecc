@@ -3,12 +3,14 @@ respecc {
   Statement    = Declaration
                | Conditional
                | Loop
-               | FuncCall
+               | FuncCallStmt
                | Assignment
                | SimpleStmt
   SimpleStmt   = "print" "(" Exp? ")"                            -- print
-               | "return" Exp?                                   -- return
-               | "break"                                         -- break
+               | "return" Exp?                                   -- return_impolite
+               | "Kindly return" Exp?                            -- return_polite
+               | "break"                                         -- break_impolite
+               | "You deserve a break!"                          -- break_polite
   Conditional  = "if" "(" Exp ")" Block
                  (br* "else" "if" "(" Exp ")" Block)*
                  (br* "else" Block)?                             -- if_impolite
@@ -19,15 +21,21 @@ respecc {
                | "for"  "(" (VarDec)? ";" Exp?
                  ";" Assignment? ")" Block                       -- for_impolite
                | "Excuse me, while " Exp "," Block               -- while_polite
-  FuncCall     = id Params
+  FuncCallStmt = id Params                                       -- call_impolite
+               | "Could you do me a favor and run" id
+                 ("with" Params)? "?"                            -- call_polite
+  FuncCallExp  = id Params                                       -- call_impolite
+               | "the result of running" id
+                 ("with" Params)?                                -- call_polite
   Assignment   = Var "=" Exp                                     -- impolite
                | Increment
                | "Please populate " Var "with " Exp "."          -- polite
-  Declaration  = VarDec | FunDec// | TypeDec
+  Declaration  = VarDec | FuncDec// | TypeDec
   Type         =  Type "[" "]"                                   -- array
                |  primtype
                |  id
-  FunDec       = "Objective:" id Params (":" Type)? Block
+  FuncDec       = "Favor" id Params (":" Type)? Block             -- polite
+               | "function" id Params (":" Type)? Block          -- impolite
   VarDec       = "Please declare " id
                  ("as a " Type)? ("as " Exp)? "."                -- polite
                | "gimme" id (":" Type)? "=" Exp                  -- impolite
@@ -36,24 +44,28 @@ respecc {
   Block        =  "could you..." br* (Statement br+)*
                   "Thank You."                                   -- polite
                |  "{" br* (Statement br+)* "}"                   -- impolite
-              //Lambda or ? :
-  Exp          =  Exp orop Exp1                                  -- binary
+  Exp          =  Exp1 "?" Exp1 ":" Exp1                         -- ternary
                |  Exp1
-  Exp1         =  Exp1 andop Exp2                                -- binary
+  Exp1         =  Params "->" Block                              -- lambda_blk
+               |  Params "->" Exp2                               -- lambda_exp
                |  Exp2
-  Exp2         =  Exp3 relop Exp3                                -- binary
+  Exp2         =  Exp2 orop Exp3                                  -- binary
                |  Exp3
-  Exp3         =  Exp3 addop Exp4                                -- binary
+  Exp3         =  Exp3 andop Exp4                                -- binary
                |  Exp4
-  Exp4         =  Exp4 mulop Exp5                                -- binary
+  Exp4         =  Exp5 relop Exp5                                -- binary
                |  Exp5
-  Exp5         =  prefixop Exp7                                  -- prefix
+  Exp5         =  Exp5 addop Exp6                                -- binary
                |  Exp6
-  Exp6         =  Exp7 expoop Exp6                               -- binary
-               |  "-" Exp7                                       -- negate
+  Exp6         =  Exp6 mulop Exp7                                -- binary
                |  Exp7
-  Exp7         =  Literal
-               |  FuncCall
+  Exp7         =  prefixop Exp9                                  -- prefix
+               |  Exp8
+  Exp8         =  Exp9 expoop Exp8                               -- binary
+               |  "-" Exp9                                       -- negate
+               |  Exp9
+  Exp9         =  Literal
+               |  FuncCallExp
                |  Var
                |  "(" Exp ")"                                    -- parens
   Increment    =  incop Var                                      -- prefix
@@ -64,12 +76,11 @@ respecc {
   Literal      = intlit
                | stringlit
                | boollit
-//               | "NULL"
   keyword      =  ("Boolean" | "if" | "break" | "else" | "int"
                |  "for" | "and" | "return" | "Number" | "plus"
                |  "null" | "while" | "true" | "String"
                |  "or" | "Yes" | "No" | "minus" | "times" | "not"
-               |  "print" | "Objective") ~idrest
+               |  "print" | "Favor" | "function" | "gimme" ) ~idrest
   id           = ~keyword letter idrest*
   idrest       = letter | digit | "_"
   boollit      = "Yes" | "No"
