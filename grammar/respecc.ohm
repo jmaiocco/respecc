@@ -44,7 +44,7 @@ respecc {
   Block        =  "could you..." br* (Statement br+)*
                   "Thank You."                                   -- polite
                |  "{" br* (Statement br+)* "}"                   -- impolite
-  Exp          =  Exp1 "?" Exp1 ":" Exp1                         -- ternary
+  Exp          =  Exp1 "?" Exp1 ":" Exp                          -- ternary
                |  Exp1
   Exp1         =  Params "->" Block                              -- lambda_blk
                |  Params "->" Exp2                               -- lambda_exp
@@ -70,7 +70,7 @@ respecc {
                |  "(" Exp ")"                                    -- parens
   Increment    =  incop Var                                      -- prefix
                |  Var incop                                      -- postfix
-  Var          =  Var "[" Exp "]"                                -- subscript
+  Var          =  Var "[" intlit "]"                                -- subscript
                |  Var "." id                                     -- select
                |  id
   Literal      = intlit
