@@ -22,6 +22,7 @@ const errors = [
     ['negative power', 'x = -2 ** 3;'],
     ['Bad Block', "Excuse me, if x < 3, could you.. Thank You."],
     ['chained relational operators', '1 < 3 < 5'],
+    ['bad strings in print', 'print(Hello World)']
 ];
 
 describe('The syntax checker', () => {
