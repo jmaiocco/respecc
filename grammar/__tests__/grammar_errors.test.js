@@ -22,9 +22,9 @@ const errors = [
     ['negative power', 'x = -2 ** 3;'],
     ['Bad Block', "Excuse me, if x < 3, could you.. Thank You."],
     ['chained relational operators', '1 < 3 < 5'],
-    ['bad strings in print', 'print(Hello World)']
-    ['bad index - float', 'a = a[1.1] ']
-    ['bad index - bool', 'a = a[Yes] ']
+    ['bad strings in print', 'print(Hello World)'],
+    ['bad index - float', 'a = a[1.1] '],
+    ['bad index - bool', 'a = a[Yes] '],
 ];
 
 describe('The syntax checker', () => {

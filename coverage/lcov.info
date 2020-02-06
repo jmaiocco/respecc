@@ -3,11 +3,11 @@ SF:grammar\syntax-checker.js
 FN:6,(anonymous_0)
 FNF:1
 FNH:1
-FNDA:6,(anonymous_0)
+FNDA:8,(anonymous_0)
 DA:1,2
 DA:2,2
 DA:4,2
-DA:6,6
+DA:6,8
 LF:4
 LH:4
 BRF:0
