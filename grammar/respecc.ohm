@@ -70,7 +70,7 @@ respecc {
                |  "(" Exp ")"                                    -- parens
   Increment    =  incop Var                                      -- prefix
                |  Var incop                                      -- postfix
-  Var          =  Var "[" intlit "]"                             -- subscript
+  Var          =  Var "[" Exp "]"                             -- subscript
                |  Var "." id                                     -- select
                |  id
   Literal      = numlit

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1581021489490" clover="3.2.0">
-  <project timestamp="1581021489490" name="All files">
+<coverage generated="1581030055369" clover="3.2.0">
+  <project timestamp="1581030055369" name="All files">
     <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1" elements="5" coveredelements="5" complexity="0" loc="4" ncloc="4" packages="1" files="1" classes="1"/>
     <file name="syntax-checker.js" path="C:\ComputerScience\CMSI 488\respecc\grammar\syntax-checker.js">
       <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
