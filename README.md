@@ -21,6 +21,6 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 
 | Respecc++ (Polite) | Respecc++ (Rude) | JavaScript |
 | ------------------ | ---------------- | ---------- |
-| Salutations!<br>for( Number i = 0; i < 10; i++) could you...<br>  print(i)<br>Thank You.<br>Farewell! | for( Number i = 0; i < 10; i++) {<br>  print(i)<br>} | for(i=0; i < 10; i++) {<br>  console.log(i);<br>}
+| Salutations!<br>Please declare i as a Number as 0.<br>Excuse me, while i is less than 10, could you...<br>Do me a favor and run print with (i).<br>Thank You.<br>Farewell! | for( Number i = 0; i < 10; i++) {<br>  print(i)<br>} | for(i=0; i < 10; i++) {<br>  console.log(i);<br>}
 
 
