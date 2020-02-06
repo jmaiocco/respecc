@@ -16,7 +16,7 @@ respecc {
                  (br* "Otherwise, if " Exp "," Block)*
                  (br* "Otherwise," Block)?                       -- if_polite
   Loop         = "while" "(" Exp ")" Block                       -- while_impolite
-               | "for"  "(" (Type? id "=" Exp)? ";" Exp?
+               | "for"  "(" (VarDec)? ";" Exp?
                  ";" Assignment? ")" Block                       -- for_impolite
                | "Excuse me, while " Exp "," Block               -- while_polite
   FuncCall     = id Params
