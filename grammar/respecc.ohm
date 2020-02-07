@@ -21,12 +21,12 @@ respecc {
                | "for"  "(" (VarDec)? ";" Exp?
                  ";" Assignment? ")" Block                       -- for_impolite
                | "Excuse me, while " Exp "," Block               -- while_polite
-  FuncCallStmt = id Params                                       -- call_impolite
+  FuncCallStmt = id Args                                         -- call_impolite
                | "Do me a favor and run" (id | "print")
-                 ("with" Params)? "."                            -- call_polite
-  FuncCallExp  = id Params                                       -- call_impolite
+                 ("with" Args)? "."                              -- call_polite
+  FuncCallExp  = id Args                                         -- call_impolite
                | "the result of running" id
-                 ("with" Params)?                                -- call_polite
+                 ("with" Args  )?                                -- call_polite
   Assignment   = Var "=" Exp                                     -- impolite
                | Increment
                | "Please populate " Var "with " Exp "."          -- polite
@@ -41,6 +41,7 @@ respecc {
                | "gimme" id (":" Type)? "=" Exp                  -- impolite
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id (":" Type)?
+  Args         = "(" ListOf<Exp, ","> ")"
   Block        =  "could you..." br* (Statement br+)*
                   "Thank You."                                   -- polite
                |  "{" br* (Statement br+)* "}"                   -- impolite
