@@ -35,7 +35,7 @@ console.log("Hello world!")
 /*****************                                        /*****************
 Respecc++ (Polite)                                        Respecc++ (Rude)                            
 ******************/                                       ******************/                   
-Salutations!                                              for (gimme i: Number = 0; i < 10; i++) {                        
+Salutations!                                              for (gimme i = 0; i < 10; i++) {                        
 Please declare i as a Number as 0.                            print(i) 
 Excuse me, while i is less than 10, could you...          }
     Do me a favor and run print with (i).
@@ -45,7 +45,7 @@ Bye Bye!
 /*****************
 JavaScript 
 ******************/
-for(i=0; i < 10; i++) {
+for(let i=0; i < 10; i++) {
     console.log(i);
 }
 ```
