@@ -68,7 +68,7 @@ Favor MakeChange(amount) could you...
     Please declare result as a Number[].
     Please populate remaining with amount.
     Please populate i with 0.
-    Excuse me, while is is less than 4, could you...
+    Excuse me, while i is less than 4, could you...
         Please populate result[ i ] with remaining / US_Denominations[ i ].
         Please populate remaining with remaining modded with US_Denominations[ i ].
         i++
@@ -80,6 +80,30 @@ Please populate exampleAmount with 105.
 Do me a favor and run MakeChange with (exampleAmount).
 
 Bye Bye!
+
+/*****************
+Respecc++ (Rude) 
+******************/
+
+gimme US_Denominations = [25, 10, 5, 1]
+
+function MakeChange(amount) {
+    if (amount < 0) {
+        print("Error")
+        return -1
+    }
+    result = []
+    remaining = amount
+    i = 0
+    while ( i < 4 ) {
+        result[ i ] = remaining / US_Denominations[ i ]
+        remaining= remaining % US_Denominations[ i ]
+        i++
+    }
+    return result
+}
+exampleAmount = 105
+MakeChange(exampleAmount)
 
 /*****************
 JavaScript 
