@@ -17,24 +17,24 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 
 ### Hello World
 ```
---------------------                                      --------------------
+/*****************                                        /*****************
 Respecc++ (Polite)                                        Respecc++ (Rude)                              
---------------------                                      --------------------                          
+******************/                                       ******************/                          
 Hello!                                                    print("Hello world!")                       
 Do me a favor and run print with ("Hello world!")
 Bye Bye! 
 
---------------------
+/*****************
 JavaScript 
--------------------- 
+******************/
 console.log("Hello world!")
 ```
 ### Basic for-loop functionality
 
 ```
---------------------                                      --------------------
+/*****************                                        /*****************
 Respecc++ (Polite)                                        Respecc++ (Rude)                            
---------------------                                      --------------------                        
+******************/                                       ******************/                   
 Salutations!                                              for (gimme i: Number = 0; i < 10; i++) {                        
 Please declare i as a Number as 0.                            print(i) 
 Excuse me, while i is less than 10, could you...          }
@@ -42,9 +42,9 @@ Excuse me, while i is less than 10, could you...          }
 Thank You.
 Bye Bye!
 
---------------------
+/*****************
 JavaScript 
--------------------- 
+******************/
 for(i=0; i < 10; i++) {
     console.log(i);
 }
@@ -53,17 +53,17 @@ for(i=0; i < 10; i++) {
 ### Changemaker
 
 ```
---------------------
+/*****************
 Respecc++ (Polite) 
---------------------
+******************/
 Hello!
 
-Please declare US_Denominations as a Number [25, 10, 5, 1].
+Please declare US_Denominations as a Number as [25, 10, 5, 1].
 
 Favor MakeChange(amount) could you...
     Excuse me, if (amount is less than 0), could you...
         print("Error")
-        return -1
+        Kindly return -1
     Thank You.
     Please declare result as a Number [].
     Please populate remaining with amount.
@@ -81,9 +81,9 @@ Do me a favor and run MakeChange with (exampleAmount: Number).
 
 Bye Bye!
 
---------------------
+/*****************
 JavaScript 
---------------------
+*****************/
 (amount) => {
   if (amount < 0) {
     throw new RangeError('amount cannot be negative');
