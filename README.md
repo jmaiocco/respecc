@@ -13,6 +13,13 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 
 ## List of Features
 
+* Two syntax styles: Polite longhand vs Rude shorthand
+* Strong, static typing with opportunity for type inference
+  * Basic type system containing number, string, boolean and array types
+* Standard conditional (if, else if and else) and loop (for, while) statements
+* Recursive functions
+
+
 ## Example Programs
 
 ### Hello World
@@ -36,9 +43,9 @@ console.log("Hello world!")
 Respecc++ (Polite)                                        Respecc++ (Rude)                            
 ******************/                                       ******************/                   
 Salutations!                                              for (gimme i = 0; i < 10; i++) {                        
-Please declare i as a Number as 0.                            print(i) 
+Please declare i as a Number as 0.                          print(i) 
 Excuse me, while i is less than 10, could you...          }
-    Do me a favor and run print with (i).
+  Do me a favor and run print with (i).
 Thank You.
 Bye Bye!
 
@@ -46,7 +53,7 @@ Bye Bye!
 JavaScript 
 ******************/
 for(let i=0; i < 10; i++) {
-    console.log(i);
+  console.log(i);
 }
 ```
 
@@ -61,19 +68,19 @@ Hello!
 Please declare US_Denominations as a Number as [25, 10, 5, 1].
 
 Favor MakeChange(amount) could you...
-    Excuse me, if (amount is less than 0), could you...
-        Do me a favor and run print with ("Error").
-        Kindly return -1
-    Thank You.
-    Please declare result as a Number[].
-    Please populate remaining with amount.
-    Please populate i with 0.
-    Excuse me, while i is less than 4, could you...
-        Please populate result[ i ] with remaining / US_Denominations[ i ].
-        Please populate remaining with remaining modded with US_Denominations[ i ].
-        i++
-    Thank You.
-    Kindly return result
+  Excuse me, if (amount is less than 0), could you...
+    Do me a favor and run print with ("Error").
+    Kindly return -1
+  Thank You.
+  Please declare result as a Number[].
+  Please populate remaining with amount.
+  Please populate i with 0.
+  Excuse me, while i is less than 4, could you...
+    Please populate result[ i ] with remaining / US_Denominations[ i ].
+    Please populate remaining with remaining modded with US_Denominations[ i ].
+    i++
+  Thank You.
+  Kindly return result
 Thank You.
 
 Please populate exampleAmount with 105.
@@ -88,19 +95,19 @@ Respecc++ (Rude)
 gimme US_Denominations = [25, 10, 5, 1]
 
 function MakeChange(amount) {
-    if (amount < 0) {
-        print("Error")
-        return -1
-    }
-    result = []
-    remaining = amount
-    i = 0
-    while ( i < 4 ) {
-        result[ i ] = remaining / US_Denominations[ i ]
-        remaining= remaining % US_Denominations[ i ]
-        i++
-    }
-    return result
+  if (amount < 0) {
+    print("Error")
+    return -1
+  }
+  result = []
+  remaining = amount
+  i = 0
+  while ( i < 4 ) {
+    result[ i ] = remaining / US_Denominations[ i ]
+    remaining= remaining % US_Denominations[ i ]
+    i++
+  }
+  return result
 }
 exampleAmount = 105
 MakeChange(exampleAmount)
@@ -119,7 +126,61 @@ let makeChange = (amount) => {
     remaining %= value;
   });
   return result;
-};
+}
 let exampleAmount = 105;
 makeChange(exampleAmount);
+```
+
+### Fibonacci Number Sequence
+```
+/*****************
+Respecc++ (Polite) 
+******************/
+Salutations!
+
+Favor Fibonacci(n: Number, length: Number) could you... 
+  Excuse me, if (n is equal to 1), could you...
+    Please populate series with [0, 1].
+    Kindly return series
+  Thank You.
+  Otherwise, could you...
+    Please populate series with Fibonacci(n minus 1, length minus 1).
+    Please populate series[length] with (series[length minus 1] plus series[length minus 2]).
+    Kindly return series
+  Thank You.
+Thank You.
+
+Do me a favor and run Fibonacci with (12, 12).
+Farewell!
+
+/*****************
+Respecc++ (Rude) 
+******************/
+function Fibonacci(n, length) { 
+  if (n == 1) {
+    series = [0, 1]
+    return series
+  } else {
+    series = Fibonacci(n - 1, length - 1)
+    series[length] = series[length minus 1] plus series[length minus 2]
+    return series
+  }
+}
+
+Fibonacci(12, 12)
+
+
+/*****************
+JavaScript 
+*****************/
+let fibonacci = (n) => {
+  if (n === 1) {
+    return [0, 1];
+  } else {
+    let series = fibonacci(n - 1);
+    series.push(series[series.length - 1] + series[series.length - 2]);
+    return series;
+  }
+}
+fibonacci(12);
 ```
