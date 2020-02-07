@@ -62,13 +62,13 @@ Please declare US_Denominations as a Number as [25, 10, 5, 1].
 
 Favor MakeChange(amount) could you...
     Excuse me, if (amount is less than 0), could you...
-        print("Error")
+        Do me a favor and run print with ("Error").
         Kindly return -1
     Thank You.
-    Please declare result as a Number [].
+    Please declare result as a Number[].
     Please populate remaining with amount.
     Please populate i with 0.
-    Excuse me, while ( i < 4 ), could you...
+    Excuse me, while is is less than 4, could you...
         Please populate result[ i ] with remaining / US_Denominations[ i ].
         Please populate remaining with remaining modded with US_Denominations[ i ].
         i++
@@ -77,14 +77,14 @@ Favor MakeChange(amount) could you...
 Thank You.
 
 Please populate exampleAmount with 105.
-Do me a favor and run MakeChange with (exampleAmount: Number).
+Do me a favor and run MakeChange with (exampleAmount).
 
 Bye Bye!
 
 /*****************
 JavaScript 
 *****************/
-(amount) => {
+let makeChange = (amount) => {
   if (amount < 0) {
     throw new RangeError('amount cannot be negative');
   }
@@ -96,4 +96,6 @@ JavaScript
   });
   return result;
 };
+let exampleAmount = 105;
+makeChange(exampleAmount);
 ```
