@@ -16,15 +16,84 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 ## Example Programs
 
 ### Hello World
+```
+--------------------                                      --------------------
+Respecc++ (Polite)                                        Respecc++ (Rude)                              
+--------------------                                      --------------------                          
+Hello!                                                    print("Hello world!")                       
+Do me a favor and run print with ("Hello world!")
+Bye Bye! 
 
-| Respecc++ (Polite) | Respecc++ (Rude) | JavaScript |
-| ------------------ | ---------------- | ---------- |
-|Hello!<br>print("Hello world!")<br>Bye Bye! | print("Hello world!") | console.log("Hello world!")
-
+--------------------
+JavaScript 
+-------------------- 
+console.log("Hello world!")
+```
 ### Basic for-loop functionality
 
-| Respecc++ (Polite) | Respecc++ (Rude) | JavaScript |
-| ------------------ | ---------------- | ---------- |
-| Salutations!<br>Please declare i as a Number as 0.<br>Excuse me, while i is less than 10, could you...<br>Do me a favor and run print with (i).<br>Thank You.<br>Farewell! | for( Number i = 0; i < 10; i++) {<br>  print(i)<br>} | for(i=0; i < 10; i++) {<br>  console.log(i);<br>}
+```
+--------------------                                      --------------------
+Respecc++ (Polite)                                        Respecc++ (Rude)                            
+--------------------                                      --------------------                        
+Salutations!                                              for (gimme i: Number = 0; i < 10; i++) {                        
+Please declare i as a Number as 0.                            print(i) 
+Excuse me, while i is less than 10, could you...          }
+    Do me a favor and run print with (i).
+Thank You.
+Bye Bye!
 
+--------------------
+JavaScript 
+-------------------- 
+for(i=0; i < 10; i++) {
+    console.log(i);
+}
+```
 
+### Changemaker
+
+```
+--------------------
+Respecc++ (Polite) 
+--------------------
+Hello!
+
+Please declare US_Denominations as a Number [25, 10, 5, 1].
+
+Favor MakeChange(amount) could you...
+    Excuse me, if (amount is less than 0), could you...
+        print("Error")
+        return -1
+    Thank You.
+    Please declare result as a Number [].
+    Please populate remaining with amount.
+    Please populate i with 0.
+    Excuse me, while ( i < 4 ), could you...
+        Please populate result[ i ] with remaining / US_Denominations[ i ].
+        Please populate remaining with remaining modded with US_Denominations[ i ].
+        i++
+    Thank You.
+    Kindly return result
+Thank You.
+
+Please populate exampleAmount with 105.
+Do me a favor and run MakeChange with (exampleAmount: Number).
+
+Bye Bye!
+
+--------------------
+JavaScript 
+--------------------
+(amount) => {
+  if (amount < 0) {
+    throw new RangeError('amount cannot be negative');
+  }
+  const result = [];
+  let remaining = amount;
+  [25, 10, 5, 1].forEach((value) => {
+    result.push(Math.floor(remaining / value));
+    remaining %= value;
+  });
+  return result;
+};
+```
