@@ -14,6 +14,7 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 ## List of Features
 
 * Two syntax styles: Polite longhand vs Rude shorthand
+* Politeness rating system that basically lints code and rejects programs that are worded too rudely
 * Strong, static typing with opportunity for type inference
   * Basic type system containing number, string, boolean and array types
 * Standard conditional (if, else if and else) and loop (for, while) statements
@@ -183,4 +184,67 @@ let fibonacci = (n) => {
   }
 }
 fibonacci(12);
+```
+
+
+### Greatest Common Divisor (GCD)
+```
+/*****************
+Respecc++ (Polite) 
+******************/
+Hey!
+
+Favor GCD(firstValue: Number, secondValue: Number) could you...
+  Excuse me, if (firstValue is less than 0), could you...
+    Please populate firstValue with (0 - firstValue).
+  Thank You.
+  Excuse me, if (secondValue is less than 0), could you...
+    Please populate secondValue with (0 - secondValue).
+  Thank You.
+  Excuse me, while (secondValue is greater than 0), could you...
+    Please populate temporaryValue with secondValue.
+    Please populate secondValue with firstValue modded with secondValue.
+    Please populate firstValue with temporaryValue.
+  Thank You.
+  Kindly return firstValue
+Thank You.
+
+Do me a favor and run GCD with (90, 180).
+
+Bye Bye!
+
+/*****************
+Respecc++ (Rude) 
+******************/
+function GCD(firstValue, secondValue) {
+  if (firstValue < 0) {
+    firstValue = (0 - firstValue)
+  }
+  if (secondValue < 0) {
+    secondValue = (0 - secondValue)
+  }
+  while (secondValue > 0) {
+    temporaryValue = secondValue
+    secondValue = firstValue % secondValue
+    firstValue = temporaryValue
+  }
+  return firstValue
+}
+
+GCD(90, 180)
+
+/*****************
+JavaScript 
+*****************/
+function gcd(firstValue, secondValue) {
+  firstValue = Math.abs(firstValue);
+  secondValue = Math.abs(secondValue);
+  while(secondValue > 0) {
+    let temporaryValue = secondValue;
+    secondValue = firstValue % secondValue;
+    firstValue = temporaryValue;
+  }
+  return firstValue;
+}
+gcd(90, 180);
 ```
