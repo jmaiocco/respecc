@@ -34,7 +34,7 @@ respecc {
   Type         =  Type "[" "]"                                   -- array
                |  primtype
                |  id
-  FuncDec       = "Favor" id Params (":" Type)? Block             -- polite
+  FuncDec      = "Favor" id Params (":" Type)? Block             -- polite
                | "function" id Params (":" Type)? Block          -- impolite
   VarDec       = "Please declare " id
                  ("as a " Type)? ("as " Exp)? "."                -- polite
