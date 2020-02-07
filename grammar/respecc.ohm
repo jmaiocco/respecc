@@ -73,9 +73,11 @@ respecc {
   Var          =  Var "[" Exp "]"                             -- subscript
                |  Var "." id                                     -- select
                |  id
-  Literal      = numlit
+  Literal      = ArrayLit
+               | numlit
                | stringlit
                | boollit
+  ArrayLit     = "[" ListOf<Exp, ",">"]"
   keyword      =  ("Boolean" | "if" | "break" | "else" | "int"
                |  "for" | "and" | "return" | "Number" | "plus"
                |  "null" | "while" | "true" | "String"
