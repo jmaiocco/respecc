@@ -20,6 +20,7 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
   * Basic type system containing number, string, boolean and array types.
 * Standard conditional (if, else if and else) and loop (for, while) statements.
 * Recursive functions.
+* Option to seperate statements with newlines or semicolons, allowing multiple statements on a single line if desired.
 
 
 ## Example Programs
