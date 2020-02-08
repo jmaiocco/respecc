@@ -31,7 +31,7 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 Respecc++ (Polite)                                        Respecc++ (Rude)                              
 ******************/                                       ******************/                          
 Hello!                                                    print("Hello world!")                       
-Do me a favor and run print with ("Hello world!")
+Do me a favor and run print with ("Hello world!").
 Bye Bye! 
 
 /*****************
