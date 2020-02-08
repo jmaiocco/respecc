@@ -16,7 +16,7 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 * Two syntax styles: Polite longhand vs Rude shorthand, with the ability to mix and max different syntaxes at will.
 * Politeness rating system that gauges your reltionship with the compiler and discourages user from too much code with the rude syntax.
 * Consequences for programmers with low program politeness, decreasing the odds that the compiler will compile code correctly.
-* Strong, static typing with opportunity for type inference, allowing the user to type variables implicitly or impose type restrictions with manifest typing.
+* Strong, dynamic typing for ease of use, but also allowing the user to manually impose static type restrictions with manifest typing.
   * Basic type system containing number, string, boolean and array types.
 * Standard conditional (if, else if and else) and loop (for, while) statements.
 * Recursive functions.
@@ -31,7 +31,7 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 Respecc++ (Polite)                                        Respecc++ (Rude)                              
 ******************/                                       ******************/                          
 Hello!                                                    print("Hello world!")                       
-Do me a favor and run print with ("Hello world!")
+Do me a favor and run print with ("Hello world!").
 Bye Bye! 
 
 /*****************
@@ -75,7 +75,7 @@ Favor MakeChange(amount) could you...
     Do me a favor and run print with ("Error").
     Kindly return -1
   Thank You.
-  Please declare result as a Number[].
+  Please declare result as a Array<Number>.
   Please populate remaining with amount.
   Please populate i with 0.
   Excuse me, while i is less than 4, could you...
@@ -198,10 +198,10 @@ Hey!
 
 Favor GCD(firstValue: Number, secondValue: Number) could you...
   Excuse me, if (firstValue is less than 0), could you...
-    Please populate firstValue with (0 - firstValue).
+    Please populate firstValue with (0 minus firstValue).
   Thank You.
   Excuse me, if (secondValue is less than 0), could you...
-    Please populate secondValue with (0 - secondValue).
+    Please populate secondValue with (0 minus secondValue).
   Thank You.
   Excuse me, while (secondValue is greater than 0), could you...
     Please populate temporaryValue with secondValue.

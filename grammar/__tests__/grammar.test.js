@@ -17,7 +17,7 @@ Favor MakeChange(amount) could you...
     Do me a favor and run print with ("Error").
     Kindly return -1
   Thank You.
-  Please declare result as a Number[].
+  Please declare result as a Array<Number>.
   Please populate remaining with amount.
   Please populate i with 0.
   Excuse me, while i is less than 4, could you...
