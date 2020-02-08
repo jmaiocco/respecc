@@ -40,7 +40,8 @@ respecc {
                  ("as a " Type)? ("as " Exp)? "."                -- polite
                | "gimme" id (":" Type)? "=" Exp                  -- impolite
   Params       = "(" ListOf<Param, ","> ")"
-  Param        = id (":" Type)?
+  Param        = id (":" Type)?                                  -- impolite
+                | id ("as a " Type)?                             -- polite                                                
   Args         = "(" ListOf<Exp, ","> ")"
   Block        =  "could you..." br* (Statement br+)*
                   "Thank You."                                   -- polite
