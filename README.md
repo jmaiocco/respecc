@@ -16,7 +16,7 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 * Two syntax styles: Polite longhand vs Rude shorthand, with the ability to mix and max different syntaxes at will.
 * Politeness rating system that gauges your reltionship with the compiler and discourages user from too much code with the rude syntax.
 * Consequences for programmers with low program politeness, decreasing the odds that the compiler will compile code correctly.
-* Strong, static typing with opportunity for type inference, allowing the user to type variables implicitly or impose type restrictions with manifest typing.
+* Strong, dynamic typing for ease of use, but also allowing the user to manually impose static type restrictions with manifest typing.
   * Basic type system containing number, string, boolean and array types.
 * Standard conditional (if, else if and else) and loop (for, while) statements.
 * Recursive functions.
@@ -75,7 +75,7 @@ Favor MakeChange(amount) could you...
     Do me a favor and run print with ("Error").
     Kindly return -1
   Thank You.
-  Please declare result as a Number[].
+  Please declare result as a Array<Number>.
   Please populate remaining with amount.
   Please populate i with 0.
   Excuse me, while i is less than 4, could you...
