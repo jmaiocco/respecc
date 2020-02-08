@@ -89,7 +89,7 @@ Favor isPrime(num) could you...
     Kindly return No
   Thank You.
 
-  Please populate i with 5.
+  Please declare i as 5.
   Excuse me, while i*i is less than or equal to 0 or ( num%(i+2) is equal to 0 ), could you...
     Kindly return Yes
   Thank You.
@@ -97,15 +97,16 @@ Favor isPrime(num) could you...
   Kindly return No
 Thank You.
 Farewell!
+
 `;
 
 const politePseudoRandom = String.raw`
 Hey!
 //Generate pseudorandom number
-Please populate a with 1103515245.
-  Please populate m with 2 raised to the power of 31.
-  Please populate c with 12345.
-  Please populate x with 4.
+Please declare a as 1103515245.
+Please declare m as 2 raised to the power of 31.
+Please declare c as 12345.
+Please declare x as 4.
 
 Favor linearCongruentialGenerator() could you...
   Excuse me, if x is less than or equal to 0 and x is less than m, could you...
@@ -114,6 +115,8 @@ Favor linearCongruentialGenerator() could you...
   Thank You.
   Kindly return "invalid input"
 Thank You.
+
+Do me a favor and run linearCongruentialGenerator.
 
 Bye Bye!
 `;
@@ -209,7 +212,7 @@ function isPrime (num) {
     return No
   }
 
-  i = 5
+  gimme i = 5
   while (i*i <= num) {
     if (num%i == 0 || num%(i+2) == 0) {
       return false
@@ -218,21 +221,27 @@ function isPrime (num) {
   }
   return Yes
 }
+
 `;
 
 const rudePseudoRandom = String.raw`
 //Generates pseudorandom number
-a = 1103515245
-m = 2**31
-c = 12345
-x = 4
+gimme a = 1103515245
+gimme m = 2**31
+gimme c = 12345
+gimme x = 4
+
 function linearCongruentialGenerator(){
+
   if (x>=0 && x< m){
-    x= (a* X + c) % m;
+    x= (a* x + c) % m;
     return  x
   }
   return "invalid input"
 }
+
+linearCongruentialGenerator()
+
 `;
 describe("The (rude) syntax checker", () => {
   test("accepts sample changemaker in rude form", done => {
