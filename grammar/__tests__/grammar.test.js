@@ -5,7 +5,7 @@
  * syntactic forms of the language.
  */
 
-const syntaxCheck = require('../syntax-checker');
+const syntaxCheck = require("../syntax-checker");
 /*
 const program1 = String.raw`
 let
@@ -37,8 +37,24 @@ in
 end
 `;
 */
+let programs = [
+  String.raw`
+Salutations!
+for( gimme i : Number = 0; i < 10; i++) could you...
+  print(i)
+Thank You.
+Farewell!
+`
+];
+programs.push(String.raw`
+Salutations!
+for( gimme i : Number = 0; i < 10; i++) could you...
+  print(i)
+Thank You.
+Farewell!
+`);
 
-const program1 = String.raw`
+programs.push(String.raw`
 Excuse me, if x is less than 3, could you...
 	x = 3;
   Please declare x as 3.
@@ -48,11 +64,101 @@ Otherwise, if x is equal to 6, could you...
 Thank You.
 Otherwise, could you...
 Thank You.
-`;
+`);
 
-describe('The syntax checker', () => {
-  test('accepts the mega program with all syntactic forms', (done) => {
-    expect(syntaxCheck(program1)).toBe(true);
-    done();
+programs.push(String.raw`
+Hello!
+if(x raised to the power of 3 is less than 6) {
+	x = 3;
+}
+
+Farewell!
+`);
+
+programs.push(String.raw`
+y = func(x,y,z) or func();
+Please populate y with the result of running sum with (a,b).
+
+x =  the result of running sum with (a,b)
+
+You deserve a break!
+`);
+programs.push(String.raw`
+gimme id : Number = 6
+Please declare id as a Number as 6.
+id = 7;
+Please populate id with 7.
+
+`);
+
+programs.push(String.raw`
+Excuse me, while x is less than y, could you...
+	 x++
+
+Thank You.
+
+for(gimme i =  x; x < 6; x++) {
+}
+
+if(  x  < y   ) {
+}
+
+x = the result of running o
+`);
+
+programs.push(String.raw`
+Favor o():Number {
+}
+print(333333)
+Do me a favor and run o.
+`);
+
+programs.push(String.raw`
+/* Impolite Function Declartion */
+
+function sum(a,b) {
+	return a + b
+}`);
+
+programs.push(String.raw`
+/* Polite Function Declartion */
+Favor sum( a , b ) could you...
+	return a plus b
+Thank You.
+`);
+
+programs.push(String.raw`
+/* Impolite Loop  */
+for(gimme i = 0; i < n; i++) {
+	if(i == 3) { break; }
+ }
+ `);
+
+programs.push(String.raw`
+/* Polite Loop */
+Please declare i as 0.
+Excuse me, while i is less than n, could you...
+	Excuse me, if i is equal to 3, could you...
+    	break
+    Thank You.
+    Please populate i with i plus 1.
+Thank You.
+
+`);
+
+programs.push(String.raw`
+x = x ? x : x
+x = (x,x) -> could you...
+x = x + x
+Thank You.
+
+`);
+
+programs.forEach(program => {
+  describe("The syntax checker", () => {
+    test("accepts the mega program with all syntactic forms", done => {
+      expect(syntaxCheck(program)).toBe(true);
+      done();
+    });
   });
 });
