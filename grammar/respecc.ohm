@@ -6,9 +6,8 @@ respecc {
                | FuncCallStmt
                | Assignment
                | SimpleStmt
-  SimpleStmt   = "print" "(" Exp? ")"                            -- print
-               | "return" Exp?                                   -- return_impolite
-               | "Kindly return" Exp?                            -- return_polite
+  SimpleStmt   = "return" Exp?                                   -- return_impolite
+               | "Kindly return" Exp? "."?                       -- return_polite
                | "break"                                         -- break_impolite
                | "You deserve a break!"                          -- break_polite
   Conditional  = "if" "(" Exp ")" Block
@@ -21,17 +20,18 @@ respecc {
                | "for"  "(" (VarDec)? ";" Exp?
                  ";" Assignment? ")" Block                       -- for_impolite
                | "Excuse me, while " Exp "," Block               -- while_polite
-  FuncCallStmt = id Args                                         -- call_impolite
+  FuncCallStmt = (id | "print") Args                             -- call_impolite
                | "Do me a favor and run" (id | "print")
                  ("with" Args)? "."                              -- call_polite
-  FuncCallExp  = id Args                                         -- call_impolite
-               | "the result of running" id
+  FuncCallExp  = (id | "print") Args                             -- call_impolite
+               | "the result of running" (id | "print")
                  ("with" Args  )?                                -- call_polite
   Assignment   = Var "=" Exp                                     -- impolite
                | Increment
                | "Please populate " Var "with " Exp "."          -- polite
   Declaration  = VarDec | FuncDec// | TypeDec
-  Type         =  Type "[" "]"                                   -- array
+  Type         =  "Array" "<"Type">"                             -- array
+               |  "Dict" "<"Type","Type">"                       -- dict
                |  primtype
                |  id
   FuncDec      = "Favor" id Params (":" Type)? Block             -- polite
@@ -71,14 +71,17 @@ respecc {
                |  "(" Exp ")"                                    -- parens
   Increment    =  incop Var                                      -- prefix
                |  Var incop                                      -- postfix
-  Var          =  Var "[" Exp "]"                             -- subscript
+  Var          =  Var "[" Exp "]"                                -- subscript
                |  Var "." id                                     -- select
                |  id
   Literal      = ArrayLit
+  			       | DictLit
                | numlit
                | stringlit
                | boollit
   ArrayLit     = "[" ListOf<Exp, ",">"]"
+  DictLit      = "{" ListOf<DictEntry, ","> "}"
+  DictEntry    = Exp ":" Exp
   keyword      =  ("Boolean" | "if" | "break" | "else" | "int"
                |  "for" | "and" | "return" | "Number" | "plus"
                |  "null" | "while" | "true" | "String"
@@ -108,7 +111,9 @@ respecc {
   space        := comment | " " | "\t"
   comment      = "/*" (~"*/" any)* "*/"
                | "//" (~"\n" any)* ("\n")?
+               | "BTW..." (~"\n" any)* ("\n")?
+               | "By the way..." (~"\n" any)* ("\n")?
   br           =  ";" | "\n"
   greeting     = ("Hello!" | "Hey!" | "Hi There!" | "Salutations!")
-  farewell     = ("Bye Bye!" | "Farewell!")
+  farewell     = ("Bye Bye!" | "Farewell!" | "Godspeed!")
 }
