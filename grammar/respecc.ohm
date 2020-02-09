@@ -3,7 +3,7 @@ respecc {
   Statement    = Declaration
                | Conditional
                | Loop
-               | FuncCallStmt
+               | FuncCallStmt    
                | Assignment
                | SimpleStmt
   SimpleStmt   = "return" Exp?                                   -- return_impolite
@@ -41,7 +41,7 @@ respecc {
                | "gimme" id (":" Type)? "=" Exp                  -- impolite
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id (":" Type)?                                  -- impolite
-                | id ("as a " Type)?                             -- polite                                                
+                | id ("as a " Type)?                             -- polite
   Args         = "(" ListOf<Exp, ","> ")"
   Block        =  "could you..." br* (Statement br+)*
                   "Thank You."                                   -- polite
