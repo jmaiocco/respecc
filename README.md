@@ -252,3 +252,37 @@ function gcd(firstValue, secondValue) {
 }
 gcd(90, 180);
 ```
+
+### IsEvenOrOdd
+```
+/*****************
+Respecc++ (Polite) 
+******************/
+Hey!
+
+Favor IsEvenOrOdd(numericValue: Number) could you...
+  Kindly return numericValue modded with 2 is equal to 0 ? "Even" : "Odd"
+Thank You.
+
+Do me a favor and run IsEvenOrOdd with (43).
+
+Farewell!
+
+/*****************
+Respecc++ (Rude) 
+******************/
+function IsEvenOrOdd(numericValue) {
+  return numericValue % 2 == 0 ? "Even" : "Odd"
+}
+
+IsEvenOrOdd(43)
+
+/*****************
+JavaScript 
+*****************/
+function isEvenOrOdd(numericValue) {
+  return numericValue % 2 === 0 ? "Even" : "Odd";
+}
+
+isEvenOrOdd(43);
+```
