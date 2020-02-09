@@ -137,6 +137,29 @@ Thank You.
 Godspeed!
 `;
 
+const politeBubbleSort = String.raw`
+Hello!
+Please declare numbers as [1,3,4,5,28,3].
+Favor bubbleSort(comparator, arr, arrlen) could you...
+	Please declare i as 0.
+    Excuse me, while i is less than arrlen minus 1, could you...
+      Please declare j as 0.
+      Excuse me, while j is less than arrlen minus i minus 1, could you...
+        Excuse me, if (comparator(arr[j],arr[j plus 1]) is greater than 0), could you...
+      	  Please declare temp as arr[j].
+          Please populate arr[j] with arr[j plus 1].
+          Please populate arr[j plus 1] with temp.
+        Please populate j with j plus 1.
+        Thank You.
+      Thank You.
+      Please populate i with i plus 1.
+    Thank You.
+    Kindly return arr.
+Thank You.
+Do me a favor and run bubbleSort with((a,b)->(a-b),numbers,6).
+Godspeed!
+`;
+
 describe("The (polite) syntax checker", () => {
   test("accepts sample changemaker in polite form", done => {
     expect(syntaxCheck(politeChangemaker)).toBe(true);
@@ -162,6 +185,10 @@ describe("The (polite) syntax checker", () => {
   });
   test("accept sample tiling configuration program in polite form", done => {
     expect(syntaxCheck(politeTilingCount)).toBe(true);
+    done();
+  });
+  test("accepts sample BubbleSort program in polite form", done => {
+    expect(syntaxCheck(politeBubbleSort)).toBe(true);
     done();
   });
 });
@@ -275,6 +302,25 @@ function countWays(n) {
   return a[n]
 }
 `;
+
+const rudeBubbleSort = String.raw`
+gimme numbers = [1,3,4,5,28,3]
+
+function bubbleSort(comparator, arr, arrlen) {
+	for(gimme i=0;i<arrlen-1;i++){
+      for(gimme j=0;j<arrlen-i-1;j++){
+        if(comparator(arr[j],arr[j+1]) > 0){
+          gimme temp = arr[j]
+          arr[j] = arr[j+1]
+          arr[j+1] = temp
+        }
+      }
+    }
+    return arr
+}
+
+bubbleSort((a,b)->(a-b),numbers,6)
+`;
 describe("The (rude) syntax checker", () => {
   test("accepts sample changemaker in rude form", done => {
     expect(syntaxCheck(rudeChangemaker)).toBe(true);
@@ -298,6 +344,10 @@ describe("The (rude) syntax checker", () => {
   });
   test("accepts sample tiling configuration counter in rude form", done => {
     expect(syntaxCheck(rudeTilingCount)).toBe(true);
+    done();
+  });
+  test("accepts sample BubbleSort program in rude form", done => {
+    expect(syntaxCheck(rudeBubbleSort)).toBe(true);
     done();
   });
 });
