@@ -39,7 +39,7 @@ Salutations!
 
 Favor Fibonacci(n: Number, length: Number) could you...
   Excuse me, if (n is equal to 1), could you...
-    Please populate series with [0, 1].
+    Please declare series as [0, 1].
     Kindly return series
   Thank You.
   Otherwise, could you...
@@ -64,11 +64,11 @@ Favor GCD(firstValue: Number, secondValue: Number) could you...
     Please populate secondValue with (0 - secondValue).
   Thank You.
   Excuse me, while (secondValue is greater than 0), could you...
-    Please populate temporaryValue with secondValue.
+    Please declare temporaryValue as secondValue.
     Please populate secondValue with firstValue modded with secondValue.
     Please populate firstValue with temporaryValue.
   Thank You.
-  Kindly return firstValue
+  Kindly return firstValue.
 Thank You.
 
 Do me a favor and run GCD with (90, 180).
@@ -192,7 +192,7 @@ MakeChange(exampleAmount)
 const rudeFibonacci = String.raw`
 function Fibonacci(n, length) {
   if (n == 1) {
-    series = [0, 1]
+    gimme series = [0, 1]
     return series
   } else {
     series = Fibonacci(n - 1, length - 1)
@@ -213,7 +213,7 @@ function GCD(firstValue, secondValue) {
     secondValue = (0 - secondValue)
   }
   while (secondValue > 0) {
-    temporaryValue = secondValue
+    gimme temporaryValue = secondValue
     secondValue = firstValue % secondValue
     firstValue = temporaryValue
   }
