@@ -18,8 +18,8 @@ Favor MakeChange(amount) could you...
     Kindly return -1
   Thank You.
   Please declare result as a Array<Number>.
-  Please populate remaining with amount.
-  Please populate i with 0.
+  Please declare remaining as a Number as amount.
+  Please declare i as a Number as 0.
   Excuse me, while i is less than 4, could you...
     Please populate result[ i ] with remaining / US_Denominations[ i ].
     Please populate remaining with remaining modded with US_Denominations[ i ].
@@ -28,7 +28,7 @@ Favor MakeChange(amount) could you...
   Kindly return result
 Thank You.
 
-Please populate exampleAmount with 105.
+Please declare exampleAmount as a Number as 105.
 Do me a favor and run MakeChange with (exampleAmount).
 
 Bye Bye!
@@ -39,13 +39,13 @@ Salutations!
 
 Favor Fibonacci(n: Number, length: Number) could you...
   Excuse me, if (n is equal to 1), could you...
-    Please populate series with [0, 1].
-    Kindly return series
+    Please declare series as a Array<Number> as [0, 1].
+    Kindly return series.
   Thank You.
   Otherwise, could you...
-    Please populate series with Fibonacci(n minus 1, length minus 1).
+    Please declare series as a Array<Number> as the result of running Fibonacci with (n minus 1, length minus 1).
     Please populate series[length] with (series[length minus 1] plus series[length minus 2]).
-    Kindly return series
+    Kindly return series.
   Thank You.
 Thank You.
 
@@ -58,17 +58,18 @@ Hey!
 
 Favor GCD(firstValue: Number, secondValue: Number) could you...
   Excuse me, if (firstValue is less than 0), could you...
-    Please populate firstValue with (0 - firstValue).
+    Please populate firstValue with  -firstValue.
   Thank You.
   Excuse me, if (secondValue is less than 0), could you...
-    Please populate secondValue with (0 - secondValue).
+    Please populate secondValue with -secondValue.
   Thank You.
+   Please declare temporaryValue as a Number.
   Excuse me, while (secondValue is greater than 0), could you...
-    Please populate temporaryValue with secondValue.
+    Please declare temporaryValue as secondValue.
     Please populate secondValue with firstValue modded with secondValue.
     Please populate firstValue with temporaryValue.
   Thank You.
-  Kindly return firstValue
+  Kindly return firstValue.
 Thank You.
 
 Do me a favor and run GCD with (90, 180).
@@ -137,6 +138,29 @@ Thank You.
 Godspeed!
 `;
 
+const politeBubbleSort = String.raw`
+Hello!
+Please declare numbers as [1,3,4,5,28,3].
+Favor bubbleSort(comparator, arr, arrlen) could you...
+	Please declare i as 0.
+    Excuse me, while i is less than arrlen minus 1, could you...
+      Please declare j as 0.
+      Excuse me, while j is less than arrlen minus i minus 1, could you...
+        Excuse me, if (comparator(arr[j],arr[j plus 1]) is greater than 0), could you...
+      	  Please declare temp as arr[j].
+          Please populate arr[j] with arr[j plus 1].
+          Please populate arr[j plus 1] with temp.
+        Please populate j with j plus 1.
+        Thank You.
+      Thank You.
+      Please populate i with i plus 1.
+    Thank You.
+    Kindly return arr.
+Thank You.
+Do me a favor and run bubbleSort with((a,b)->(a-b),numbers,6).
+Godspeed!
+`;
+
 describe("The (polite) syntax checker", () => {
   test("accepts sample changemaker in polite form", done => {
     expect(syntaxCheck(politeChangemaker)).toBe(true);
@@ -164,39 +188,43 @@ describe("The (polite) syntax checker", () => {
     expect(syntaxCheck(politeTilingCount)).toBe(true);
     done();
   });
+  test("accepts sample BubbleSort program in polite form", done => {
+    expect(syntaxCheck(politeBubbleSort)).toBe(true);
+    done();
+  });
 });
 
 //Rude Forms of Programs
 const rudeChangemaker = String.raw`
-gimme US_Denominations = [25, 10, 5, 1]
+gimme US_Denominations: Array<Number> = [25, 10, 5, 1]
 
 function MakeChange(amount) {
   if (amount < 0) {
     print("Error")
     return -1
   }
-  result = []
-  remaining = amount
-  i = 0
+  gimme result: Array<Number> = []
+  gimme remaining = amount
+  gimme i = 0
   while ( i < 4 ) {
     result[ i ] = remaining / US_Denominations[ i ]
-    remaining= remaining % US_Denominations[ i ]
+    remaining = remaining % US_Denominations[ i ]
     i++
   }
   return result
 }
-exampleAmount = 105
+gimme exampleAmount = 105
 MakeChange(exampleAmount)
 `;
 
 const rudeFibonacci = String.raw`
 function Fibonacci(n, length) {
   if (n == 1) {
-    series = [0, 1]
+    gimme series = [0, 1]
     return series
   } else {
-    series = Fibonacci(n - 1, length - 1)
-    series[length] = series[length minus 1] plus series[length minus 2]
+    gimme series = Fibonacci(n - 1, length - 1)
+    series[length] = series[length - 1] + series[length - 2]
     return series
   }
 }
@@ -207,13 +235,14 @@ Fibonacci(12, 12)
 const rudeGCD = String.raw`
 function GCD(firstValue, secondValue) {
   if (firstValue < 0) {
-    firstValue = (0 - firstValue)
+    firstValue = -firstValue
   }
   if (secondValue < 0) {
-    secondValue = (0 - secondValue)
+    secondValue = -secondValue
   }
+  gimme temporaryValue = 0
   while (secondValue > 0) {
-    temporaryValue = secondValue
+    gimme temporaryValue = secondValue
     secondValue = firstValue % secondValue
     firstValue = temporaryValue
   }
@@ -275,6 +304,25 @@ function countWays(n) {
   return a[n]
 }
 `;
+
+const rudeBubbleSort = String.raw`
+gimme numbers = [1,3,4,5,28,3]
+
+function bubbleSort(comparator, arr, arrlen) {
+	for(gimme i=0;i<arrlen-1;i++){
+      for(gimme j=0;j<arrlen-i-1;j++){
+        if(comparator(arr[j],arr[j+1]) > 0){
+          gimme temp = arr[j]
+          arr[j] = arr[j+1]
+          arr[j+1] = temp
+        }
+      }
+    }
+    return arr
+}
+
+bubbleSort((a,b)->(a-b),numbers,6)
+`;
 describe("The (rude) syntax checker", () => {
   test("accepts sample changemaker in rude form", done => {
     expect(syntaxCheck(rudeChangemaker)).toBe(true);
@@ -298,6 +346,10 @@ describe("The (rude) syntax checker", () => {
   });
   test("accepts sample tiling configuration counter in rude form", done => {
     expect(syntaxCheck(rudeTilingCount)).toBe(true);
+    done();
+  });
+  test("accepts sample BubbleSort program in rude form", done => {
+    expect(syntaxCheck(rudeBubbleSort)).toBe(true);
     done();
   });
 });
