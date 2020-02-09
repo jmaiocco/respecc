@@ -76,8 +76,8 @@ Favor MakeChange(amount) could you...
     Kindly return -1
   Thank You.
   Please declare result as a Array<Number>.
-  Please populate remaining with amount.
-  Please populate i with 0.
+  Please declare remaining as a Number as amount.
+  Please declare i as a Number as 0.
   Excuse me, while i is less than 4, could you...
     Please populate result[ i ] with remaining / US_Denominations[ i ].
     Please populate remaining with remaining modded with US_Denominations[ i ].
@@ -86,7 +86,7 @@ Favor MakeChange(amount) could you...
   Kindly return result
 Thank You.
 
-Please populate exampleAmount with 105.
+Please declare exampleAmount as a Number as 105.
 Do me a favor and run MakeChange with (exampleAmount).
 
 Bye Bye!
@@ -94,25 +94,24 @@ Bye Bye!
 /*****************
 Respecc++ (Rude) 
 ******************/
-
-gimme US_Denominations = [25, 10, 5, 1]
+gimme US_Denominations: Array<Number> = [25, 10, 5, 1]
 
 function MakeChange(amount) {
   if (amount < 0) {
     print("Error")
     return -1
   }
-  result = []
-  remaining = amount
-  i = 0
+  gimme result: Array<Number> = []
+  gimme remaining = amount
+  gimme i = 0
   while ( i < 4 ) {
     result[ i ] = remaining / US_Denominations[ i ]
-    remaining= remaining % US_Denominations[ i ]
+    remaining = remaining % US_Denominations[ i ]
     i++
   }
   return result
 }
-exampleAmount = 105
+gimme exampleAmount = 105
 MakeChange(exampleAmount)
 
 /*****************
@@ -143,13 +142,13 @@ Salutations!
 
 Favor Fibonacci(n: Number, length: Number) could you... 
   Excuse me, if (n is equal to 1), could you...
-    Please populate series with [0, 1].
-    Kindly return series
+    Please declare series as a Array<Number> as [0, 1].
+    Kindly return series.
   Thank You.
   Otherwise, could you...
-    Please populate series with Fibonacci(n minus 1, length minus 1).
+    Please declare series as a Array<Number> as the result of running Fibonacci with (n minus 1, length minus 1).
     Please populate series[length] with (series[length minus 1] plus series[length minus 2]).
-    Kindly return series
+    Kindly return series.
   Thank You.
 Thank You.
 
@@ -161,11 +160,11 @@ Respecc++ (Rude)
 ******************/
 function Fibonacci(n, length) { 
   if (n == 1) {
-    series = [0, 1]
+    gimme series = [0, 1]
     return series
   } else {
-    series = Fibonacci(n - 1, length - 1)
-    series[length] = series[length minus 1] plus series[length minus 2]
+    gimmme series = Fibonacci(n - 1, length - 1)
+    series[length] = series[length - 1] + series[length - 2]
     return series
   }
 }
@@ -198,11 +197,12 @@ Hey!
 
 Favor GCD(firstValue: Number, secondValue: Number) could you...
   Excuse me, if (firstValue is less than 0), could you...
-    Please populate firstValue with (0 minus firstValue).
+    Please populate firstValue with  -firstValue.
   Thank You.
   Excuse me, if (secondValue is less than 0), could you...
-    Please populate secondValue with (0 minus secondValue).
+    Please populate secondValue with -secondValue.
   Thank You.
+   Please declare temporaryValue as a Number.
   Excuse me, while (secondValue is greater than 0), could you...
     Please populate temporaryValue with secondValue.
     Please populate secondValue with firstValue modded with secondValue.
@@ -220,11 +220,12 @@ Respecc++ (Rude)
 ******************/
 function GCD(firstValue, secondValue) {
   if (firstValue < 0) {
-    firstValue = (0 - firstValue)
+    firstValue = -firstValue
   }
   if (secondValue < 0) {
-    secondValue = (0 - secondValue)
+    secondValue = -secondValue
   }
+  gimme temporaryValue = 0
   while (secondValue > 0) {
     temporaryValue = secondValue
     secondValue = firstValue % secondValue
@@ -232,6 +233,7 @@ function GCD(firstValue, secondValue) {
   }
   return firstValue
 }
+
 
 GCD(90, 180)
 
