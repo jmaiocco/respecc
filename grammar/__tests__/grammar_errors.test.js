@@ -101,7 +101,18 @@ const errors = [
   ["keyword error - if not of, of(x = 5)"],
   ["incorrect syntax - need seperate lines", "Thank you. Farewell"],
   ["bad character in id", "$x := 1"],
-  ["bad syntax - && not &", "a & b"]
+  ["bad syntax - && not &", "a & b"],
+  ['bad syntax - missing closing parentheses', 'print(x'],
+  ['bad syntax - missing beginning parenthese','printx)'],
+  ['bad syntax - missing comma ', '(x y)'],
+  ['incorrect wording - Use Yes ', 'true'],
+  ['incorrect wording - Use No ', 'false'],
+  ['bad syntax - missing closing bracket', '{test'],
+  ['bad syntax - missing opening bracket', 'test}'],
+  ['bad syntax - use "" instead of ''', "'insertString'"],
+  ['bad syntax - use "" instead of ``', '`insertString`'],
+  ['incorrect usage - all inputs must be of same type', '{1, "string", 3}'],
+  ['bad index - incorrect character', 'a = a[^] '],
 ];
 
 describe("The syntax checker", () => {

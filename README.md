@@ -15,6 +15,7 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 
 * Two syntax styles: Polite longhand vs Rude shorthand, with the ability to mix and max different syntaxes at will.
 * Politeness rating system that gauges your reltionship with the compiler and discourages user from too much code with the rude syntax.
+* Features a global function **respecc_score()**, allowing users to find out in real time what their compiler truly thinks of them. 
 * Consequences for programmers with low program politeness, decreasing the odds that the compiler will compile code correctly.
 * Strong, dynamic typing for ease of use, but also allowing the user to manually impose static type restrictions with manifest typing.
   * Basic type system containing number, string, and boolean primitives, as well as array and dictionary types.
