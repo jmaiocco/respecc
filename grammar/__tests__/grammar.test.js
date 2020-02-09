@@ -120,6 +120,23 @@ Do me a favor and run linearCongruentialGenerator.
 
 Bye Bye!
 `;
+const politeTilingCount = String.raw`
+//Number of ways for tiling a 3*n board with 2*1 domino tiles
+Salutations!
+Favor countWays(n) could you...
+  Please declare a as [1,0].
+  Please declare b as [0,1].
+  Please declare i as 2.
+  Excuse me, while i is less than (n plus 1), could you...
+    Please populate a[i] with a[i minus 2]+2 times b[i minus 1].
+    Please populate b[i] with a[i minus 1] +b[i minus 2].
+    Please populate i with i plus 1.
+  Kindly return a[n].
+  Thank You.
+Thank You.
+Godspeed!
+`;
+
 describe("The (polite) syntax checker", () => {
   test("accepts sample changemaker in polite form", done => {
     expect(syntaxCheck(politeChangemaker)).toBe(true);
@@ -141,6 +158,10 @@ describe("The (polite) syntax checker", () => {
   });
   test("accepts sample PseudoRandom number generator in polite form", done => {
     expect(syntaxCheck(politePseudoRandom)).toBe(true);
+    done();
+  });
+  test("accept sample tiling configuration program in polite form", done => {
+    expect(syntaxCheck(politeTilingCount)).toBe(true);
     done();
   });
 });
@@ -241,7 +262,18 @@ function linearCongruentialGenerator(){
 }
 
 linearCongruentialGenerator()
-
+`;
+const rudeTilingCount = String.raw`
+//Number of ways for tiling a 3*n board with 2*1 domino tiles
+function countWays(n) {
+  gimme a = [1,0]
+  gimme b = [0,1]
+  for(gimme i=2; i <n+1;i++){
+    a[i] = a[i-2]+2*b[i-1]
+    b[i] = a[i-1]+b[i-2]
+  }
+  return a[n]
+}
 `;
 describe("The (rude) syntax checker", () => {
   test("accepts sample changemaker in rude form", done => {
@@ -262,6 +294,10 @@ describe("The (rude) syntax checker", () => {
   });
   test("accepts sample pseudorandom number generator in rude form", done => {
     expect(syntaxCheck(rudePseudoRandom)).toBe(true);
+    done();
+  });
+  test("accepts sample tiling configuration counter in rude form", done => {
+    expect(syntaxCheck(rudeTilingCount)).toBe(true);
     done();
   });
 });
