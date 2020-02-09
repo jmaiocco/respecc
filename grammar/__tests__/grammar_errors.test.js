@@ -19,16 +19,32 @@ const syntaxCheck = require("../syntax-checker");
 const errors = [
   //Errors about bad punctuation
   [
-    "wrong punctuation in Blocks - missing first comma of while",
+    "Bad punctuation in Conditional - missing first comma in if",
+    "Excuse me if Yes, could you... Thank You."
+  ],
+  [
+    "Bad punctuation in Conditional - missing second comma in if",
+    "Excuse me, if Yes could you... Thank You."
+  ],
+  [
+    "Bad punctuation in Conditional - missing first comma in Otherwise",
+    "Excuse me, if Yes, could you... Thank You. Otherwise could you... Thank You."
+  ],
+  [
+    "Bad punctuation in Conditional - missing second comma in Otherwise",
+    "Excuse me, if Yes, could you... Thank You. Otherwise, if Yes could you... Thank You."
+  ],
+  [
+    "Bad punctuation in Loop - missing first comma of while",
     "Excuse me while Yes, could you... Thank You."
   ],
   [
-    "wrong punctuation in Loop - missing second comma",
+    "Bad punctuation in Loop - missing second comma",
     "Excuse me, while Yes could you...Thank You."
   ],
   [
-    "wrong punctuation in Block - space inserted before elipses at could you... ",
-    "Excuse me while Yes could you ... Thank You."
+    "Bad punctuation in Block - space inserted before elipses at could you... ",
+    "Excuse me, while Yes could you ... Thank You."
   ],
   [
     "Bad punctuation in Block - missing elipses in could you...",
