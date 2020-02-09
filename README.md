@@ -17,10 +17,12 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 * Politeness rating system that gauges your reltionship with the compiler and discourages user from too much code with the rude syntax.
 * Consequences for programmers with low program politeness, decreasing the odds that the compiler will compile code correctly.
 * Strong, dynamic typing for ease of use, but also allowing the user to manually impose static type restrictions with manifest typing.
-  * Basic type system containing number, string, boolean and array types.
+  * Basic type system containing number, string, and boolean primitives, as well as array and dictionary types.
 * Standard conditional (if, else if and else) and loop (for, while) statements.
 * Recursive functions.
+* Anonymous lambda functions and expressions.
 * Option to seperate statements with newlines or semicolons, allowing multiple statements on a single line if desired.
+* More features on the way as development progresses!
 
 
 ## Example Programs
