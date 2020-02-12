@@ -4,7 +4,7 @@
  * These tests check that our grammar accepts a program that features all of
  * syntactic forms of the language.
  */
-
+// Useless comment
 const syntaxCheck = require("../syntax-checker");
 
 const politeChangemaker = String.raw`
