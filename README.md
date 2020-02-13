@@ -9,7 +9,7 @@ Respecc++ is a programming language designed to promote good manners and proper 
 
 Although slightly more verbose than some modern languages, Respecc++ boasts an incredibly readable (and respectful) syntactic structure. Additionally, the compiler keeps track of whether any written program is civil or rude and assigns it a numerical value. Considerate code means that at compile time, everything is hunky-dory. However, if a programmer cuts too many corners with "rude" code, the compiler will remember that, *and we cannot promise anything good will come of making the compiler your enemy.* 
 
-*Created by Luis Garcia, Timothy Herrmann, Joseph Maiocco, Kevin McInerney, Bennett Shingledecker, and Kevin Solis*
+*Created by Luis Garcia, Timothy Herrmann, Joseph Maiocco, Kevin McInerney, Bennett Shingledecker, and Kevin Solis*.
 
 ## List of Features
 
