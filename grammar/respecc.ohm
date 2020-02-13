@@ -3,7 +3,7 @@ respecc {
   Statement    = Declaration
                | Conditional
                | Loop
-               | FuncCallStmt    
+               | FuncCallStmt
                | Assignment
                | SimpleStmt
   SimpleStmt   = "return" Exp?                                   -- return_impolite
@@ -76,7 +76,7 @@ respecc {
                |  Var "." id                                     -- select
                |  id
   Literal      = ArrayLit
-  			       | DictLit
+               | DictLit
                | numlit
                | stringlit
                | boollit
