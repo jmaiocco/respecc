@@ -38,7 +38,7 @@ respecc {
                | "function" id Params (":" Type)? Block          -- impolite
   VarDec       = "Please declare " id
                  ("as a " Type)? ("as " Exp)? "."                -- polite
-               | "gimme" id (":" Type)? "=" Exp                  -- impolite
+               | "gimme" id (":" Type)? ("=" Exp)?               -- impolite
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id (":" Type)?                                  -- impolite
                 | id ("as a " Type)?                             -- polite
