@@ -1,11 +1,10 @@
 const fs = require('fs');
 const ohm = require('ohm-js');
 const {
-  /*
-  ArrayExp, ArrayType, Assignment, BinaryExp, Binding, Break, Call, ExpSeq, Field,
-  ForExp, Func, IdExp, IfExp, LetExp, Literal, MemberExp, NegationExp, Nil, Param,
-  RecordExp, RecordType, SubscriptedExp, TypeDec, Variable, WhileExp,
-  */
+  Program, Return, Break, Conditional, WhileLoop, ForLoop, FunctionCall, Assignment, ArrayType,
+  DictionaryType, FunctionDeclaration, VariableDeclaration, Parameters, Parameter, Arguments, Block, TernaryExp, LambdaBlock, LambdaExp,
+  BinaryExp, UnaryPrefix, UnaryPostfix, SubscriptExp, MemberExp, ArrayLiteral, DictionaryLiteral, DictEntry, NumberLiteral, StringLiteral,
+  BooleanLiteral
 } = require('../ast');
 
 const grammar = ohm.grammar(fs.readFileSync('grammar/respecc.ohm'));
