@@ -18,6 +18,17 @@ const {
 } = require('../../ast');
 
 const fixture = {
+  hello: [
+    String.raw`print("Hello, world\n")`,
+    new Program(
+      false,
+      [ new FunctionCall(
+          "print",
+          new Arguments(['Hello, world\n']), false)
+      ],
+      false),
+  ],
+
 /*
   hello: [
     String.raw`print("Hello, world\n")`,

@@ -174,6 +174,12 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
   boollit(bool) {
     return new BooleanLiteral(bool === "Yes");
   },
+  NonemptyListOf(first, _separator, rest) {
+    return [first.ast(), ...rest.ast()];
+  },
+  EmptyListOf() {
+      return [];
+  },
   _terminal() {
     return this.sourceString;
   },

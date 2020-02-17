@@ -109,7 +109,7 @@ respecc {
   incop        =  "++" | "--"
   prefixop     =  ~"--" "-" | "!" | "not"
   primtype     =  "Boolean" | "Number" | "String"
-  space        := comment | " " | "\t"
+  space        := comment | " " | "\t" | "\r"
   comment      = "/*" (~"*/" any)* "*/"
                | "//" (~"\n" any)* ("\n")?
                | "BTW..." (~"\n" any)* ("\n")?
