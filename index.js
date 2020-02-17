@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 /*
  * A Respecc++ Compiler
  *
@@ -45,3 +46,4 @@ if (require.main === module) {
     .demand(1);
   compileFile(argv._[0], { astOnly: argv.a});
 }
+
