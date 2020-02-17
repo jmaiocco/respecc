@@ -33,12 +33,12 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
     return new Break(true);
   },
   Conditional_if_impolite(_if, _po1, exp, _pc1, ifblk,
-                          _1, _elseif, _eif, _po2, exps, pc2, blks
+                          _1, _elseif, _eif, _po2, exps, pc2, blks,
                           _2, _else, elseblk) {
     return new Conditional(exp.ast(), ifblk.ast(), exps.ast(), blks.ast(), arrayToNullable(elseblk.ast()), false);
   },
   Conditional_if_polite(_if, exp, _c1, ifblk,
-                        _1, _otherwiseif, exps, _c2, blks
+                        _1, _otherwiseif, exps, _c2, blks,
                         _2, _otherwise, oblk) {
     return new Conditional(exp.ast(), ifblk.ast(), exps.ast(), blks.ast(), arrayToNullable(oblk.ast()), true);
   },
@@ -48,7 +48,7 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
   Loop_while_polite(_while, exp, _c, blk) {
     return new WhileLoop(exp.ast(), blk.ast(), true)
   },
-  Loop_for_impolite(_for, _po, dec, _semi, exp, _semi, assign, _pc, blk) {
+  Loop_for_impolite(_for, _po, dec, _semi1, exp, _semi2, assign, _pc, blk) {
     return new ForLoop(arrayToNullable(dec.ast()), arrayToNullable(exp.ast()), arrayToNullable(assign.ast()), blk.ast())
   },
   FuncCallStmt_call_impolite(id, args) {
@@ -63,11 +63,11 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
   FuncCallExp_call_polite(_1, id, _2, args) {
     return new FunctionCall(id.ast(), arrayToNullable(args.ast()), true);
   },
-  Assignment_impolite(var, _eq, exp) {
-    return new Assignment(var.ast(), exp.ast(), false);
+  Assignment_impolite(v, _eq, exp) {
+    return new Assignment(v.ast(), exp.ast(), false);
   },
-  Assignment_polite(_1, var, _2, exp, _3) {
-    return new Assignment(var.ast(), exp.ast(), true);
+  Assignment_polite(_1, v, _2, exp, _3) {
+    return new Assignment(v.ast(), exp.ast(), true);
   },
   Type_array(_arr, _open, type ,_close) {
     return new ArrayType(type.ast());
@@ -90,10 +90,10 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
   Params(_open, params, _close) {
     return new Parameters(params.ast());
   },
-  Param_polite(id, _colon, type) {
+  Param_polite(id, _as, type) {
     return new Parameter(id.ast(), arrayToNullable(type.ast()), true)
   },
-  Param_impolite() {
+  Param_impolite(id, _colon, type) {
     return new Parameter(id.ast(), arrayToNullable(type.ast()), false)
   },
   Args(_open, exps, _close) {
@@ -141,17 +141,17 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
   Exp9_parens(_open, exp, _close) {
     return exp.ast();
   },
-  Increment_prefix(op, var) {
-    return new UnaryPrefix(op.sourceString, var.ast());
+  Increment_prefix(op, v) {
+    return new UnaryPrefix(op.sourceString, v.ast());
   },
-  Increment_postfix(var, op) {
-    return new UnaryPostfix(var.ast(), op.sourceString);
+  Increment_postfix(v, op) {
+    return new UnaryPostfix(v.ast(), op.sourceString);
   },
-  Var_subscript(var, _open, subscript, _close) {
-    return new SubscriptExp(var.ast(), subscript.ast());
+  Var_subscript(v, _open, subscript, _close) {
+    return new SubscriptExp(v.ast(), subscript.ast());
   },
-  Var_select(var, _dot, field) {
-    return new MemberExp(var.ast(), field.ast());
+  Var_select(v, _dot, field) {
+    return new MemberExp(v.ast(), field.ast());
   },
   ArrayLit(_open, exps, _close) {
     return new ArrayLiteral([...exps.ast()]);
