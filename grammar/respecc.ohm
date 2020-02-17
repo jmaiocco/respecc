@@ -3,7 +3,7 @@ respecc {
   Statement    = Declaration
                | Conditional
                | Loop
-               | FuncCallStmt    
+               | FuncCallStmt
                | Assignment
                | SimpleStmt
   SimpleStmt   = "return" Exp?                                   -- return_impolite
@@ -38,7 +38,7 @@ respecc {
                | "function" id Params (":" Type)? Block          -- impolite
   VarDec       = "Please declare " id
                  ("as a " Type)? ("as " Exp)? "."                -- polite
-               | "gimme" id (":" Type)? "=" Exp                  -- impolite
+               | "gimme" id (":" Type)? ("=" Exp)?               -- impolite
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id (":" Type)?                                  -- impolite
                 | id ("as a " Type)?                             -- polite
@@ -76,7 +76,7 @@ respecc {
                |  Var "." id                                     -- select
                |  id
   Literal      = ArrayLit
-  			       | DictLit
+               | DictLit
                | numlit
                | stringlit
                | boollit
