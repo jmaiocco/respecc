@@ -6,7 +6,7 @@ const {
   DictionaryType, FunctionDeclaration, VariableDeclaration, Parameters, Parameter, Arguments, Block, TernaryExp, LambdaBlock, LambdaExp,
   BinaryExp, UnaryPrefix, UnaryPostfix, SubscriptExp, MemberExp, ArrayLiteral, DictionaryLiteral, DictEntry, NumberLiteral, StringLiteral,
   BooleanLiteral
-  
+
 } = require('../ast');
 
 const grammar = ohm.grammar(fs.readFileSync('grammar/respecc.ohm'));
@@ -20,7 +20,7 @@ function arrayToNullable(a) {
 
 const astGenerator = grammar.createSemantics().addOperation('ast', {
   Program(_1, greet, _2, sfirst, _3, ss, _4, farewell, _5) {
-    return new Program(greet.length !== 0, [sfirst.ast(), ...ss.ast()], farewell.length !== 0);
+    return new Program(greet.ast().length !== 0, [sfirst.ast(), ...ss.ast()], farewell.ast().length !== 0);
   },
   SimpleStmt_return_impolite(_return, exp) {
     return new Return(arrayToNullable(exp.ast()), false)

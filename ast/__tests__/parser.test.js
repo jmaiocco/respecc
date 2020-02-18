@@ -15,7 +15,7 @@ const {
   DictionaryType, FunctionDeclaration, VariableDeclaration, Parameters, Parameter, Arguments, Block, TernaryExp, LambdaBlock, LambdaExp,
   BinaryExp, UnaryPrefix, UnaryPostfix, SubscriptExp, MemberExp, ArrayLiteral, DictionaryLiteral, DictEntry, NumberLiteral, StringLiteral,
   BooleanLiteral
-  
+
 } = require('../../ast');
 
 const fixture = {
@@ -25,7 +25,9 @@ const fixture = {
       false,
       [ new FunctionCall(
           "print",
-          new Arguments(['Hello, world\n']), false)
+          new Arguments([
+            new StringLiteral('Hello, world\\n')]),
+          false)
       ],
       false),
   ],
