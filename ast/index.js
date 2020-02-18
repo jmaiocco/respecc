@@ -68,7 +68,7 @@ class VariableDeclaration {
   constructor(id, type, expression, politeFlag) {
     Object.assign(this, {id, type, expression, politeFlag});
   }
-} 
+}
 
 class Parameters {
   constructor(params) {
@@ -119,7 +119,7 @@ class BinaryExp {
 }
 
 class UnaryPrefix {
-  constructor(op, right) {
+  constructor(operator, right) {
     Object.assign(this, {operator, right});
   }
 }
@@ -162,7 +162,7 @@ class DictEntry {
 
 class NumberLiteral {
   constructor(value) {
-    Object.assign(this, value);
+    Object.assign(this, {value});
   }
 }
 
@@ -171,7 +171,7 @@ class StringLiteral {
     Object.assign(this, {value});
   }
 }
- 
+
 class BooleanLiteral {
   constructor(value) {
     Object.assign(this, {value});
@@ -179,10 +179,10 @@ class BooleanLiteral {
 }
 
 module.exports = {
-  
+
   Program, Return, Break, Conditional, WhileLoop, ForLoop, FunctionCall, Assignment, ArrayType,
   DictionaryType, FunctionDeclaration, VariableDeclaration, Parameters, Parameter, Arguments, Block, TernaryExp, LambdaBlock, LambdaExp,
   BinaryExp, UnaryPrefix, UnaryPostfix, SubscriptExp, MemberExp, ArrayLiteral, DictionaryLiteral, DictEntry, NumberLiteral, StringLiteral,
   BooleanLiteral
-  
+
 };

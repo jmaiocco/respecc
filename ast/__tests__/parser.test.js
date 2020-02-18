@@ -25,8 +25,8 @@ const fixture = {
       false,
       [ new FunctionCall(
           "print",
-          new Arguments([
-            new StringLiteral('Hello, world\\n')]),
+          new Arguments(
+            [ new StringLiteral('Hello, world\\n')]),
           false)
       ],
       false),

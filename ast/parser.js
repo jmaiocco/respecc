@@ -102,10 +102,10 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
     return new Arguments(exps.ast());
   },
   Block_polite(_open, _1, statements, _2, _close) {
-    return new Block(statements, true)
+    return new Block(statements.ast(), true)
   },
   Block_impolite(_open, _1, statements, _2, _close) {
-    return new Block(statements, false)
+    return new Block(statements.ast(), false)
   },
   Exp_ternary(exp1, _1, exp2, _2, exp3) {
     return new TernaryExp(exp1.ast(), exp2.ast(), exp3.ast());
@@ -168,7 +168,7 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
    return this.sourceString;
   },
   numlit(digits, _radix, decimals) {
-    return new NumberLiteral(+this.sourceString)
+    return new NumberLiteral(+this.sourceString);
   },
   stringlit(_openQuote, chars, _closeQuote) {
     return new StringLiteral(this.sourceString.slice(1, -1))

@@ -1,1 +1,24 @@
-print("Hello, world\n");
+Hello!
+
+Please declare US_Denominations as a Number as [25, 10, 5, 1].
+
+Favor MakeChange(amount) could you...
+  Excuse me, if (amount is less than 0), could you...
+    Do me a favor and run print with ("Error").
+    Kindly return -1
+  Thank You.
+  Please declare result as a Array<Number>.
+  Please declare remaining as a Number as amount.
+  Please declare i as a Number as 0.
+  Excuse me, while i is less than 4, could you...
+    Please populate result[ i ] with remaining / US_Denominations[ i ].
+    Please populate remaining with remaining modded with US_Denominations[ i ].
+    i++
+  Thank You.
+  Kindly return result
+Thank You.
+
+Please declare exampleAmount as a Number as 105.
+Do me a favor and run MakeChange with (exampleAmount).
+
+Bye Bye!
