@@ -19,7 +19,7 @@ const {
 } = require('../../ast');
 
 const fixture = {
-  hello: [
+  helloRude: [
     String.raw`print("Hello, world\n")`,
     new Program(
       false,
@@ -30,6 +30,20 @@ const fixture = {
           false)
       ],
       false),
+  ],
+  helloPolite: [
+    String.raw`Hello!
+    Do me a favor and run print with ("Hello, world\n").
+    Bye Bye!`,
+    new Program(
+      true,
+      [ new FunctionCall(
+          "print",
+          new Arguments(
+            [ new StringLiteral('Hello, world\\n')]),
+          true)
+      ],
+      true),
   ],
 
 /*
