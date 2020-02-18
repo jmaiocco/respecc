@@ -1,10 +1,12 @@
 const fs = require('fs');
 const ohm = require('ohm-js');
 const {
+
   Program, Return, Break, Conditional, WhileLoop, ForLoop, FunctionCall, Assignment, ArrayType,
   DictionaryType, FunctionDeclaration, VariableDeclaration, Parameters, Parameter, Arguments, Block, TernaryExp, LambdaBlock, LambdaExp,
   BinaryExp, UnaryPrefix, UnaryPostfix, SubscriptExp, MemberExp, ArrayLiteral, DictionaryLiteral, DictEntry, NumberLiteral, StringLiteral,
   BooleanLiteral
+  
 } = require('../ast');
 
 const grammar = ohm.grammar(fs.readFileSync('grammar/respecc.ohm'));
@@ -165,7 +167,7 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
   id(_firstChar, _restChars) {
    return this.sourceString;
   },
-  numlit(digits, _period, decimals) {
+  numlit(digits, _radix, decimals) {
     return new NumberLiteral(+this.sourceString)
   },
   stringlit(_openQuote, chars, _closeQuote) {
