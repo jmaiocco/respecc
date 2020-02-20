@@ -23,7 +23,6 @@ const {
   FunctionDeclaration,
   VariableDeclaration,
   Parameter,
-  Arguments,
   Block,
   TernaryExp,
   LambdaBlock,
@@ -47,11 +46,7 @@ const fixture = {
     new Program(
       false,
       [
-        new FunctionCall(
-          "print",
-          new Arguments([new StringLiteral("Hello, world\\n")]),
-          false
-        )
+        new FunctionCall("print", [new StringLiteral("Hello, world\\n")], false)
       ],
       false
     )
@@ -62,13 +57,7 @@ const fixture = {
     Bye Bye!`,
     new Program(
       true,
-      [
-        new FunctionCall(
-          "print",
-          new Arguments([new StringLiteral("Hello, world\\n")]),
-          true
-        )
-      ],
+      [new FunctionCall("print", [new StringLiteral("Hello, world\\n")], true)],
       true
     )
   ],

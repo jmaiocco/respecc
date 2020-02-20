@@ -76,12 +76,6 @@ class Parameter {
   }
 }
 
-class Arguments {
-  constructor(exps) {
-    Object.assign(this, { exps });
-  }
-}
-
 class Block {
   constructor(statements, politeFlag) {
     Object.assign(this, { statements, politeFlag });
@@ -186,7 +180,6 @@ module.exports = {
   FunctionDeclaration,
   VariableDeclaration,
   Parameter,
-  Arguments,
   Block,
   TernaryExp,
   LambdaBlock,

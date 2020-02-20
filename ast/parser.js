@@ -14,7 +14,6 @@ const {
   FunctionDeclaration,
   VariableDeclaration,
   Parameter,
-  Arguments,
   Block,
   TernaryExp,
   LambdaBlock,
@@ -193,7 +192,7 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
     );
   },
   Args(_open, exps, _close) {
-    return new Arguments(exps.ast());
+    return exps.ast();
   },
   Block_polite(_open, _1, statements, _2, _close) {
     return new Block(statements.ast(), true);
