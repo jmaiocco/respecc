@@ -70,12 +70,6 @@ class VariableDeclaration {
   }
 }
 
-class Parameters {
-  constructor(params) {
-    Object.assign(this, { params });
-  }
-}
-
 class Parameter {
   constructor(id, type, politeFlag) {
     Object.assign(this, { id, type, politeFlag });
@@ -191,7 +185,6 @@ module.exports = {
   DictionaryType,
   FunctionDeclaration,
   VariableDeclaration,
-  Parameters,
   Parameter,
   Arguments,
   Block,

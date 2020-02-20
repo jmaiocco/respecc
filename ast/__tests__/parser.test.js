@@ -22,7 +22,6 @@ const {
   DictionaryType,
   FunctionDeclaration,
   VariableDeclaration,
-  Parameters,
   Parameter,
   Arguments,
   Block,
