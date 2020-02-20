@@ -184,13 +184,14 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
     );
   },
   Params(_open, params, _close) {
-    return new Parameters(params.ast());
+    return params.ast();
   },
-  Param(id, _sep, type) {
+  Param(id, sep, type) {
+    console.log("TEST" + sep.ast());
     return new Parameter(
       id.ast(),
       arrayToNullable(type.ast()),
-      _sep === "as a"
+      arrayToNullable([sep.ast() === [] ? [] : sep.ast() !== ":"])
     );
   },
   Args(_open, exps, _close) {

@@ -72,28 +72,31 @@ const fixture = {
       ],
       true
     )
-  ]
-  /*
+  ],
+
   functionPolite: [
     String.raw`Hello!
-    Favor sum(x as a Number, y as a Number) : Number could you...
+    Favor sum(x as a Number, y as a Number) as a Number could you...
 	   Kindly return x plus y
     Thank You.
     Farewell!`,
     new Program(
       true,
-      [new FunctionDeclaration(
-        "sum",
-        new Parameters([new Parameter(x, "Number", true),
-                        new Parameter(y, "Number", true)]),
-        "Number",
-        new Block([
-            new Return(new BinaryExp("x", "plus", "y"), true)
-                ], true)
-        true)],
+      [
+        new FunctionDeclaration(
+          "sum",
+          [
+            new Parameter("x", "Number", true),
+            new Parameter("y", "Number", true)
+          ],
+          "Number",
+          new Block([new Return(new BinaryExp("x", "plus", "y"), true)], true),
+          true
+        )
+      ],
       true
     )
-  ] */
+  ]
 };
 
 describe("The parser", () => {
