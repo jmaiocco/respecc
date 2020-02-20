@@ -187,7 +187,6 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
     return params.ast();
   },
   Param(id, sep, type) {
-    console.log("TEST" + sep.ast());
     return new Parameter(
       id.ast(),
       arrayToNullable(type.ast()),
