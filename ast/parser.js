@@ -1,15 +1,39 @@
-const fs = require('fs');
-const ohm = require('ohm-js');
+const fs = require("fs");
+const ohm = require("ohm-js");
 const {
-
-  Program, Return, Break, Conditional, WhileLoop, ForLoop, FunctionCall, Assignment, ArrayType,
-  DictionaryType, FunctionDeclaration, VariableDeclaration, Parameters, Parameter, Arguments, Block, TernaryExp, LambdaBlock, LambdaExp,
-  BinaryExp, UnaryPrefix, UnaryPostfix, SubscriptExp, MemberExp, ArrayLiteral, DictionaryLiteral, DictEntry, NumberLiteral, StringLiteral,
+  Program,
+  Return,
+  Break,
+  Conditional,
+  WhileLoop,
+  ForLoop,
+  FunctionCall,
+  Assignment,
+  ArrayType,
+  DictionaryType,
+  FunctionDeclaration,
+  VariableDeclaration,
+  Parameters,
+  Parameter,
+  Arguments,
+  Block,
+  TernaryExp,
+  LambdaBlock,
+  LambdaExp,
+  BinaryExp,
+  UnaryPrefix,
+  UnaryPostfix,
+  SubscriptExp,
+  MemberExp,
+  ArrayLiteral,
+  DictionaryLiteral,
+  DictEntry,
+  NumberLiteral,
+  StringLiteral,
   BooleanLiteral
+} = require("../ast");
 
-} = require('../ast');
-
-const grammar = ohm.grammar(fs.readFileSync('grammar/respecc.ohm'));
+const grammar = ohm.grammar(fs.readFileSync("grammar/respecc.ohm"));
 
 // Ohm turns `x?` into either [x] or [], which we should clean up for our AST.
 function arrayToNullable(a) {
@@ -18,15 +42,19 @@ function arrayToNullable(a) {
 
 /* eslint-disable no-unused-vars */
 
-const astGenerator = grammar.createSemantics().addOperation('ast', {
+const astGenerator = grammar.createSemantics().addOperation("ast", {
   Program(_1, greet, _2, sfirst, _3, ss, _4, farewell, _5) {
-    return new Program(greet.ast().length !== 0, [sfirst.ast(), ...ss.ast()], farewell.ast().length !== 0);
+    return new Program(
+      greet.ast().length !== 0,
+      [sfirst.ast(), ...ss.ast()],
+      farewell.ast().length !== 0
+    );
   },
   SimpleStmt_return_impolite(_return, exp) {
-    return new Return(arrayToNullable(exp.ast()), false)
+    return new Return(arrayToNullable(exp.ast()), false);
   },
   SimpleStmt_return_polite(_kreturn, exp, _p) {
-    return new Return(arrayToNullable(exp.ast()), true)
+    return new Return(arrayToNullable(exp.ast()), true);
   },
   SimpleStmt_break_impolite(_break) {
     return new Break(false);
@@ -34,24 +62,68 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
   SimpleStmt_break_polite(_break) {
     return new Break(true);
   },
-  Conditional_if_impolite(_if, _po1, exp, _pc1, ifblk,
-                          _1, _elseif, _eif, _po2, exps, pc2, blks,
-                          _2, _else, elseblk) {
-    return new Conditional(exp.ast(), ifblk.ast(), exps.ast(), blks.ast(), arrayToNullable(elseblk.ast()), false);
+  Conditional_if_impolite(
+    _if,
+    _po1,
+    exp,
+    _pc1,
+    ifblk,
+    _1,
+    _elseif,
+    _eif,
+    _po2,
+    exps,
+    pc2,
+    blks,
+    _2,
+    _else,
+    elseblk
+  ) {
+    return new Conditional(
+      exp.ast(),
+      ifblk.ast(),
+      exps.ast(),
+      blks.ast(),
+      arrayToNullable(elseblk.ast()),
+      false
+    );
   },
-  Conditional_if_polite(_if, exp, _c1, ifblk,
-                        _1, _otherwiseif, exps, _c2, blks,
-                        _2, _otherwise, oblk) {
-    return new Conditional(exp.ast(), ifblk.ast(), exps.ast(), blks.ast(), arrayToNullable(oblk.ast()), true);
+  Conditional_if_polite(
+    _if,
+    exp,
+    _c1,
+    ifblk,
+    _1,
+    _otherwiseif,
+    exps,
+    _c2,
+    blks,
+    _2,
+    _otherwise,
+    oblk
+  ) {
+    return new Conditional(
+      exp.ast(),
+      ifblk.ast(),
+      exps.ast(),
+      blks.ast(),
+      arrayToNullable(oblk.ast()),
+      true
+    );
   },
   Loop_while_impolite(_while, _po, exp, _pc, blk) {
-    return new WhileLoop(exp.ast(), blk.ast(), false)
+    return new WhileLoop(exp.ast(), blk.ast(), false);
   },
   Loop_while_polite(_while, exp, _c, blk) {
-    return new WhileLoop(exp.ast(), blk.ast(), true)
+    return new WhileLoop(exp.ast(), blk.ast(), true);
   },
   Loop_for_impolite(_for, _po, dec, _semi1, exp, _semi2, assign, _pc, blk) {
-    return new ForLoop(arrayToNullable(dec.ast()), arrayToNullable(exp.ast()), arrayToNullable(assign.ast()), blk.ast())
+    return new ForLoop(
+      arrayToNullable(dec.ast()),
+      arrayToNullable(exp.ast()),
+      arrayToNullable(assign.ast()),
+      blk.ast()
+    );
   },
   FuncCallStmt_call_impolite(id, args) {
     return new FunctionCall(id.ast(), args.ast(), false);
@@ -71,41 +143,64 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
   Assignment_polite(_1, v, _2, exp, _3) {
     return new Assignment(v.ast(), exp.ast(), true);
   },
-  Type_array(_arr, _open, type ,_close) {
+  Type_array(_arr, _open, type, _close) {
     return new ArrayType(type.ast());
   },
   Type_dict(_dict, _open, type1, _comma, type2, _close) {
     return new DictionaryType(type1.ast(), type2.ast());
   },
   FuncDec_polite(_favor, id, params, _colon, type, block) {
-    return new FunctionDeclaration(id.ast(), params.ast(), arrayToNullable(type.ast()), block.ast(), true);
+    return new FunctionDeclaration(
+      id.ast(),
+      params.ast(),
+      arrayToNullable(type.ast()),
+      block.ast(),
+      true
+    );
   },
   FuncDec_impolite(_function, id, params, _colon, type, block) {
-    return new FunctionDeclaration(id.ast(), params.ast(), arrayToNullable(type.ast()), block.ast(), false);
+    return new FunctionDeclaration(
+      id.ast(),
+      params.ast(),
+      arrayToNullable(type.ast()),
+      block.ast(),
+      false
+    );
   },
   VarDec_polite(_1, id, _2, type, _3, exp, _4) {
-    return new VariableDeclaration(id.ast(), arrayToNullable(type.ast()), arrayToNullable(exp.ast()), true)
+    return new VariableDeclaration(
+      id.ast(),
+      arrayToNullable(type.ast()),
+      arrayToNullable(exp.ast()),
+      true
+    );
   },
   VarDec_impolite(_1, id, _2, type, _3, exp) {
-    return new VariableDeclaration(id.ast(), arrayToNullable(type.ast()), arrayToNullable(exp.ast()), false)
+    return new VariableDeclaration(
+      id.ast(),
+      arrayToNullable(type.ast()),
+      arrayToNullable(exp.ast()),
+      false
+    );
   },
   Params(_open, params, _close) {
     return new Parameters(params.ast());
   },
-  Param_polite(id, _as, type) {
-    return new Parameter(id.ast(), arrayToNullable(type.ast()), true)
-  },
-  Param_impolite(id, _colon, type) {
-    return new Parameter(id.ast(), arrayToNullable(type.ast()), false)
+  Param(id, _sep, type) {
+    return new Parameter(
+      id.ast(),
+      arrayToNullable(type.ast()),
+      _sep === "as a"
+    );
   },
   Args(_open, exps, _close) {
     return new Arguments(exps.ast());
   },
   Block_polite(_open, _1, statements, _2, _close) {
-    return new Block(statements.ast(), true)
+    return new Block(statements.ast(), true);
   },
   Block_impolite(_open, _1, statements, _2, _close) {
-    return new Block(statements.ast(), false)
+    return new Block(statements.ast(), false);
   },
   Exp_ternary(exp1, _1, exp2, _2, exp3) {
     return new TernaryExp(exp1.ast(), exp2.ast(), exp3.ast());
@@ -165,13 +260,13 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
     return new DictEntry(exp1.ast(), exp2.ast());
   },
   id(_firstChar, _restChars) {
-   return this.sourceString;
+    return this.sourceString;
   },
   numlit(digits, _radix, decimals) {
     return new NumberLiteral(+this.sourceString);
   },
   stringlit(_openQuote, chars, _closeQuote) {
-    return new StringLiteral(this.sourceString.slice(1, -1))
+    return new StringLiteral(this.sourceString.slice(1, -1));
   },
   boollit(bool) {
     return new BooleanLiteral(bool === "Yes");
@@ -180,15 +275,15 @@ const astGenerator = grammar.createSemantics().addOperation('ast', {
     return [first.ast(), ...rest.ast()];
   },
   EmptyListOf() {
-      return [];
+    return [];
   },
   _terminal() {
     return this.sourceString;
-  },
+  }
 });
 /* eslint-enable no-unused-vars */
 
-module.exports = (text) => {
+module.exports = text => {
   const match = grammar.match(text);
   if (!match.succeeded()) {
     throw new Error(`Syntax Error: ${match.message}`);

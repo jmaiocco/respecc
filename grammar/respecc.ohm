@@ -34,14 +34,13 @@ respecc {
                |  "Dict" "<"Type","Type">"                       -- dict
                |  primtype
                |  id
-  FuncDec      = "Favor" id Params (":" Type)? Block             -- polite
+  FuncDec      = "Favor" id Params ("as a" Type)? Block             -- polite
                | "function" id Params (":" Type)? Block          -- impolite
   VarDec       = "Please declare " id
                  ("as a " Type)? ("as " Exp)? "."                -- polite
                | "gimme" id (":" Type)? ("=" Exp)?               -- impolite
   Params       = "(" ListOf<Param, ","> ")"
-  Param        = id (":" Type)?                                  -- impolite
-                | id ("as a " Type)?                             -- polite
+  Param        = id ((":"|"as a") Type)?
   Args         = "(" ListOf<Exp, ","> ")"
   Block        =  "could you..." br* (Statement br+)*
                   "Thank You."                                   -- polite

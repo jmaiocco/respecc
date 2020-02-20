@@ -7,29 +7,55 @@
  * may have semantic errors.
  */
 
-const parse = require('../parser');
+const parse = require("../parser");
 
 const {
-
-  Program, Return, Break, Conditional, WhileLoop, ForLoop, FunctionCall, Assignment, ArrayType,
-  DictionaryType, FunctionDeclaration, VariableDeclaration, Parameters, Parameter, Arguments, Block, TernaryExp, LambdaBlock, LambdaExp,
-  BinaryExp, UnaryPrefix, UnaryPostfix, SubscriptExp, MemberExp, ArrayLiteral, DictionaryLiteral, DictEntry, NumberLiteral, StringLiteral,
+  Program,
+  Return,
+  Break,
+  Conditional,
+  WhileLoop,
+  ForLoop,
+  FunctionCall,
+  Assignment,
+  ArrayType,
+  DictionaryType,
+  FunctionDeclaration,
+  VariableDeclaration,
+  Parameters,
+  Parameter,
+  Arguments,
+  Block,
+  TernaryExp,
+  LambdaBlock,
+  LambdaExp,
+  BinaryExp,
+  UnaryPrefix,
+  UnaryPostfix,
+  SubscriptExp,
+  MemberExp,
+  ArrayLiteral,
+  DictionaryLiteral,
+  DictEntry,
+  NumberLiteral,
+  StringLiteral,
   BooleanLiteral
-
-} = require('../../ast');
+} = require("../../ast");
 
 const fixture = {
   helloRude: [
     String.raw`print("Hello, world\n")`,
     new Program(
       false,
-      [ new FunctionCall(
+      [
+        new FunctionCall(
           "print",
-          new Arguments(
-            [ new StringLiteral('Hello, world\\n')]),
-          false)
+          new Arguments([new StringLiteral("Hello, world\\n")]),
+          false
+        )
       ],
-      false),
+      false
+    )
   ],
   helloPolite: [
     String.raw`Hello!
@@ -37,104 +63,49 @@ const fixture = {
     Bye Bye!`,
     new Program(
       true,
-      [ new FunctionCall(
+      [
+        new FunctionCall(
           "print",
-          new Arguments(
-            [ new StringLiteral('Hello, world\\n')]),
-          true)
+          new Arguments([new StringLiteral("Hello, world\\n")]),
+          true
+        )
       ],
-      true),
-  ],
-
-/*
-  hello: [
-    String.raw`print("Hello, world\n")`,
-    new Call('print', [new Literal('Hello, world\\n')]),
-  ],
-
-  breaks: [
-    String.raw`while 0 do (break; break)`,
-    new WhileExp(new Literal(0), new ExpSeq([new Break(), new Break()])),
-  ],
-
-  forAndIf: [
-    String.raw`for i := 0 to 9 do if i then i := 100`,
-    new ForExp(
-      'i',
-      new Literal(0),
-      new Literal(9),
-      new IfExp(new IdExp('i'), new Assignment(new IdExp('i'), new Literal(100)), null),
-    ),
-  ],
-
-  simpleFunction: [
-    String.raw`let
-      function addTwo(x: int): int = x + 2
-    in
-      addTwo(ord("dog"))
-    end`,
-    new LetExp(
-      [new Func('addTwo', [new Param('x', 'int')], 'int',
-        new BinaryExp('+', new IdExp('x'), new Literal(2)))],
-      [new Call('addTwo', [new Call('ord', [new Literal('dog')])])],
-    ),
-  ],
-
-  emptyParameters: [
-    String.raw`f()`,
-    new Call('f', []),
-  ],
-
-  arrays: [
-    String.raw`let type list = array of int var x: list := list [1] of -9 in x[0] end`,
-    new LetExp(
-      [
-        new TypeDec('list', new ArrayType('int')),
-        new Variable('x', 'list',
-          new ArrayExp('list', new Literal(1), new NegationExp(new Literal(9)))),
-      ],
-      [new SubscriptedExp(new IdExp('x'), new Literal(0))],
-    ),
-  ],
-
-  records: [
-    String.raw`let
-      type point = {x: int, y: int}
-      var p: point := nil
-    in
-      print(point{x=1, y=8});
-      p.y * 3 | 5
-    end`,
-    new LetExp(
-      [
-        new TypeDec('point', new RecordType([new Field('x', 'int'), new Field('y', 'int')])),
-        new Variable('p', 'point', new Nil()),
-      ],
-      [
-        new Call('print', [new RecordExp(
-          'point', [new Binding('x', new Literal(1)), new Binding('y', new Literal(8))],
-        )]),
-        new BinaryExp(
-          '|',
-          new BinaryExp('*', new MemberExp(new IdExp('p'), 'y'), new Literal(3)),
-          new Literal(5),
-        ),
-      ],
-    ),
-  ],
-*/
+      true
+    )
+  ]
+  /*
+  functionPolite: [
+    String.raw`Hello!
+    Favor sum(x as a Number, y as a Number) : Number could you...
+	   Kindly return x plus y
+    Thank You.
+    Farewell!`,
+    new Program(
+      true,
+      [new FunctionDeclaration(
+        "sum",
+        new Parameters([new Parameter(x, "Number", true),
+                        new Parameter(y, "Number", true)]),
+        "Number",
+        new Block([
+            new Return(new BinaryExp("x", "plus", "y"), true)
+                ], true)
+        true)],
+      true
+    )
+  ] */
 };
 
-describe('The parser', () => {
+describe("The parser", () => {
   Object.entries(fixture).forEach(([name, [source, expected]]) => {
-    test(`produces the correct AST for ${name}`, (done) => {
+    test(`produces the correct AST for ${name}`, done => {
       expect(parse(source)).toEqual(expected);
       done();
     });
   });
 
-  test('throws an exception on a syntax error', (done) => {
-    expect(() => parse('as$df^&%*$&')).toThrow();
+  test("throws an exception on a syntax error", done => {
+    expect(() => parse("as$df^&%*$&")).toThrow();
     done();
   });
 });
