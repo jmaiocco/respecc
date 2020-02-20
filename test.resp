@@ -1,6 +1,6 @@
 Hello!
 
-Please declare US_Denominations as a Number as [25, 10, 5, 1].
+Please declare US_Denominations as a Array<Number> as [25, 10, 5, 1].
 
 Favor MakeChange(amount) could you...
   Excuse me, if (amount is less than 0), could you...

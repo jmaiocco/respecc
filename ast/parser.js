@@ -190,7 +190,7 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
     return new Parameter(
       id.ast(),
       arrayToNullable(type.ast()),
-      arrayToNullable([sep.ast() === [] ? [] : sep.ast() !== ":"])
+      arrayToNullable(sep.ast()) === null ? null : sep.ast() !== ":"
     );
   },
   Args(_open, exps, _close) {

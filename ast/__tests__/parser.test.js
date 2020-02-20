@@ -96,6 +96,23 @@ const fixture = {
       ],
       true
     )
+  ],
+
+  functionRude: [
+    String.raw`function sum(x, y) {return x + y;}`,
+    new Program(
+      false,
+      [
+        new FunctionDeclaration(
+          "sum",
+          [new Parameter("x", null, null), new Parameter("y", null, null)],
+          null,
+          new Block([new Return(new BinaryExp("x", "+", "y"), false)], false),
+          false
+        )
+      ],
+      false
+    )
   ]
 };
 
