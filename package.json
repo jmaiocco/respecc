@@ -6,6 +6,12 @@
   "scripts": {
     "test": "jest --collect-coverage"
   },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/semantics/",
+      "/backend/"
+    ]
+  },
   "repository": "git+https://github.com/jmaiocco/respecc.git",
   "author": "Luis Garcia, Timothy Herrmann, Joseph Maiocco, Kevin McInerney, Bennett Shingledecker, Kevin Solis",
   "license": "MIT",
