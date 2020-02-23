@@ -61,6 +61,29 @@ const fixture = {
       true
     )
   ],
+  returnRude: [String.raw``],
+  returnPolite: [String.raw``],
+  breakRude: [String.raw``],
+  breakPolite: [String.raw``],
+  conditionalRude: [String.raw``],
+  conditionalPolite: [String.raw``],
+  WhileLoopRude: [String.raw``],
+  WhileLoopPolite: [String.raw``],
+  ForLooopRude: [String.raw``],
+  // ForLoopPolite: [String.raw``],
+  FunctionCallRude: [String.raw``],
+  FunctionCallPolite: [String.raw``],
+  // FunctionCallStmtRude:[String.raw``],
+  // FunctionCallStmtPolite:[String.raw``],
+  // FunctionCallExpRude:[String.raw``],
+  // FunctionCallExpPolite:[String.raw``],
+  AssignmentRude: [String.raw``],
+  AssignmentPolite: [String.raw``],
+  // DeclarationRude:[String.raw``],
+  // DeclarationPolite:[String.raw``],
+  ArrayType: [String.raw``],
+
+  DictionaryType: [String.raw``],
 
   functionPolite: [
     String.raw`Hello!
@@ -101,7 +124,40 @@ const fixture = {
       ],
       false
     )
-  ]
+  ],
+  VariableDeclarationRude: [String.raw``],
+  VariableDeclarationPolite: [String.raw``],
+  ParameterRude: [String.raw``],
+  ParameterPolite: [String.raw``],
+  BlockRude: [String.raw``],
+  BlockPolite: [String.raw``],
+  TernaryExp: [String.raw``],
+
+  LambdaBlock: [String.raw``],
+
+  LambdaExp: [String.raw``],
+
+  BinaryExp: [String.raw``],
+
+  UnaryPrefix: [String.raw``],
+
+  UnaryPostfix: [String.raw``],
+
+  SubscriptExp: [String.raw``],
+
+  MemberExp: [String.raw``],
+
+  ArrayLiteral: [String.raw``],
+
+  DictionaryLiteral: [String.raw``],
+
+  DictEntry: [String.raw``],
+
+  NumberLiteral: [String.raw``],
+
+  StringLiteral: [String.raw``],
+
+  BooleanLiteral: [String.raw``]
 };
 
 describe("The parser", () => {
