@@ -38,6 +38,7 @@ const {
   NumberLiteral,
   StringLiteral,
   BooleanLiteral
+  //Classes added as of 02/23/2020
 } = require("../../ast");
 
 const fixture = {
@@ -61,8 +62,45 @@ const fixture = {
       true
     )
   ],
-  returnRude: [String.raw``],
-  returnPolite: [String.raw``],
+  returnRude: [
+    String.raw`gimme gimmeFive = ()->{return 5;}`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "gimmeFive",
+          null,
+          new LambdaBlock(
+            [],
+            new Block([new Return(new NumberLiteral(5), false)], false)
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+  returnPolite: [
+    String.raw`Please declare gimmeFive as ()-> could you... Kindly return 5.
+    Thank You..`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "gimmeFive",
+          null,
+          new LambdaBlock(
+            [],
+            new Block([new Return(new NumberLiteral(5), true)], true)
+          ),
+          true
+        )
+      ],
+      false
+    )
+  ],
+
+  /* UNIMPLEMENTED TESTS
   breakRude: [String.raw``],
   breakPolite: [String.raw``],
   conditionalRude: [String.raw``],
@@ -77,15 +115,50 @@ const fixture = {
   // FunctionCallStmtPolite:[String.raw``],
   // FunctionCallExpRude:[String.raw``],
   // FunctionCallExpPolite:[String.raw``],
-  AssignmentRude: [String.raw``],
-  AssignmentPolite: [String.raw``],
+  //*/
+
+  AssignmentRude: [
+    String.raw`gimmeFive = ()->{return 5;}`,
+    new Program(
+      false,
+      [
+        new Assignment(
+          "gimmeFive",
+          new LambdaBlock(
+            [],
+            new Block([new Return(new NumberLiteral(5), false)], false)
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ], //DOES NOT PASS AS OF 02/23/2020
+
+  AssignmentPolite: [
+    String.raw`Please populate gimmeFive with () -> 5.`,
+    new Program(
+      false,
+      [
+        new Assignment(
+          "gimmeFive",
+          new LambdaExp([], new NumberLiteral(5)),
+          true
+        )
+      ],
+      false
+    )
+  ],
   // DeclarationRude:[String.raw``],
   // DeclarationPolite:[String.raw``],
+
+  /*UNIMPLEMENTED TESTS
   ArrayType: [String.raw``],
 
   DictionaryType: [String.raw``],
+  //*/
 
-  functionPolite: [
+  functionDeclarationPolite: [
     String.raw`Hello!
     Favor sum(x as a Number, y as a Number) as a Number could you...
 	   Kindly return x plus y
@@ -109,7 +182,7 @@ const fixture = {
     )
   ],
 
-  functionRude: [
+  functionDeclarationRude: [
     String.raw`function sum(x, y) {return x + y;}`,
     new Program(
       false,
@@ -125,18 +198,188 @@ const fixture = {
       false
     )
   ],
-  VariableDeclarationRude: [String.raw``],
-  VariableDeclarationPolite: [String.raw``],
-  ParameterRude: [String.raw``],
-  ParameterPolite: [String.raw``],
-  BlockRude: [String.raw``],
-  BlockPolite: [String.raw``],
-  TernaryExp: [String.raw``],
 
-  LambdaBlock: [String.raw``],
+  VariableDeclarationRude: [
+    String.raw`gimme gimmeFive = () -> 5`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "gimmeFive",
+          null,
+          new LambdaExp([], new NumberLiteral(5)),
+          false
+        )
+      ],
+      false
+    )
+  ], // same as returnRude ast
+  VariableDeclarationPolite: [
+    String.raw`Please declare gimmeFive as () -> 5.`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "gimmeFive",
+          null,
+          new LambdaExp([], new NumberLiteral(5)),
+          true
+        )
+      ],
+      false
+    )
+  ], // may need review for polite punctuation
 
-  LambdaExp: [String.raw``],
+  ParameterNull: [
+    String.raw`function sum(x, y) {return x + y;}`,
+    new Program(
+      false,
+      [
+        new FunctionDeclaration(
+          "sum",
+          [new Parameter("x", null, null), new Parameter("y", null, null)],
+          null,
+          new Block([new Return(new BinaryExp("x", "+", "y"), false)], false),
+          false
+        )
+      ],
+      false
+    )
+  ], // same as function Declaration
 
+  ParameterRude: [
+    String.raw`function sum(x:Number, y:Number) {return x + y;}`,
+    new Program(
+      false,
+      [
+        new FunctionDeclaration(
+          "sum",
+          [
+            new Parameter("x", "Number", false),
+            new Parameter("y", "Number", false)
+          ],
+          null,
+          new Block([new Return(new BinaryExp("x", "+", "y"), false)], false),
+          false
+        )
+      ],
+      false
+    )
+  ], //DOES NOT PASS AS OF 02/23/2020
+
+  ParameterPolite: [
+    String.raw`function sum(x as a Number, y as a Number) {return x + y;}`,
+    new Program(
+      false,
+      [
+        new FunctionDeclaration(
+          "sum",
+          [
+            new Parameter("x", "Number", true),
+            new Parameter("y", "Number", true)
+          ],
+          null,
+          new Block([new Return(new BinaryExp("x", "+", "y"), false)], false),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  BlockRude: [
+    String.raw`gimme gimmeFive = ()->{return 5;}`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "gimmeFive",
+          null,
+          new LambdaBlock(
+            [],
+            new Block([new Return(new NumberLiteral(5), false)], false)
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ], //same as returnRude ast
+  BlockPolite: [
+    String.raw`gimme gimmeFive = ()-> could you... return 5; Thank You.`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "gimmeFive",
+          null,
+          new LambdaBlock(
+            [],
+            new Block([new Return(new NumberLiteral(5), false)], true)
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  TernaryExp: [
+    String.raw`gimme five = 5>4? 5: 4;`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "five",
+          null,
+          new TernaryExp(
+            new BinaryExp(new NumberLiteral(5), ">", new NumberLiteral(4)),
+            new NumberLiteral(5),
+            new NumberLiteral(4)
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  LambdaBlock: [
+    String.raw`gimme gimmeFive = ()->{return 5;}`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "gimmeFive",
+          null,
+          new LambdaBlock(
+            [],
+            new Block([new Return(new NumberLiteral(5), false)], false)
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  LambdaExp: [
+    String.raw`gimme gimmeFive = ()-> 5`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "gimmeFive",
+          null,
+          new LambdaExp([], new NumberLiteral(5)),
+          false
+        )
+      ],
+      false
+    )
+  ]
+
+  /* UNIMPLEMENTED TESTS
   BinaryExp: [String.raw``],
 
   UnaryPrefix: [String.raw``],
@@ -158,6 +401,8 @@ const fixture = {
   StringLiteral: [String.raw``],
 
   BooleanLiteral: [String.raw``]
+  //Test necessary as of 02/23/2020
+  //*/
 };
 
 describe("The parser", () => {
