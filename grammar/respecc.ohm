@@ -6,7 +6,7 @@ respecc {
                | FuncCallStmt
                | Assignment
                | SimpleStmt
-  SimpleStmt   = "return" Exp?                                   -- return_impolite
+  SimpleStmt   = "return" Exp? "."?                                 -- return_impolite
                | "Kindly return" Exp? "."?                       -- return_polite
                | "break"                                         -- break_impolite
                | "You deserve a break!"                          -- break_polite
@@ -42,8 +42,11 @@ respecc {
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id ((":"|"as a") Type)?
   Args         = "(" ListOf<Exp, ","> ")"
-  Block        =  "could you..." br* (Statement br+)*
-                  "Thank You."                                   -- polite
+  Block        =  "could you..."  br* Statement (br+ Statement)* br*
+                  "Thank You" "."?                                   -- polite
+               |  "{"  br* Statement (br+ Statement)* br* "}"                   -- impolite
+ InlineBlock   =  "could you..." br* (Statement br+)*
+                 "Thank You"                                     -- polite
                |  "{" br* (Statement br+)* "}"                   -- impolite
   Exp          =  Exp1 "?" Exp1 ":" Exp                          -- ternary
                |  Exp1

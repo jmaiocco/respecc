@@ -48,7 +48,7 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
       farewell.ast().length !== 0
     );
   },
-  SimpleStmt_return_impolite(_return, exp) {
+  SimpleStmt_return_impolite(_return, exp, _p) {
     return new Return(arrayToNullable(exp.ast()), false);
   },
   SimpleStmt_return_polite(_kreturn, exp, _p) {
@@ -194,11 +194,11 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
   Args(_open, exps, _close) {
     return exps.ast();
   },
-  Block_polite(_open, _1, statements, _2, _close) {
-    return new Block(statements.ast(), true);
+  Block_polite(_open, _1, sfirst, _2, ss, _3, _close, _4) {
+    return new Block([sfirst.ast(), ...ss.ast()], true);
   },
-  Block_impolite(_open, _1, statements, _2, _close) {
-    return new Block(statements.ast(), false);
+  Block_impolite(_open, _1, sfirst, _2, ss, _3, _close) {
+    return new Block([sfirst.ast(), ...ss.ast()], false);
   },
   Exp_ternary(exp1, _1, exp2, _2, exp3) {
     return new TernaryExp(exp1.ast(), exp2.ast(), exp3.ast());
