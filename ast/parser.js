@@ -202,9 +202,6 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
   Block_impolite(_open, _1, sfirst, _2, ss, _3, _close) {
     return new Block([...sfirst.ast(), ...ss.ast()], false);
   },
-  InlineBlock_polite(_open, _1, sfirst, _2, ss, _3, _close) {
-    return new Block([...sfirst.ast(), ...ss.ast()], true);
-  },
   InlineBlock_impolite(_open, _1, sfirst, _2, ss, _3, _close) {
     return new Block([...sfirst.ast(), ...ss.ast()], false);
   },

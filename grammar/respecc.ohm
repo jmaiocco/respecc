@@ -1,14 +1,14 @@
 respecc {
   Program      = br* greeting? br* Statement (br+ Statement)* br* farewell? br*
-  Statement    = Declaration
+  Statement    = Assignment
+               | Declaration
                | Conditional
                | Loop
                | FuncCallStmt
-               | Assignment
                | SimpleStmt
-  SimpleStmt   = "return" Exp? "."?                                 -- return_impolite
+  SimpleStmt   = "return" Exp? "."?                      -- return_impolite
                | "Kindly return" Exp? "."?                       -- return_polite
-               | "break"                                         -- break_impolite
+               | "break"                                 -- break_impolite
                | "You deserve a break!"                          -- break_polite
   Conditional  = "if" "(" Exp ")" Block
                  (br* "else" "if" "(" Exp ")" Block)*
@@ -45,9 +45,7 @@ respecc {
   Block        =  "could you..."  br* Statement? (br+ Statement)* br*
                   "Thank You."                                    -- polite
                |  "{"  br* Statement? (br+ Statement)* br* "}"     -- impolite
- InlineBlock   =  "could you..." br* Statement? (br+ Statement)* br*
-                 "Thank You"                                     -- polite
-               |  "{" br* Statement? (br+ Statement)* br* "}"     -- impolite
+ InlineBlock   =  "{" br* Statement? (br+ Statement)* br* "}"     -- impolite
   Exp          =  Exp1 "?" Exp1 ":" Exp                          -- ternary
                |  Exp1
   Exp1         =  Params "->" InlineBlock                        -- lambda_blk
