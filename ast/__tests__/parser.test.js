@@ -265,7 +265,7 @@ const fixture = {
       ],
       false
     )
-  ], //DOES NOT PASS AS OF 02/23/2020 , Politeflag should be false but read as true
+  ],
 
   ParameterPolite: [
     String.raw`function sum(x as a Number, y as a Number) {return x + y;}`,
