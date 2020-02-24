@@ -81,8 +81,7 @@ const fixture = {
     )
   ],
   returnPolite: [
-    String.raw`Please declare gimmeFive as ()-> could you... Kindly return 5.
-    Thank You..`,
+    String.raw`Please declare gimmeFive as ()-> could you... Kindly return 5. Thank You.`,
     new Program(
       false,
       [
@@ -306,7 +305,7 @@ const fixture = {
     )
   ], //same as returnRude ast
   BlockPolite: [
-    String.raw`gimme gimmeFive = ()-> could you... return 5; Thank You.`,
+    String.raw`gimme gimmeFive = ()-> could you... return 5. Thank You`,
     new Program(
       false,
       [
