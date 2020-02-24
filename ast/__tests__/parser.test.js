@@ -133,7 +133,7 @@ const fixture = {
       ],
       false
     )
-  ], //DOES NOT PASS AS OF 02/23/2020
+  ], //DOES NOT PASS AS OF 02/23/2020, here "gimme" is considered a keyword despite being connected to "Five"
 
   AssignmentPolite: [
     String.raw`Please populate gimmeFive with () -> 5.`,
@@ -265,7 +265,7 @@ const fixture = {
       ],
       false
     )
-  ], //DOES NOT PASS AS OF 02/23/2020
+  ], //DOES NOT PASS AS OF 02/23/2020 , Politeflag should be false but read as true
 
   ParameterPolite: [
     String.raw`function sum(x as a Number, y as a Number) {return x + y;}`,
