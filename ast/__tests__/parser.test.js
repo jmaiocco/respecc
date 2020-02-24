@@ -81,7 +81,7 @@ const fixture = {
     )
   ],
   returnPolite: [
-    String.raw`Please declare gimmeFive as ()-> could you... Kindly return 5. Thank You.`,
+    String.raw`Please declare gimmeFive as ()-> { Kindly return 5. }.`,
     new Program(
       false,
       [
@@ -90,7 +90,7 @@ const fixture = {
           null,
           new LambdaBlock(
             [],
-            new Block([new Return(new NumberLiteral(5), true)], true)
+            new Block([new Return(new NumberLiteral(5), true)], false)
           ),
           true
         )
@@ -305,7 +305,7 @@ const fixture = {
     )
   ], //same as returnRude ast
   BlockPolite: [
-    String.raw`gimme gimmeFive = ()-> could you... return 5. Thank You`,
+    String.raw`gimme gimmeFive = ()-> { return 5; }`,
     new Program(
       false,
       [
@@ -314,7 +314,7 @@ const fixture = {
           null,
           new LambdaBlock(
             [],
-            new Block([new Return(new NumberLiteral(5), false)], true)
+            new Block([new Return(new NumberLiteral(5), false)], false)
           ),
           false
         )
