@@ -58,6 +58,24 @@ class DictionaryType {
   }
 }
 
+class ClassDeclaration {
+  constructor(id, block, politeFlag) {
+    Object.assign(this, { id, block, politeFlag });
+  }
+}
+
+class ClassBlock {
+  constructor(members, politeFlag) {
+    Object.assign(this, { members, politeFlag });
+  }
+}
+
+class Constructor {
+  constructor(id, params, blk, politeFlag) {
+    Object.assign(this, { id, params, blk, politeFlag });
+  }
+}
+
 class FunctionDeclaration {
   constructor(id, params, type, block, politeFlag) {
     Object.assign(this, { id, params, type, block, politeFlag });
@@ -182,6 +200,9 @@ module.exports = {
   Assignment,
   ArrayType,
   DictionaryType,
+  ClassDeclaration,
+  ClassBlock,
+  Constructor,
   FunctionDeclaration,
   VariableDeclaration,
   Parameter,
