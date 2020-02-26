@@ -202,9 +202,6 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
   Block_impolite(_open, _1, sfirst, _2, ss, _3, _close) {
     return new Block([...sfirst.ast(), ...ss.ast()], false);
   },
-  InlineBlock_impolite(_open, _1, sfirst, _2, ss, _3, _close) {
-    return new Block([...sfirst.ast(), ...ss.ast()], false);
-  },
   Exp_ternary(exp1, _1, exp2, _2, exp3) {
     return new TernaryExp(exp1.ast(), exp2.ast(), exp3.ast());
   },

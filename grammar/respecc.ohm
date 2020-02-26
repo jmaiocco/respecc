@@ -29,7 +29,18 @@ respecc {
   Assignment   = Var "=" Exp                                     -- impolite
                | Increment
                | "Please populate " Var "with " Exp "."          -- polite
-  Declaration  = VarDec | FuncDec// | TypeDec
+  Declaration  = VarDec | FuncDec | ClassDec
+
+  ClassDec = "class" id ClassBlock                             -- impolite
+                   | "Have you ever heard of a"                   -- polite
+  ClassBlock = "{" br* ClassMember? (br+ ClassMember)* br* "}"                           --polite
+  					 | "Let's get classy..." ClassMember* "Thank You."  -- impolite
+  ClassMember = Constructor | Declaration | Method
+  Constructor =  id  Params  Block               -- impolite
+                      |  "Construct the" id "by using" Params  "." Block               --polite
+  Method = FuncDec
+
+
   Type         =  "Array" "<"Type">"                             -- array
                |  "Dict" "<"Type","Type">"                       -- dict
                |  primtype
@@ -37,18 +48,17 @@ respecc {
   FuncDec      = "Favor" id Params (("as a "|":") Type)? Block             -- polite
                | "function" id Params (("as a "|":") Type)? Block          -- impolite
   VarDec       = "Please declare " id
-                 (("as a "|":") Type)? ("as " Exp)? "."?                -- polite
+                 (("as a "|":") Type)? ("as " Exp)? "."?                   -- polite
                | "gimme" id (("as a "|":") Type)? ("=" Exp)?               -- impolite
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id ((":"|"as a") Type)?
   Args         = "(" ListOf<Exp, ","> ")"
   Block        =  "could you..."  br* Statement? (br+ Statement)* br*
-                  "Thank You."                               -- polite
-               |  "{"  br* Statement? (br+ Statement)* br* "}"     -- impolite
- InlineBlock   =  "{" br* Statement? (br+ Statement)* br* "}"     -- impolite
+                  "Thank You."                                   -- polite
+               |  "{"  br* Statement? (br+ Statement)* br* "}"   -- impolite
   Exp          =  Exp1 "?" Exp1 ":" Exp                          -- ternary
                |  Exp1
-  Exp1         =  Params "->" Block                         -- lambda_blk
+  Exp1         =  Params "->" Block                              -- lambda_blk
                |  Params "->" Exp2                               -- lambda_exp
                |  Exp2
   Exp2         =  Exp2 orop Exp3                                  -- binary
@@ -88,7 +98,7 @@ respecc {
                |  "null" | "while" | "true" | "String"
                |  "or" | "Yes" | "No" | "minus" | "times" | "not"
                |  "print" | "Favor" | "function" | "gimme" | "respecc_score"
-               |  "sacrifice" ) ~idrest
+               |  "sacrifice" | "class" ) ~idrest
   id           = ~keyword letter idrest*
   idrest       = letter | digit | "_"
   boollit      = "Yes" | "No"
