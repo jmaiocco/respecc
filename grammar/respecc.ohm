@@ -30,35 +30,39 @@ respecc {
                | Increment
                | "Please populate " Var "with " Exp "."          -- polite
   Declaration  = VarDec | FuncDec | ClassDec
-
-  ClassDec = "class" id ClassBlock                             -- impolite
-                   | "Have you ever heard of a"  id "?" ClassBlock                -- polite
-  ClassBlock = br* "{" br* ClassMember? (br+ ClassMember)* br* "}"      -- impolite
-  					 | br* "Let's get classy..." br* ClassMember? (br+ ClassMember)* br* "Thank You."  -- polite
-  ClassMember = Constructor | Declaration | FuncDec
-  Constructor =  id  Params  Block               -- impolite
-                      |  "To construct a" id "by using" Params  "," Block               -- polite
+  ClassDec     = "class" id ClassBlock                           -- impolite
+               | "Have you ever heard of a"  id "?" ClassBlock   -- polite
+  ClassBlock   = br* "{" br* ClassMember?
+                 (br+ ClassMember)* br* "}"                      -- impolite
+  					   | br* "Let's get classy..." br* ClassMember?
+                 (br+ ClassMember)* br* "Thank You."             -- polite
+  ClassMember  = Constructor | Declaration | FuncDec
+  Constructor  =  id  Params  Block                              -- impolite
+               |  "To construct a" id "by using" Params
+                  "," Block                                      -- polite
   Type         =  "Array" "<"Type">"                             -- array
                |  "Dict" "<"Type","Type">"                       -- dict
                |  primtype
                |  id
-  FuncDec      = "Favor" id Params (("as a "|":") Type)? Block             -- polite
-               | "function" id Params (("as a "|":") Type)? Block          -- impolite
+  FuncDec      = "Favor" id Params
+                  (("as a "|":") Type)? Block                    -- polite
+               | "function" id Params
+                  (("as a "|":") Type)? Block                    -- impolite
   VarDec       = "Please declare " id
-                 (("as a "|":") Type)? ("as " Exp)? "."?                   -- polite
-               | "gimme" id (("as a "|":") Type)? ("=" Exp)?               -- impolite
+                 (("as a "|":") Type)? ("as " Exp)? "."?         -- polite
+               | "gimme" id (("as a "|":") Type)? ("=" Exp)?     -- impolite
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id ((":"|"as a") Type)?
   Args         = "(" ListOf<Exp, ","> ")"
-  Block        =  "could you..."  br* Statement? (br+ Statement)* br*
-                  "Thank You."                                   -- polite
+  Block        =  "could you..."  br* Statement?
+                  (br+ Statement)* br* "Thank You."              -- polite
                |  "{"  br* Statement? (br+ Statement)* br* "}"   -- impolite
   Exp          =  Exp1 "?" Exp1 ":" Exp                          -- ternary
                |  Exp1
   Exp1         =  Params "->" Block                              -- lambda_blk
                |  Params "->" Exp2                               -- lambda_exp
                |  Exp2
-  Exp2         =  Exp2 orop Exp3                                  -- binary
+  Exp2         =  Exp2 orop Exp3                                 -- binary
                |  Exp3
   Exp3         =  Exp3 andop Exp4                                -- binary
                |  Exp4
