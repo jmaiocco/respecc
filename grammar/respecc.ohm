@@ -32,12 +32,12 @@ respecc {
   Declaration  = VarDec | FuncDec | ClassDec
 
   ClassDec = "class" id ClassBlock                             -- impolite
-                   | "Have you ever heard of a"                   -- polite
-  ClassBlock = "{" br* ClassMember? (br+ ClassMember)* br* "}"                           --polite
-  					 | "Let's get classy..." ClassMember* "Thank You."  -- impolite
+                   | "Have you ever heard of a"  id "?" ClassBlock                -- polite
+  ClassBlock = br* "{" br* ClassMember? (br+ ClassMember)* br* "}"                           --polite
+  					 | br* "Let's get classy..." br* ClassMember? (br+ ClassMember)* br* "Thank You."  -- impolite
   ClassMember = Constructor | Declaration | Method
   Constructor =  id  Params  Block               -- impolite
-                      |  "Construct the" id "by using" Params  "." Block               --polite
+                      |  "To construct a" id "by using" Params  "," Block               --polite
   Method = FuncDec
 
 
