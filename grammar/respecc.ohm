@@ -97,8 +97,8 @@ respecc {
                |  "for" | "and" | "return" | "Number" | "plus"
                |  "null" | "while" | "true" | "String"
                |  "or" | "Yes" | "No" | "minus" | "times" | "not"
-               |  "print" | "Favor" | "function" | "gimme" | "respecc_score"
-               |  "sacrifice" | "class" ) ~idrest
+               |  "Favor" | "function" | "gimme" | "respecc_score"
+               |  "class" ) ~idrest
   id           = ~keyword letter idrest*
   idrest       = letter | digit | "_"
   boollit      = "Yes" | "No"
