@@ -21,7 +21,7 @@ respecc {
                  ";" Assignment? ")" Block                       -- for_impolite
                | "Excuse me, while " Exp "," Block               -- while_polite
   FuncCallStmt = (id | "print") Args                             -- call_impolite
-               | "Do me a favor and run" (id | "print")
+               | "Do me a favor and run " (id | "print")
                  ("with" Args)? "."                              -- call_polite
   FuncCallExp  = (id | "print") Args                             -- call_impolite
                | "the result of running" (id | "print")
@@ -34,11 +34,11 @@ respecc {
                |  "Dict" "<"Type","Type">"                       -- dict
                |  primtype
                |  id
-  FuncDec      = "Favor" id Params ("as a" Type)? Block             -- polite
-               | "function" id Params (":" Type)? Block          -- impolite
+  FuncDec      = "Favor" id Params (("as a "|":") Type)? Block             -- polite
+               | "function" id Params (("as a "|":") Type)? Block          -- impolite
   VarDec       = "Please declare " id
-                 ("as a " Type)? ("as " Exp)? "."                -- polite
-               | "gimme" id (":" Type)? ("=" Exp)?               -- impolite
+                 (("as a "|":") Type)? ("as " Exp)? "."                -- polite
+               | "gimme" id (("as a "|":") Type)? ("=" Exp)?               -- impolite
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id ((":"|"as a") Type)?
   Args         = "(" ListOf<Exp, ","> ")"
