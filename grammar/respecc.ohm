@@ -21,10 +21,10 @@ respecc {
                  ";" Assignment? ")" Block                       -- for_impolite
                | "Excuse me, while " Exp "," Block               -- while_polite
   FuncCallStmt = (id | "print") Args                             -- call_impolite
-               | "Do me a favor and run " (id | "print")
+               | "Do me a favor and run " id
                  ("with" Args)? "."                              -- call_polite
   FuncCallExp  = (id | "print") Args                             -- call_impolite
-               | "the result of running" (id | "print")
+               | "the result of running" id
                  ("with" Args  )?                                -- call_polite
   Assignment   = Var "=" Exp                                     -- impolite
                | Increment
