@@ -56,7 +56,7 @@ const errors = [
     "Bad punctuation in Blocks - missing period at Thank You.",
     "Excuse me while Yes, could you... Thank You"
   ],
-  ["Bad punctuation in VarDec - missing period", "Please declare i as 3"],
+  ["Bad punctuation in VarDec - too many periods", "Please declare i as 3.."],
   [
     "Bad punctuation in Assignment - missing period",
     "Please populate i with 4"
