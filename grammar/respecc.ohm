@@ -34,7 +34,7 @@ respecc {
                | "Have you ever heard of a"  id "?" ClassBlock   -- polite
   ClassBlock   = br* "{" br* ClassMember?
                  (br+ ClassMember)* br* "}"                      -- impolite
-  					   | br* "Let's get classy..." br* ClassMember?
+               | br* "Let's get classy..." br* ClassMember?
                  (br+ ClassMember)* br* "Thank You."             -- polite
   ClassMember  = Constructor | Declaration | FuncDec
   Constructor  =  id  Params  Block                              -- impolite
@@ -91,6 +91,7 @@ respecc {
                | numlit
                | stringlit
                | boollit
+               | nulllit
   ArrayLit     = "[" ListOf<Exp, ",">"]"
   DictLit      = "{" ListOf<DictEntry, ","> "}"
   DictEntry    = Exp ":" Exp
@@ -99,12 +100,13 @@ respecc {
                |  "null" | "while" | "true" | "String"
                |  "or" | "Yes" | "No" | "minus" | "times" | "not"
                |  "Favor" | "function" | "gimme" | "respecc_score"
-               |  "class" ) ~idrest
+               |  "class" | "Null" ) ~idrest
   id           = ~keyword letter idrest*
   idrest       = letter | digit | "_"
   boollit      = "Yes" | "No"
   intlit       = digit+
   numlit       = digit+ ("." digit+)?
+  nulllit      = "NULL" | "Null" | "null"
   stringlit    = "\"" char* "\"" | "\'" char* "\'"
   char         = ~"\\" ~"\"" ~"\n" any | escape
   escape       = "\\" ("\\" | "\"" | "n" | "t" | codepoint)
@@ -119,7 +121,7 @@ respecc {
                | "is equal to" | "is not equal to"
   incop        =  "++" | "--"
   prefixop     =  ~"--" "-" | "!" | "not"
-  primtype     =  "Boolean" | "Number" | "String"
+  primtype     =  "Boolean" | "Number" | "String" | "Null"
   space        := comment | " " | "\t" | "\r"
   comment      = "/*" (~"*/" any)* "*/"
                | "//" (~"\n" any)* ("\n")?

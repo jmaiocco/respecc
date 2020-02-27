@@ -31,7 +31,8 @@ const {
   DictEntry,
   NumberLiteral,
   StringLiteral,
-  BooleanLiteral
+  BooleanLiteral,
+  NullLiteral
 } = require("../ast");
 
 const grammar = ohm.grammar(fs.readFileSync("grammar/respecc.ohm"));
@@ -293,6 +294,9 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
   },
   boollit(bool) {
     return new BooleanLiteral(bool === "Yes");
+  },
+  nulllit(_null) {
+    return new NullLiteral();
   },
   NonemptyListOf(first, _separator, rest) {
     return [first.ast(), ...rest.ast()];
