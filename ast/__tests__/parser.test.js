@@ -40,8 +40,8 @@ const {
   DictEntry,
   NumberLiteral,
   StringLiteral,
-  BooleanLiteral
-  //Classes added as of 02/23/2020
+  BooleanLiteral,
+  NullLiteral
 } = require("../../ast");
 
 const fixture = {
@@ -135,8 +135,7 @@ const fixture = {
       ],
       false
     )
-  ], //DOES NOT PASS AS OF 02/23/2020, here "gimme" is considered a keyword despite being connected to "Five"
-
+  ],
   AssignmentPolite: [
     String.raw`Please populate gimmeFive with () -> 5.`,
     new Program(

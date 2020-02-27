@@ -189,6 +189,8 @@ class BooleanLiteral {
   }
 }
 
+class NullLiteral {}
+
 module.exports = {
   Program,
   Return,
@@ -220,5 +222,6 @@ module.exports = {
   DictEntry,
   NumberLiteral,
   StringLiteral,
-  BooleanLiteral
+  BooleanLiteral,
+  NullLiteral
 };
