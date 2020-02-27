@@ -37,7 +37,10 @@ const {
   DictEntry,
   NumberLiteral,
   StringLiteral,
-  BooleanLiteral
+  BooleanLiteral,
+  ClassDecleration,
+  Constructor,
+  ClassMember
   //Classes added as of 02/23/2020
 } = require("../../ast");
 
@@ -98,24 +101,92 @@ const fixture = {
       false
     )
   ],
+  /*
+  breakRude: [
+    String.raw``,
+    new Program(
 
-  /* UNIMPLEMENTED TESTS
-  breakRude: [String.raw``],
-  breakPolite: [String.raw``],
-  conditionalRude: [String.raw``],
-  conditionalPolite: [String.raw``],
-  WhileLoopRude: [String.raw``],
-  WhileLoopPolite: [String.raw``],
-  ForLooopRude: [String.raw``],
-  // ForLoopPolite: [String.raw``],
-  FunctionCallRude: [String.raw``],
-  FunctionCallPolite: [String.raw``],
-  // FunctionCallStmtRude:[String.raw``],
-  // FunctionCallStmtPolite:[String.raw``],
-  // FunctionCallExpRude:[String.raw``],
-  // FunctionCallExpPolite:[String.raw``],
-  //*/
+    )
+  ],
+  breakPolite: [
+    String.raw``,
+    new Program(
 
+    )
+  ],
+  conditionalRude: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  conditionalPolite: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  WhileLoopRude: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  WhileLoopPolite: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  ForLoopRude: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  ForLoopPolite: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  FunctionCallRude: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  FunctionCallPolite: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  FunctionCallStmtRude: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  FunctionCallStmtPolite: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  FunctionCallExpRude: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  FunctionCallExpPolite: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  */
   AssignmentRude: [
     String.raw`gimmeFive = ()->{return 5;}`,
     new Program(
@@ -148,15 +219,32 @@ const fixture = {
       false
     )
   ],
-  // DeclarationRude:[String.raw``],
-  // DeclarationPolite:[String.raw``],
+  /*
+  DeclerationRude: [
+    String.raw``,
+    new Program(
 
-  /*UNIMPLEMENTED TESTS
-  ArrayType: [String.raw``],
+    )
+  ],
+  DeclerationPolite: [
+    String.raw``,
+    new Program(
 
-  DictionaryType: [String.raw``],
-  //*/
+    )
+  ],
+  DictionaryType: [
+    String.raw``,
+    new Program(
 
+    )
+  ],
+  ArrayType: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  */
   functionDeclarationPolite: [
     String.raw`Hello!
     Favor sum(x as a Number, y as a Number) as a Number could you...
@@ -376,32 +464,93 @@ const fixture = {
       ],
       false
     )
-  ]
+  ],
+  /*
+  BinaryExp: [
+    String.raw``,
+    new Program(
 
-  /* UNIMPLEMENTED TESTS
-  BinaryExp: [String.raw``],
+    )
+  ],
+  UnaryPrefix: [
+    String.raw``,
+    new Program(
 
-  UnaryPrefix: [String.raw``],
+    )
+  ],
+  UnaryPostfix: [
+    String.raw``,
+    new Program(
 
-  UnaryPostfix: [String.raw``],
+    )
+  ],
+  SubscriptExp: [
+    String.raw``,
+    new Program(
 
-  SubscriptExp: [String.raw``],
+    )
+  ],
+  MemberExp: [
+    String.raw``,
+    new Program(
 
-  MemberExp: [String.raw``],
+    )
+  ],
+  ArrayLiteral: [
+    String.raw``,
+    new Program(
 
-  ArrayLiteral: [String.raw``],
+    )
+  ],
+  DictionaryLiteral: [
+    String.raw``,
+    new Program(
 
-  DictionaryLiteral: [String.raw``],
+    )
+  ],
+  DictEntry: [
+    String.raw``,
+    new Program(
 
-  DictEntry: [String.raw``],
+    )
+  ],
+  NumberLiteral: [
+    String.raw``,
+    new Program(
 
-  NumberLiteral: [String.raw``],
+    )
+  ],
+  StringLiteral: [
+    String.raw``,
+    new Program(
 
-  StringLiteral: [String.raw``],
+    )
+  ],
+  BooleanLiteral: [
+    String.raw``,
+    new Program(
 
-  BooleanLiteral: [String.raw``]
-  //Test necessary as of 02/23/2020
-  //*/
+    )
+  ],
+  ClassDecleration: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  Constructor: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  ClassMember: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+*/
 };
 
 describe("The parser", () => {
