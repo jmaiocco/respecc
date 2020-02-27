@@ -20,6 +20,9 @@ const {
   Assignment,
   ArrayType,
   DictionaryType,
+  ClassDeclaration,
+  ClassBlock,
+  Constructor,
   FunctionDeclaration,
   VariableDeclaration,
   Parameter,
@@ -38,10 +41,7 @@ const {
   NumberLiteral,
   StringLiteral,
   BooleanLiteral,
-  ClassDecleration,
-  Constructor,
-  ClassMember
-  //Classes added as of 02/23/2020
+  NullLiteral
 } = require("../../ast");
 
 const fixture = {
@@ -203,8 +203,7 @@ const fixture = {
       ],
       false
     )
-  ], //DOES NOT PASS AS OF 02/23/2020, here "gimme" is considered a keyword despite being connected to "Five"
-
+  ],
   AssignmentPolite: [
     String.raw`Please populate gimmeFive with () -> 5.`,
     new Program(
