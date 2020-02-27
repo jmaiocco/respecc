@@ -106,7 +106,7 @@ respecc {
   boollit      = "Yes" | "No"
   intlit       = digit+
   numlit       = digit+ ("." digit+)?
-  nulllit      = "NULL" | "Null" | "null"
+  nulllit      = "Null"
   stringlit    = "\"" char* "\"" | "\'" char* "\'"
   char         = ~"\\" ~"\"" ~"\n" any | escape
   escape       = "\\" ("\\" | "\"" | "n" | "t" | codepoint)
