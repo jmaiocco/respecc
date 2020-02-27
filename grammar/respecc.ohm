@@ -121,7 +121,7 @@ respecc {
                | "is equal to" | "is not equal to"
   incop        =  "++" | "--"
   prefixop     =  ~"--" "-" | "!" | "not"
-  primtype     =  "Boolean" | "Number" | "String" | "Null"
+  primtype     =  "Boolean" | "Number" | "String"
   space        := comment | " " | "\t" | "\r"
   comment      = "/*" (~"*/" any)* "*/"
                | "//" (~"\n" any)* ("\n")?
