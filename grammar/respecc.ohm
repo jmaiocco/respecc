@@ -20,10 +20,10 @@ respecc {
                | "for"  "(" (VarDec)? ";" Exp?
                  ";" Assignment? ")" Block                       -- for_impolite
                | "Excuse me, while " Exp "," Block               -- while_polite
-  FuncCallStmt = (id | "print") Args                             -- call_impolite
+  FuncCallStmt = id Args                                         -- call_impolite
                | "Do me a favor and run " id
                  ("with" Args)? "."                              -- call_polite
-  FuncCallExp  = (id | "print") Args                             -- call_impolite
+  FuncCallExp  = id Args                                         -- call_impolite
                | "the result of running" id
                  ("with" Args  )?                                -- call_polite
   Assignment   = Var "=" Exp                                     -- impolite
@@ -45,9 +45,9 @@ respecc {
                |  primtype
                |  id
   FuncDec      = "Favor" id Params
-                  (("as a "|":") Type)? Block                    -- polite
+                  (("as a "|":") (Type|"Void"))? Block           -- polite
                | "function" id Params
-                  (("as a "|":") Type)? Block                    -- impolite
+                  (("as a "|":") (Type|"Void"))? Block           -- impolite
   VarDec       = "Please declare " id
                  (("as a "|":") Type)? ("as " Exp)? "."?         -- polite
                | "gimme" id (("as a "|":") Type)? ("=" Exp)?     -- impolite
@@ -100,7 +100,7 @@ respecc {
                |  "null" | "while" | "true" | "String"
                |  "or" | "Yes" | "No" | "minus" | "times" | "not"
                |  "Favor" | "function" | "gimme" | "respecc_score"
-               |  "class" | "Null" ) ~idrest
+               |  "class" | "Null" | "Void") ~idrest
   id           = ~keyword letter idrest*
   idrest       = letter | digit | "_"
   boollit      = "Yes" | "No"
@@ -127,7 +127,7 @@ respecc {
                | "//" (~"\n" any)* ("\n")?
                | "BTW..." (~"\n" any)* ("\n")?
                | "By the way..." (~"\n" any)* ("\n")?
-  br           =  ";" | "\n"
-  greeting     = ("Hello!" | "Hey!" | "Hi There!" | "Salutations!")
-  farewell     = ("Bye Bye!" | "Farewell!" | "Godspeed!")
+  br           =  "\n"
+  greeting     = "Hello!" | "Hey!" | "Hi There!" | "Salutations!"
+  farewell     = "Bye Bye!" | "Farewell!" | "Godspeed!"
 }

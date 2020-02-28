@@ -66,7 +66,7 @@ const fixture = {
     )
   ],
   returnRude: [
-    String.raw`gimme gimmeFive = ()->{return 5;}`,
+    String.raw`gimme gimmeFive = ()->{return 5}`,
     new Program(
       false,
       [
@@ -188,7 +188,7 @@ const fixture = {
   ],
   */
   AssignmentRude: [
-    String.raw`gimmeFive = ()->{return 5;}`,
+    String.raw`gimmeFive = ()->{return 5}`,
     new Program(
       false,
       [
@@ -269,7 +269,7 @@ const fixture = {
   ],
 
   functionDeclarationRude: [
-    String.raw`function sum(x, y) {return x + y;}`,
+    String.raw`function sum(x, y) {return x + y}`,
     new Program(
       false,
       [
@@ -317,7 +317,7 @@ const fixture = {
   ], // may need review for polite punctuation
 
   ParameterNull: [
-    String.raw`function sum(x, y) {return x + y;}`,
+    String.raw`function sum(x, y) {return x + y}`,
     new Program(
       false,
       [
@@ -334,7 +334,7 @@ const fixture = {
   ], // same as function Declaration
 
   ParameterRude: [
-    String.raw`function sum(x:Number, y:Number) {return x + y;}`,
+    String.raw`function sum(x:Number, y:Number) {return x + y}`,
     new Program(
       false,
       [
@@ -354,7 +354,7 @@ const fixture = {
   ],
 
   ParameterPolite: [
-    String.raw`function sum(x as a Number, y as a Number) {return x + y;}`,
+    String.raw`function sum(x as a Number, y as a Number) {return x + y}`,
     new Program(
       false,
       [
@@ -374,7 +374,7 @@ const fixture = {
   ],
 
   BlockRude: [
-    String.raw`gimme gimmeFive = ()->{return 5;}`,
+    String.raw`gimme gimmeFive = ()->{return 5}`,
     new Program(
       false,
       [
@@ -392,7 +392,7 @@ const fixture = {
     )
   ], //same as returnRude ast
   BlockPolite: [
-    String.raw`gimme gimmeFive = ()-> { return 5; }`,
+    String.raw`gimme gimmeFive = ()-> { return 5 }`,
     new Program(
       false,
       [
@@ -411,7 +411,7 @@ const fixture = {
   ],
 
   TernaryExp: [
-    String.raw`gimme five = 5>4? 5: 4;`,
+    String.raw`gimme five = 5>4? 5: 4`,
     new Program(
       false,
       [
@@ -431,7 +431,7 @@ const fixture = {
   ],
 
   LambdaBlock: [
-    String.raw`gimme gimmeFive = ()->{return 5;}`,
+    String.raw`gimme gimmeFive = ()->{return 5}`,
     new Program(
       false,
       [
@@ -463,7 +463,7 @@ const fixture = {
       ],
       false
     )
-  ],
+  ]
   /*
   BinaryExp: [
     String.raw``,

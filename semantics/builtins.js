@@ -1,13 +1,13 @@
 /*
 
-const { Func, Param, PrimitiveType } = require('../ast');
+const { FunctionDeclaration, Parameter, PrimitiveType } = require('../ast');
 
 const IntType = new PrimitiveType('int');
 const StringType = new PrimitiveType('string');
 const NilType = new PrimitiveType('nil');
 
 const standardFunctions = [
-  new Func('print', [new Param('s', StringType)]),
+  new FunctionDeclaration('print', [new Param('s', StringType)]),
   new Func('ord', [new Param('s', StringType)], IntType),
   new Func('chr', [new Param('x', IntType)], StringType),
   new Func('size', [new Param('s', StringType)], IntType),
@@ -26,7 +26,7 @@ const standardFunctions = [
 
 // eslint-disable no-param-reassign
 standardFunctions.forEach((f) => { f.builtin = true; });
-// eslint-enable no-param-reassign 
+// eslint-enable no-param-reassign
 
 module.exports = { IntType, StringType, NilType, standardFunctions };
 
