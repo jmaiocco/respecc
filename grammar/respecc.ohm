@@ -11,7 +11,7 @@ respecc {
                | "break"                                         -- break_impolite
                | "You deserve a break!"                          -- break_polite
   Conditional  = "if" "(" Exp ")" Block
-                 (br* "else" "if" "(" Exp ")" Block)*
+                 (br* "else if" "(" Exp ")" Block)*
                  (br* "else" Block)?                             -- if_impolite
                | "Excuse me, if " Exp "," Block
                  (br* "Otherwise, if " Exp "," Block)*
