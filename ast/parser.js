@@ -72,7 +72,6 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
     ifblk,
     _1,
     _elseif,
-    _eif,
     _po2,
     exps,
     pc2,
