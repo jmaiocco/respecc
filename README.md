@@ -1,7 +1,7 @@
 # Respecc++
 
 <p align="center">
-  <img width="440" height="168" src="https://github.com/jmaiocco/respecc/blob/master/general_images/LogoRev1.png">
+  <img width="440" height="168" src="/general_images/LogoRev1.png">
 </p>
 
 ## Brief Description
