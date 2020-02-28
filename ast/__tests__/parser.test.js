@@ -101,37 +101,60 @@ const fixture = {
       false
     )
   ],
-  /*
-  breakRude: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
+  breakRude: [String.raw`break`, new Program(false, [new Break(false)], false)],
   breakPolite: [
-    String.raw``,
-    new Program(
-
-    )
+    String.raw`You deserve a break!`,
+    new Program(false, [new Break(true)], false)
   ],
   conditionalRude: [
-    String.raw``,
+    String.raw`if(x is less than 3) {return 1} 
+    else if(x >= 3) {return 2}
+    else {return 3}`,
     new Program(
-
+      false,
+      [
+        new Conditional(
+          new BinaryExp("x", "is less than", new NumberLiteral(3)),
+          new Block([new Return(new NumberLiteral(1), false)], false),
+          [new BinaryExp("x", ">=", new NumberLiteral(3))],
+          [new Block([new Return(new NumberLiteral(2), false)], false)],
+          new Block([new Return(new NumberLiteral(3), false)], false),
+          false
+        )
+      ],
+      false
     )
   ],
+  /*
   conditionalPolite: [
-    String.raw``,
-    new Program(
+    String.raw`Excuse me, if x is less than 3, could you…
 
-    )
+    Thank You.
+    Otherwise, if x >= 3, could you…
+        
+    Thank You.
+    Otherwise, could you…
+    
+    Thank You.
+    `,
+    new Program(false, [], false)
   ],
+  */
   WhileLoopRude: [
-    String.raw``,
+    String.raw`while(x < 3){break}`,
     new Program(
-
+      false,
+      [
+        new WhileLoop(
+          new BinaryExp("x", "<", new NumberLiteral(3)),
+          new Block([new Break(false)], false),
+          false
+        )
+      ],
+      false
     )
   ],
+  /*
   WhileLoopPolite: [
     String.raw``,
     new Program(
@@ -144,44 +167,14 @@ const fixture = {
 
     )
   ],
-  ForLoopPolite: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
-  FunctionCallRude: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
-  FunctionCallPolite: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
+  */
   FunctionCallStmtRude: [
-    String.raw``,
-    new Program(
-
-    )
+    String.raw`init(x,y)`,
+    new Program(false, [new FunctionCall(`init`, ["x", "y"], false)], false)
   ],
+  /*
   FunctionCallStmtPolite: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
-  FunctionCallExpRude: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
-  FunctionCallExpPolite: [
-    String.raw``,
+    String.raw`Do me a favor and run init.`,
     new Program(
 
     )
@@ -219,18 +212,6 @@ const fixture = {
     )
   ],
   /*
-  DeclerationRude: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
-  DeclerationPolite: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
   DictionaryType: [
     String.raw``,
     new Program(
@@ -463,14 +444,8 @@ const fixture = {
       ],
       false
     )
-  ],
+  ]
   /*
-  BinaryExp: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
   UnaryPrefix: [
     String.raw``,
     new Program(
@@ -531,7 +506,7 @@ const fixture = {
 
     )
   ],
-  ClassDecleration: [
+  ClassDeclaration: [
     String.raw``,
     new Program(
 
