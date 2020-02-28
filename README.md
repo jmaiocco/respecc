@@ -5,7 +5,7 @@
 </p>
 
 ![GitHub Logo](https://github.com/jmaiocco/respecc/blob/master/general_images/LogoRev1.png)
-Format: ![Alt Text](url)
+Format: ![Alt Text](https://github.com/jmaiocco/respecc/blob/master/general_images/LogoRev1.png)
 
 ## Brief Description
 Respecc++ is a programming language designed to promote good manners and proper etiquette in our degenerate society. Many programmers nowadays view computers as tools rather than partners. When a cryptic error message is shown, programmers mutter curses and ask the compiler, "What the HECK are you doing today...?" Yet nobody ever asks the compiler, "How are you doing today?" We find this state of affairs to be deplorable, and we hope the creation of Respecc++ will improve human-computer interactions for years to come.
