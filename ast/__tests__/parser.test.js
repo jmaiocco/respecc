@@ -161,13 +161,24 @@ const fixture = {
 
     )
   ],
+   */
   ForLoopRude: [
-    String.raw``,
+    String.raw`for(gimme i = 0; i < n; i++) {
+      break;
+    }`,
     new Program(
-
+      false,
+      [
+        new ForLoop(
+          new VariableDeclaration("i", null, new NumberLiteral(0), false),
+          new BinaryExp("i", "<", "n"),
+          new UnaryPostfix("i", "++"),
+          new Block([new Break(false)], false)
+        )
+      ],
+      false
     )
   ],
-  */
   FunctionCallStmtRude: [
     String.raw`init(x,y)`,
     new Program(false, [new FunctionCall(`init`, ["x", "y"], false)], false)
@@ -444,20 +455,16 @@ const fixture = {
       ],
       false
     )
+  ],
+  UnaryPrefix: [
+    String.raw`y = !x`,
+    new Program(
+      false,
+      [new Assignment("y", new UnaryPrefix("!", "x"), false)],
+      false
+    )
   ]
   /*
-  UnaryPrefix: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
-  UnaryPostfix: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
   SubscriptExp: [
     String.raw``,
     new Program(
@@ -488,18 +495,8 @@ const fixture = {
 
     )
   ],
-  NumberLiteral: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
-  StringLiteral: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
+  */
+  /*
   BooleanLiteral: [
     String.raw``,
     new Program(
