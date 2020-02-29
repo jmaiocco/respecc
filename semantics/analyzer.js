@@ -1,18 +1,115 @@
 // The semantic analyzer
-/*
 const {
-  ArrayExp, ArrayType, Assignment, BinaryExp, Binding, Break, Call, ExpSeq, Field,
-  ForExp, Func, IdExp, IfExp, LetExp, Literal, MemberExp, NegationExp, Nil, Param,
-  RecordExp, RecordType, SubscriptedExp, TypeDec, Variable, WhileExp,
-} = require('../ast');
-const { IntType, StringType, NilType } = require('./builtins');
-const check = require('./check');
-const Context = require('./context');
+  Program,
+  Return,
+  Break,
+  Conditional,
+  WhileLoop,
+  ForLoop,
+  FunctionCall,
+  Assignment,
+  ArrayType,
+  DictionaryType,
+  ClassDeclaration,
+  ClassBlock,
+  Constructor,
+  FunctionDeclaration,
+  VariableDeclaration,
+  Parameter,
+  Block,
+  TernaryExp,
+  LambdaBlock,
+  LambdaExp,
+  BinaryExp,
+  UnaryPrefix,
+  UnaryPostfix,
+  SubscriptExp,
+  MemberExp,
+  ArrayLiteral,
+  DictionaryLiteral,
+  DictEntry,
+  NumberLiteral,
+  StringLiteral,
+  BooleanLiteral,
+  NullLiteral
+} = require("../ast");
+const { NumberType, StringType, NullType, BooleanType } = require("./builtins");
+const check = require("./check");
+const Context = require("./context");
 
-module.exports = function (exp) {
+module.exports = function(exp) {
   exp.analyze(Context.INITIAL);
 };
 
+Program.prototype.analyze = function(context) {
+  //So classes and functions seen everywhere within their block?
+  /*
+  this.statements.filter(d => d.constructor === ClassDeclaration).forEach(d => context.add(d));
+  this.statements.filter(d => d.constructor === FunctionDeclaration).forEach(d => d.analyzeSignature(context));
+  this.statements.filter(d => d.constructor === FunctionDeclaration).forEach(d => context.add(d));
+  this.statements.forEach(d => d.analyze(context));
+  */
+  //check.noRecursiveTypeCyclesWithoutRecordTypes(this.decs);
+};
+
+Assignment.prototype.analyze = function(context) {};
+
+Conditional.prototype.analyze = function(context) {};
+
+WhileLoop.prototype.analyze = function(context) {};
+
+ForLoop.prototype.analyze = function(context) {};
+
+FunctionCall.prototype.analyze = function(context) {};
+
+Return.prototype.analyze = function(context) {};
+
+Break.prototype.analyze = function(context) {};
+
+VariableDeclaration.prototype.analyze = function(context) {};
+
+// Function analysis is broken up into two parts in order to support (nutual)
+// recursion. First we have to do semantic analysis just on the signature
+// (including the return type). This is so other functions that may be declared
+// before this one have calls to this one checked.
+FunctionDeclaration.prototype.analyzeSignature = function(context) {
+  //this.bodyContext = context.createChildContextForFunctionBody();
+  //this.params.forEach(p => p.analyze(this.bodyContext));
+  //this.returnType = !this.returnType ? undefined : context.lookup(this.returnType);
+};
+FunctionDeclaration.prototype.analyze = function() {};
+
+ClassDeclaration.prototype.analyze = function(context) {};
+
+NumberLiteral.prototype.analyze = function(context) {
+  this.type = NumberType;
+};
+
+StringLiteral.prototype.analyze = function(context) {
+  this.type = StringType;
+};
+
+NullLiteral.prototype.analyze = function(context) {
+  this.type = NullType;
+};
+
+BooleanLiteral.prototype.analyze = function(context) {
+  this.type = BooleanType;
+};
+
+ArrayLiteral.prototype.analyze = function(context) {
+  let elemType = check.allSameType(this.exps.map(e => e.analyze(context)));
+  this.type = new ArrayType(elemType);
+};
+
+DictionaryLiteral.prototype.analyze = function(context) {
+  let [keyType, valueType] = check.allSameTypePairs(
+    this.keyValuePairs.map(e => e.analyze(context))
+  );
+  this.type = new DictionaryType(keyType, valueType);
+};
+
+/*
 ArrayExp.prototype.analyze = function (context) {
   this.type = context.lookup(this.type);
   check.isArrayType(this.type);

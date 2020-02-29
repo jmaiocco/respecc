@@ -5,11 +5,16 @@
  *
  *   const Context = require('./semantics/context');
  */
-/*
-const { TypeDec } = require('../ast');
-const { standardFunctions, IntType, StringType, NilType } = require('./builtins');
 
-require('./analyzer');
+//const {  } = require('../ast');
+const {
+  NumberType,
+  StringType,
+  NullType,
+  BooleanType,
+  standardFunctions
+} = require("./builtins");
+require("./analyzer");
 
 // When doing semantic analysis we pass around context objects.
 //
@@ -32,7 +37,7 @@ class Context {
       parent,
       currentFunction,
       inLoop,
-      locals: new Map(),
+      locals: new Map()
     });
   }
 
@@ -43,7 +48,11 @@ class Context {
 
   createChildContextForLoop() {
     // When entering a loop body, just set the inLoop field, retain others
-    return new Context({ parent: this, currentFunction: this.currentFunction, inLoop: true });
+    return new Context({
+      parent: this,
+      currentFunction: this.currentFunction,
+      inLoop: true
+    });
   }
 
   createChildContextForBlock() {
@@ -51,7 +60,7 @@ class Context {
     return new Context({
       parent: this,
       currentFunction: this.currentFunction,
-      inLoop: this.inLoop,
+      inLoop: this.inLoop
     });
   }
 
@@ -60,7 +69,7 @@ class Context {
     if (this.locals.has(declaration.id)) {
       throw new Error(`${declaration.id} already declared in this scope`);
     }
-    const entity = declaration instanceof TypeDec ? declaration.type : declaration;
+    const entity = /*declaration instanceof TypeDec ? declaration.type :*/ declaration;
     this.locals.set(declaration.id, entity);
   }
 
@@ -77,10 +86,10 @@ class Context {
 }
 
 Context.INITIAL = new Context();
-[IntType, StringType, NilType, ...standardFunctions].forEach((entity) => {
-  Context.INITIAL.add(entity);
-});
+[NumberType, StringType, NullType, BooleanType, ...standardFunctions].forEach(
+  entity => {
+    Context.INITIAL.add(entity);
+  }
+);
 
 module.exports = Context;
-
-*/

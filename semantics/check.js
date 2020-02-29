@@ -1,6 +1,6 @@
 const util = require("util");
 const { ArrayType, DictionaryType, FunctionDeclaration } = require("../ast");
-const { NumberType, StringType, NullType } = require("./builtins");
+const { NumberType, StringType, NullType, BooleanType } = require("./builtins");
 
 function doCheck(condition, message) {
   if (!condition) {
@@ -66,6 +66,35 @@ module.exports = {
       `Expected ${params.length} args in call, got ${args.length}`
     );
     args.forEach((arg, i) => this.isAssignableTo(arg, params[i].type));
+  },
+
+  allSameType(exps) {
+    if (exps.length === 0) {
+      return NullType;
+    }
+    doCheck(
+      exps.filter(exp => exp.type === exps[0].type).length === exps.length,
+      `all array elements must have the same type`
+    );
+    return exps.type;
+  },
+
+  allSameTypePairs(dictEntries) {
+    if (dictEntries.length === 0) {
+      return NullType;
+    }
+    let [keyType, valueType] = [dictEntries[0].type1, dictEntries[0].type2];
+    doCheck(
+      dictEntries.filter(e => e.type1 === keyType).length ===
+        dictEntries.length,
+      `all dictionary keys must have the same type`
+    );
+    doCheck(
+      dictEntries.filter(e => e.type2 === valueType).length ===
+        dictEntries.length,
+      `all dictionary values must have the same type`
+    );
+    return [keyType, valueType];
   }
 
   /*
