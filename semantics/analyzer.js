@@ -40,7 +40,7 @@ Break.prototype.analyze = function (context) {
 BinaryExp.prototype.analyze = function (context) {
   this.left.analyze(context);
   this.right.analyze(context);
-  if (/[-+*/&|]/.test(this.op)) {
+  if (/[-+&|]/.test(this.op)) {
     check.isInteger(this.left);
     check.isInteger(this.right);
   } else if (/<=?|>=?/.test(this.op)) {
