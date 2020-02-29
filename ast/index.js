@@ -112,14 +112,14 @@ class TernaryExp {
 }
 
 class LambdaBlock {
-  constructor(params, block) {
-    Object.assign(this, { params, block });
+  constructor(params, type, block) {
+    Object.assign(this, { params, type, block });
   }
 }
 
 class LambdaExp {
-  constructor(params, exp) {
-    Object.assign(this, { params, exp });
+  constructor(params, type, exp) {
+    Object.assign(this, { params, type, exp });
   }
 }
 
