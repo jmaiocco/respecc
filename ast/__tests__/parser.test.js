@@ -164,7 +164,7 @@ const fixture = {
    */
   ForLoopRude: [
     String.raw`for(gimme i = 0; i < n; i++) {
-      break;
+      break
     }`,
     new Program(
       false,
@@ -455,16 +455,6 @@ const fixture = {
       ],
       false
     )
-<<<<<<< HEAD
-=======
-  ]
-  /*
-  BinaryExp: [
-    String.raw``,
-    new Program(
-
-    )
->>>>>>> 0168b0e88d07740c72f102cbe764875ed8cea914
   ],
   UnaryPrefix: [
     String.raw`y = !x`,
