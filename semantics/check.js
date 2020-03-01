@@ -20,11 +20,19 @@ module.exports = {
 
   // Can we assign expression to a variable/param/field of type type?
   isAssignableTo(expression, type) {
-    doCheck(
-      expression.type === type,
-      `Expression of type ${util.format(expression.type)}
+    if (type.constructor === ArrayType || type.constructor === DictionaryType) {
+      doCheck(
+        JSON.stringify(expression.type) === JSON.stringify(type),
+        `Expression of type ${util.format(expression.type)}
        not compatible with type ${util.format(type)}`
-    );
+      );
+    } else {
+      doCheck(
+        expression.type === type,
+        `Expression of type ${util.format(expression.type)}
+       not compatible with type ${util.format(type)}`
+      );
+    }
   },
   // Is the type of this expression an array or dictionary type? (For subscript)
   isArrayorDictionary(expression) {
@@ -68,6 +76,14 @@ module.exports = {
     args.forEach((arg, i) => this.isAssignableTo(arg, params[i].type));
   },
 
+  propertyOfAll(arr, prop) {
+    return arr.length !== 0 &&
+      arr.filter(e => e[prop] === arr[0][prop]).length === arr.length
+      ? arr[0][prop]
+      : null;
+  }
+
+  /*
   allSameType(exps) {
     if (exps.length === 0) {
       return NullType;
@@ -96,7 +112,7 @@ module.exports = {
     );
     return [keyType, valueType];
   }
-
+*/
   /*
   isRecord(expression) {
     doCheck(expression.type.constructor === RecordType, 'Not a record');

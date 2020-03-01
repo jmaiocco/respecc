@@ -54,12 +54,12 @@ Program.prototype.analyze = function(context) {
 };
 
 Assignment.prototype.analyze = function(context) {
-  /*
   this.exp.analyze(context);
   this.variable.analyze(context);
-  check.isAssignableTo(this.exp, this.variable.type);
+  if (this.variable.type !== null) {
+    check.isAssignableTo(this.exp, this.variable.type);
+  }
   //check.isNotReadOnly(this.variable);
-  */
 };
 
 Conditional.prototype.analyze = function(context) {};
@@ -74,7 +74,18 @@ Return.prototype.analyze = function(context) {};
 
 Break.prototype.analyze = function(context) {};
 
-VariableDeclaration.prototype.analyze = function(context) {};
+VariableDeclaration.prototype.analyze = function(context) {
+  this.expression.analyze(context);
+  if (this.type) {
+    this.type = context.lookup(this.type);
+    check.isAssignableTo(this.expression, this.type);
+  } else {
+    //type inference way: this.type = this.expression.type;
+    //type ignore
+    this.type = null;
+  }
+  context.add(this);
+};
 
 // Function analysis is broken up into two parts in order to support (nutual)
 // recursion. First we have to do semantic analysis just on the signature
@@ -105,16 +116,25 @@ BooleanLiteral.prototype.analyze = function(context) {
   this.type = BooleanType;
 };
 
+///* Types only need to be same is static typing demands in (isAssignable)
 ArrayLiteral.prototype.analyze = function(context) {
   this.exps.map(e => e.analyze(context));
-  let elemType = check.allSameType(this.exps);
-  this.type = new ArrayType(elemType);
+  this.type = new ArrayType(check.propertyOfAll(this.exps, "type"));
 };
 
 DictionaryLiteral.prototype.analyze = function(context) {
   this.keyValuePairs.forEach(e => e.analyze(context));
-  let [keyType, valueType] = check.allSameTypePairs(this.keyValuePairs);
+  let [keyType, valueType] = [
+    check.propertyOfAll(this.keyValuePairs, "type1"),
+    check.propertyOfAll(this.keyValuePairs, "type2")
+  ];
   this.type = new DictionaryType(keyType, valueType);
+};
+//*/
+
+IdExp.prototype.analyze = function(context) {
+  this.ref = context.lookup(this.ref);
+  this.type = this.ref.type;
 };
 
 /*
@@ -209,10 +229,6 @@ Func.prototype.analyze = function () {
   delete this.bodyContext; // This was only temporary, delete to keep output clean.
 };
 
-IdExp.prototype.analyze = function (context) {
-  this.ref = context.lookup(this.ref);
-  this.type = this.ref.type;
-};
 
 IfExp.prototype.analyze = function (context) {
   this.test.analyze(context);
@@ -261,10 +277,6 @@ NegationExp.prototype.analyze = function (context) {
   this.operand.analyze(context);
   check.isInteger(this.operand, 'Operand of negation');
   this.type = IntType;
-};
-
-Nil.prototype.analyze = function () {
-  this.type = NilType;
 };
 
 Param.prototype.analyze = function (context) {
