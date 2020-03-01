@@ -41,7 +41,8 @@ const {
   NumberLiteral,
   StringLiteral,
   BooleanLiteral,
-  NullLiteral
+  NullLiteral,
+  IdExp
 } = require("../../ast");
 
 const fixture = {
@@ -107,16 +108,16 @@ const fixture = {
     new Program(false, [new Break(true)], false)
   ],
   conditionalRude: [
-    String.raw`if(x is less than 3) {return 1} 
+    String.raw`if(x is less than 3) {return 1}
     else if(x >= 3) {return 2}
     else {return 3}`,
     new Program(
       false,
       [
         new Conditional(
-          new BinaryExp("x", "is less than", new NumberLiteral(3)),
+          new BinaryExp(new IdExp("x"), "is less than", new NumberLiteral(3)),
           new Block([new Return(new NumberLiteral(1), false)], false),
-          [new BinaryExp("x", ">=", new NumberLiteral(3))],
+          [new BinaryExp(new IdExp("x"), ">=", new NumberLiteral(3))],
           [new Block([new Return(new NumberLiteral(2), false)], false)],
           new Block([new Return(new NumberLiteral(3), false)], false),
           false
@@ -131,10 +132,10 @@ const fixture = {
 
     Thank You.
     Otherwise, if x >= 3, could you…
-        
+
     Thank You.
     Otherwise, could you…
-    
+
     Thank You.
     `,
     new Program(false, [], false)
@@ -146,7 +147,7 @@ const fixture = {
       false,
       [
         new WhileLoop(
-          new BinaryExp("x", "<", new NumberLiteral(3)),
+          new BinaryExp(new IdExp("x"), "<", new NumberLiteral(3)),
           new Block([new Break(false)], false),
           false
         )
@@ -171,8 +172,8 @@ const fixture = {
       [
         new ForLoop(
           new VariableDeclaration("i", null, new NumberLiteral(0), false),
-          new BinaryExp("i", "<", "n"),
-          new UnaryPostfix("i", "++"),
+          new BinaryExp(new IdExp("i"), "<", new IdExp("n")),
+          new UnaryPostfix(new IdExp("i"), "++"),
           new Block([new Break(false)], false)
         )
       ],
@@ -181,7 +182,11 @@ const fixture = {
   ],
   FunctionCallStmtRude: [
     String.raw`init(x,y)`,
-    new Program(false, [new FunctionCall(`init`, ["x", "y"], false)], false)
+    new Program(
+      false,
+      [new FunctionCall(`init`, [new IdExp("x"), new IdExp("y")], false)],
+      false
+    )
   ],
   /*
   FunctionCallStmtPolite: [
@@ -197,7 +202,7 @@ const fixture = {
       false,
       [
         new Assignment(
-          "gimmeFive",
+          new IdExp("gimmeFive"),
           new LambdaBlock(
             [],
             new Block([new Return(new NumberLiteral(5), false)], false)
@@ -214,7 +219,7 @@ const fixture = {
       false,
       [
         new Assignment(
-          "gimmeFive",
+          new IdExp("gimmeFive"),
           new LambdaExp([], new NumberLiteral(5)),
           true
         )
@@ -252,7 +257,15 @@ const fixture = {
             new Parameter("y", "Number", true)
           ],
           "Number",
-          new Block([new Return(new BinaryExp("x", "plus", "y"), true)], true),
+          new Block(
+            [
+              new Return(
+                new BinaryExp(new IdExp("x"), "plus", new IdExp("y")),
+                true
+              )
+            ],
+            true
+          ),
           true
         )
       ],
@@ -269,7 +282,15 @@ const fixture = {
           "sum",
           [new Parameter("x", null, null), new Parameter("y", null, null)],
           null,
-          new Block([new Return(new BinaryExp("x", "+", "y"), false)], false),
+          new Block(
+            [
+              new Return(
+                new BinaryExp(new IdExp("x"), "+", new IdExp("y")),
+                false
+              )
+            ],
+            false
+          ),
           false
         )
       ],
@@ -317,7 +338,15 @@ const fixture = {
           "sum",
           [new Parameter("x", null, null), new Parameter("y", null, null)],
           null,
-          new Block([new Return(new BinaryExp("x", "+", "y"), false)], false),
+          new Block(
+            [
+              new Return(
+                new BinaryExp(new IdExp("x"), "+", new IdExp("y")),
+                false
+              )
+            ],
+            false
+          ),
           false
         )
       ],
@@ -337,7 +366,15 @@ const fixture = {
             new Parameter("y", "Number", false)
           ],
           null,
-          new Block([new Return(new BinaryExp("x", "+", "y"), false)], false),
+          new Block(
+            [
+              new Return(
+                new BinaryExp(new IdExp("x"), "+", new IdExp("y")),
+                false
+              )
+            ],
+            false
+          ),
           false
         )
       ],
@@ -357,7 +394,15 @@ const fixture = {
             new Parameter("y", "Number", true)
           ],
           null,
-          new Block([new Return(new BinaryExp("x", "+", "y"), false)], false),
+          new Block(
+            [
+              new Return(
+                new BinaryExp(new IdExp("x"), "+", new IdExp("y")),
+                false
+              )
+            ],
+            false
+          ),
           false
         )
       ],
@@ -460,7 +505,13 @@ const fixture = {
     String.raw`y = !x`,
     new Program(
       false,
-      [new Assignment("y", new UnaryPrefix("!", "x"), false)],
+      [
+        new Assignment(
+          new IdExp("y"),
+          new UnaryPrefix("!", new IdExp("x")),
+          false
+        )
+      ],
       false
     )
   ]

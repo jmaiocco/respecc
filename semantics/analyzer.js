@@ -31,7 +31,8 @@ const {
   NumberLiteral,
   StringLiteral,
   BooleanLiteral,
-  NullLiteral
+  NullLiteral,
+  IdExp
 } = require("../ast");
 const { NumberType, StringType, NullType, BooleanType } = require("./builtins");
 const check = require("./check");
@@ -52,7 +53,14 @@ Program.prototype.analyze = function(context) {
   //check.noRecursiveTypeCyclesWithoutRecordTypes(this.decs);
 };
 
-Assignment.prototype.analyze = function(context) {};
+Assignment.prototype.analyze = function(context) {
+  /*
+  this.exp.analyze(context);
+  this.variable.analyze(context);
+  check.isAssignableTo(this.exp, this.variable.type);
+  //check.isNotReadOnly(this.variable);
+  */
+};
 
 Conditional.prototype.analyze = function(context) {};
 
@@ -98,14 +106,14 @@ BooleanLiteral.prototype.analyze = function(context) {
 };
 
 ArrayLiteral.prototype.analyze = function(context) {
-  let elemType = check.allSameType(this.exps.map(e => e.analyze(context)));
+  this.exps.map(e => e.analyze(context));
+  let elemType = check.allSameType(this.exps);
   this.type = new ArrayType(elemType);
 };
 
 DictionaryLiteral.prototype.analyze = function(context) {
-  let [keyType, valueType] = check.allSameTypePairs(
-    this.keyValuePairs.map(e => e.analyze(context))
-  );
+  this.keyValuePairs.forEach(e => e.analyze(context));
+  let [keyType, valueType] = check.allSameTypePairs(this.keyValuePairs);
   this.type = new DictionaryType(keyType, valueType);
 };
 
