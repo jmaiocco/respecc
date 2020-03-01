@@ -1,5 +1,10 @@
 const util = require("util");
-const { ArrayType, DictionaryType, FunctionDeclaration } = require("../ast");
+const {
+  ArrayType,
+  DictionaryType,
+  FunctionDeclaration,
+  ClassDeclaration
+} = require("../ast");
 const { NumberType, StringType, NullType, BooleanType } = require("./builtins");
 
 function doCheck(condition, message) {
@@ -18,20 +23,34 @@ module.exports = {
     doCheck(type.constructor === DictionaryType, "Not a dictionary type");
   },
 
+  isNotClassDeclaration(statement) {
+    doCheck(
+      statement.constructor !== ClassDeclaration,
+      "Classes must be declared in root scope."
+    );
+  },
+
+  isNotFunctionDeclaration(statement) {
+    doCheck(
+      statement.constructor !== FunctionDeclaration,
+      "Functions must be declared as class member or in root scope."
+    );
+  },
+
   // Can we assign expression to a variable/param/field of type type?
-  isAssignableTo(expression, type) {
+  isAssignableTo(expression, type, message) {
+    console.log(type);
+    let errorMessage = message
+      ? message
+      : `Expression of type ${util.format(expression.type)}
+         not compatible with type ${util.format(type)}`;
     if (type.constructor === ArrayType || type.constructor === DictionaryType) {
       doCheck(
         JSON.stringify(expression.type) === JSON.stringify(type),
-        `Expression of type ${util.format(expression.type)}
-       not compatible with type ${util.format(type)}`
+        errorMessage
       );
     } else {
-      doCheck(
-        expression.type === type,
-        `Expression of type ${util.format(expression.type)}
-       not compatible with type ${util.format(type)}`
-      );
+      doCheck(expression.type === type, errorMessage);
     }
   },
   // Is the type of this expression an array or dictionary type? (For subscript)
@@ -65,6 +84,13 @@ module.exports = {
 
   inLoop(context, keyword) {
     doCheck(context.inLoop, `${keyword} can only be used in a loop`);
+  },
+
+  inFunction(context, keyword) {
+    doCheck(
+      context.currentFunction !== null,
+      `${keyword} can only be used in a function`
+    );
   },
 
   // Same number of args and params; all types compatible

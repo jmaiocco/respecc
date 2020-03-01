@@ -79,10 +79,17 @@ Break.prototype.analyze = function(context) {
 };
 
 Return.prototype.analyze = function(context) {
-  //this.returnValue.analyze(context);
   //
-  //Assign this AST a type?
-  //check.inLoop(context, "return");
+  //Assign this AST a type? (Connection with function node(?))
+  check.inFunction(context, "return");
+  this.returnValue.analyze(context);
+  if (context.currentFunction.type !== null) {
+    check.isAssignableTo(
+      this.returnValue,
+      context.currentFunction.type,
+      "Type mismatch in function return"
+    );
+  }
 };
 
 VariableDeclaration.prototype.analyze = function(context) {
@@ -103,11 +110,23 @@ VariableDeclaration.prototype.analyze = function(context) {
 // (including the return type). This is so other functions that may be declared
 // before this one have calls to this one checked.
 FunctionDeclaration.prototype.analyzeSignature = function(context) {
-  //this.bodyContext = context.createChildContextForFunctionBody();
-  //this.params.forEach(p => p.analyze(this.bodyContext));
-  //this.returnType = !this.returnType ? undefined : context.lookup(this.returnType);
+  this.bodyContext = context.createChildContextForFunctionBody(this);
+  this.params.forEach(p => p.analyze(this.bodyContext));
+  this.type = !this.type ? null : context.lookup(this.type);
 };
-FunctionDeclaration.prototype.analyze = function() {};
+FunctionDeclaration.prototype.analyze = function() {
+  this.block.analyze(this.bodyContext);
+  delete this.bodyContext; // This was only temporary, delete to keep output clean.
+};
+
+Block.prototype.analyze = function(context) {
+  //Disallow Class Declarations and Function Declartions in BLocks
+  this.statements.forEach(d => {
+    check.isNotClassDeclaration(d);
+    check.isNotFunctionDeclaration(d);
+    d.analyze(context);
+  });
+};
 
 ClassDeclaration.prototype.analyze = function(context) {};
 
