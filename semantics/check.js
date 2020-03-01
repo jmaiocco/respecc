@@ -84,36 +84,6 @@ module.exports = {
   }
 
   /*
-  allSameType(exps) {
-    if (exps.length === 0) {
-      return NullType;
-    }
-    doCheck(
-      exps.filter(exp => exp.type === exps[0].type).length === exps.length,
-      `all array elements must have the same type`
-    );
-    return exps.type;
-  },
-
-  allSameTypePairs(dictEntries) {
-    if (dictEntries.length === 0) {
-      return NullType;
-    }
-    let [keyType, valueType] = [dictEntries[0].type1, dictEntries[0].type2];
-    doCheck(
-      dictEntries.filter(e => e.type1 === keyType).length ===
-        dictEntries.length,
-      `all dictionary keys must have the same type`
-    );
-    doCheck(
-      dictEntries.filter(e => e.type2 === valueType).length ===
-        dictEntries.length,
-      `all dictionary values must have the same type`
-    );
-    return [keyType, valueType];
-  }
-*/
-  /*
   isRecord(expression) {
     doCheck(expression.type.constructor === RecordType, 'Not a record');
   },

@@ -43,13 +43,17 @@ module.exports = function(exp) {
 };
 
 Program.prototype.analyze = function(context) {
-  //So classes and functions seen everywhere within their block?
-  /*
-  this.statements.filter(d => d.constructor === ClassDeclaration).forEach(d => context.add(d));
-  this.statements.filter(d => d.constructor === FunctionDeclaration).forEach(d => d.analyzeSignature(context));
-  this.statements.filter(d => d.constructor === FunctionDeclaration).forEach(d => context.add(d));
+  //So classes and functions seen everywhere within their block()?)
+  this.statements
+    .filter(d => d.constructor === ClassDeclaration)
+    .forEach(d => context.add(d));
+  this.statements
+    .filter(d => d.constructor === FunctionDeclaration)
+    .forEach(d => d.analyzeSignature(context));
+  this.statements
+    .filter(d => d.constructor === FunctionDeclaration)
+    .forEach(d => context.add(d));
   this.statements.forEach(d => d.analyze(context));
-  */
   //check.noRecursiveTypeCyclesWithoutRecordTypes(this.decs);
 };
 
@@ -70,9 +74,16 @@ ForLoop.prototype.analyze = function(context) {};
 
 FunctionCall.prototype.analyze = function(context) {};
 
-Return.prototype.analyze = function(context) {};
+Break.prototype.analyze = function(context) {
+  check.inLoop(context, "break");
+};
 
-Break.prototype.analyze = function(context) {};
+Return.prototype.analyze = function(context) {
+  //this.returnValue.analyze(context);
+  //
+  //Assign this AST a type?
+  //check.inLoop(context, "return");
+};
 
 VariableDeclaration.prototype.analyze = function(context) {
   this.expression.analyze(context);
