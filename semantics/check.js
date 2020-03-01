@@ -39,7 +39,9 @@ module.exports = {
 
   // Can we assign expression to a variable/param/field of type type?
   isAssignableTo(expression, type, message) {
-    console.log(type);
+    if (type === null) {
+      return;
+    }
     let errorMessage = message
       ? message
       : `Expression of type ${util.format(expression.type)}
@@ -59,6 +61,15 @@ module.exports = {
       expression.type.constructor === ArrayType ||
         expression.type.constructor === DictionaryType,
       "Not an array or a dictionary"
+    );
+  },
+
+  functiontypeResolved(func) {
+    doCheck(
+      func.typeResolved,
+      `Function ${func.id} needs to return value of type ${util.format(
+        func.type
+      )}`
     );
   },
 

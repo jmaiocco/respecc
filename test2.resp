@@ -3,7 +3,7 @@ Hello!
 Please declare US_Denominations as [6, "Yess"].
 
 function f() : Number {
-  return [6]
+  return 6
 }
 
 Bye Bye!

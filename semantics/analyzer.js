@@ -89,6 +89,7 @@ Return.prototype.analyze = function(context) {
       context.currentFunction.type,
       "Type mismatch in function return"
     );
+    context.currentFunction.typeResolved = true;
   }
 };
 
@@ -113,9 +114,12 @@ FunctionDeclaration.prototype.analyzeSignature = function(context) {
   this.bodyContext = context.createChildContextForFunctionBody(this);
   this.params.forEach(p => p.analyze(this.bodyContext));
   this.type = !this.type ? null : context.lookup(this.type);
+  this.typeResolved = !this.type ? true : false;
 };
 FunctionDeclaration.prototype.analyze = function() {
   this.block.analyze(this.bodyContext);
+  check.functiontypeResolved(this);
+  //If signature typed, make sure there is a return?
   delete this.bodyContext; // This was only temporary, delete to keep output clean.
 };
 
@@ -123,7 +127,7 @@ Block.prototype.analyze = function(context) {
   //Disallow Class Declarations and Function Declartions in BLocks
   this.statements.forEach(d => {
     check.isNotClassDeclaration(d);
-    check.isNotFunctionDeclaration(d);
+    check.isNotFunctionDeclaration(d); //Do we want function declaration in functions?
     d.analyze(context);
   });
 };
