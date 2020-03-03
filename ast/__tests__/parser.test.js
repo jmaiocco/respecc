@@ -247,9 +247,13 @@ const fixture = {
     )
   ],
   ArrayType: [
-    String.raw``,
+    String.raw`x = [1,2]`,
     new Program(
+      false,
+      [
 
+      ],
+      false
     )
   ],
   */
@@ -526,7 +530,7 @@ const fixture = {
       ],
       false
     )
-  ]
+  ],
   /*
   SubscriptExp: [
     String.raw``,
@@ -540,12 +544,22 @@ const fixture = {
 
     )
   ],
+  */
   ArrayLiteral: [
-    String.raw``,
+    String.raw`x = [1,2]`,
     new Program(
-
+      false,
+      [
+        new Assignment(
+          new IdExp("x"),
+          new ArrayLiteral([new NumberLiteral(1), new NumberLiteral(2)]),
+          false
+        )
+      ],
+      false
     )
-  ],
+  ]
+  /*
   DictionaryLiteral: [
     String.raw``,
     new Program(
