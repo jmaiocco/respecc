@@ -155,12 +155,16 @@ const fixture = {
   ],
   //*/
   WhileLoopRude: [
-    String.raw`while(x < 3){break}`,
+    String.raw`while(x[1] < 3){break}`,
     new Program(
       false,
       [
         new WhileLoop(
-          new BinaryExp(new IdExp("x"), "<", new NumberLiteral(3)),
+          new BinaryExp(
+            new SubscriptExp(new IdExp("x"), new NumberLiteral(1)),
+            "<",
+            new NumberLiteral(3)
+          ),
           new Block([new Break(false)], false),
           false
         )
@@ -210,10 +214,16 @@ const fixture = {
     )
   ],
   FunctionCallStmtPolite: [
-    String.raw`Do me a favor and run init with (x,y).`,
+    String.raw`Do me a favor and run init with (x,Yes).`,
     new Program(
       false,
-      [new FunctionCall("init", [new IdExp("x"), new IdExp("y")], true)],
+      [
+        new FunctionCall(
+          "init",
+          [new IdExp("x"), new BooleanLiteral(true)],
+          true
+        )
+      ],
       false
     )
   ],

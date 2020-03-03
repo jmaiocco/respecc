@@ -296,7 +296,7 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
     return new StringLiteral(this.sourceString.slice(1, -1));
   },
   boollit(bool) {
-    return new BooleanLiteral(bool === "Yes");
+    return new BooleanLiteral(bool.ast() === "Yes");
   },
   nulllit(_null) {
     return new NullLiteral();
