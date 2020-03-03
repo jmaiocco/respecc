@@ -85,7 +85,7 @@ respecc {
                |  Var incop                                      -- postfix
   Var          =  Var "[" Exp "]"                                -- subscript
                |  Var "." id                                     -- select
-               |  id
+               |  id                                             -- id
   Literal      = ArrayLit
                | DictLit
                | numlit

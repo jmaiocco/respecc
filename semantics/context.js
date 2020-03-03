@@ -6,7 +6,7 @@
  *   const Context = require('./semantics/context');
  */
 
-//const {  } = require('../ast');
+const { ArrayType, DictionaryType } = require("../ast");
 const {
   NumberType,
   StringType,
@@ -76,6 +76,12 @@ class Context {
   // Returns the entity bound to the given identifier, starting from this
   // context and searching "outward" through enclosing contexts if necessary.
   lookup(id) {
+    if (id.constructor === ArrayType) {
+      return new ArrayType(this.lookup(id.type));
+    }
+    if (id.constructor === ArrayType) {
+      return new DictionaryType(this.lookup(id.type1), this.lookup(id.type2));
+    }
     for (let context = this; context !== null; context = context.parent) {
       if (context.locals.has(id)) {
         return context.locals.get(id);

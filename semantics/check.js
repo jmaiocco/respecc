@@ -1,5 +1,10 @@
 const util = require("util");
-const { ArrayType, DictionaryType, FunctionDeclaration } = require("../ast");
+const {
+  ArrayType,
+  DictionaryType,
+  FunctionDeclaration,
+  ClassDeclaration
+} = require("../ast");
 const { NumberType, StringType, NullType, BooleanType } = require("./builtins");
 
 function doCheck(condition, message) {
@@ -18,13 +23,37 @@ module.exports = {
     doCheck(type.constructor === DictionaryType, "Not a dictionary type");
   },
 
-  // Can we assign expression to a variable/param/field of type type?
-  isAssignableTo(expression, type) {
+  isNotClassDeclaration(statement) {
     doCheck(
-      expression.type === type,
-      `Expression of type ${util.format(expression.type)}
-       not compatible with type ${util.format(type)}`
+      statement.constructor !== ClassDeclaration,
+      "Classes must be declared in root scope."
     );
+  },
+
+  isNotFunctionDeclaration(statement) {
+    doCheck(
+      statement.constructor !== FunctionDeclaration,
+      "Functions must be declared as class member or in root scope."
+    );
+  },
+
+  // Can we assign expression to a variable/param/field of type type?
+  isAssignableTo(expression, type, message) {
+    if (type === null) {
+      return;
+    }
+    let errorMessage = message
+      ? message
+      : `Expression of type ${util.format(expression.type)}
+         not compatible with type ${util.format(type)}`;
+    if (type.constructor === ArrayType || type.constructor === DictionaryType) {
+      doCheck(
+        JSON.stringify(expression.type) === JSON.stringify(type),
+        errorMessage
+      );
+    } else {
+      doCheck(expression.type === type, errorMessage);
+    }
   },
   // Is the type of this expression an array or dictionary type? (For subscript)
   isArrayorDictionary(expression) {
@@ -32,6 +61,15 @@ module.exports = {
       expression.type.constructor === ArrayType ||
         expression.type.constructor === DictionaryType,
       "Not an array or a dictionary"
+    );
+  },
+
+  functiontypeResolved(func) {
+    doCheck(
+      func.typeResolved,
+      `Function ${func.id} needs to return value of type ${util.format(
+        func.type
+      )}`
     );
   },
 
@@ -59,6 +97,13 @@ module.exports = {
     doCheck(context.inLoop, `${keyword} can only be used in a loop`);
   },
 
+  inFunction(context, keyword) {
+    doCheck(
+      context.currentFunction !== null,
+      `${keyword} can only be used in a function`
+    );
+  },
+
   // Same number of args and params; all types compatible
   legalArguments(args, params) {
     doCheck(
@@ -68,33 +113,11 @@ module.exports = {
     args.forEach((arg, i) => this.isAssignableTo(arg, params[i].type));
   },
 
-  allSameType(exps) {
-    if (exps.length === 0) {
-      return NullType;
-    }
-    doCheck(
-      exps.filter(exp => exp.type === exps[0].type).length === exps.length,
-      `all array elements must have the same type`
-    );
-    return exps.type;
-  },
-
-  allSameTypePairs(dictEntries) {
-    if (dictEntries.length === 0) {
-      return NullType;
-    }
-    let [keyType, valueType] = [dictEntries[0].type1, dictEntries[0].type2];
-    doCheck(
-      dictEntries.filter(e => e.type1 === keyType).length ===
-        dictEntries.length,
-      `all dictionary keys must have the same type`
-    );
-    doCheck(
-      dictEntries.filter(e => e.type2 === valueType).length ===
-        dictEntries.length,
-      `all dictionary values must have the same type`
-    );
-    return [keyType, valueType];
+  propertyOfAll(arr, prop) {
+    return arr.length !== 0 &&
+      arr.filter(e => e[prop] === arr[0][prop]).length === arr.length
+      ? arr[0][prop]
+      : null;
   }
 
   /*

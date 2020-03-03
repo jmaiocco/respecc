@@ -32,7 +32,8 @@ const {
   NumberLiteral,
   StringLiteral,
   BooleanLiteral,
-  NullLiteral
+  NullLiteral,
+  IdExp
 } = require("../ast");
 
 const grammar = ohm.grammar(fs.readFileSync("grammar/respecc.ohm"));
@@ -187,6 +188,9 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
       block.ast(),
       false
     );
+  },
+  Var_id(id) {
+    return new IdExp(id.ast());
   },
   VarDec_polite(_1, id, _2, type, _3, exp, _4) {
     return new VariableDeclaration(

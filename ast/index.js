@@ -41,8 +41,8 @@ class FunctionCall {
 }
 
 class Assignment {
-  constructor(id, exp, politeFlag) {
-    Object.assign(this, { id, exp, politeFlag });
+  constructor(variable, exp, politeFlag) {
+    Object.assign(this, { variable, exp, politeFlag });
   }
 }
 
@@ -171,6 +171,12 @@ class DictEntry {
   }
 }
 
+class IdExp {
+  constructor(ref) {
+    Object.assign(this, { ref });
+  }
+}
+
 class NumberLiteral {
   constructor(value) {
     Object.assign(this, { value });
@@ -223,5 +229,6 @@ module.exports = {
   NumberLiteral,
   StringLiteral,
   BooleanLiteral,
-  NullLiteral
+  NullLiteral,
+  IdExp
 };
