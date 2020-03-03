@@ -284,7 +284,7 @@ gimme x = 4
 function linearCongruentialGenerator(){
 
   if (x>=0 && x< m){
-    x= (a* x + c) % m;
+    x= (a* x + c) % m
     return  x
   }
   return "invalid input"

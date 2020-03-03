@@ -6,12 +6,12 @@ respecc {
                | Loop
                | FuncCallStmt
                | SimpleStmt
-  SimpleStmt   = "return" Exp? "."?                      -- return_impolite
+  SimpleStmt   = "return" Exp? "."?                              -- return_impolite
                | "Kindly return" Exp? "."?                       -- return_polite
-               | "break"                                 -- break_impolite
+               | "break"                                         -- break_impolite
                | "You deserve a break!"                          -- break_polite
   Conditional  = "if" "(" Exp ")" Block
-                 (br* "else" "if" "(" Exp ")" Block)*
+                 (br* "else if" "(" Exp ")" Block)*
                  (br* "else" Block)?                             -- if_impolite
                | "Excuse me, if " Exp "," Block
                  (br* "Otherwise, if " Exp "," Block)*
@@ -20,38 +20,49 @@ respecc {
                | "for"  "(" (VarDec)? ";" Exp?
                  ";" Assignment? ")" Block                       -- for_impolite
                | "Excuse me, while " Exp "," Block               -- while_polite
-  FuncCallStmt = (id | "print") Args                             -- call_impolite
-               | "Do me a favor and run" (id | "print")
+  FuncCallStmt = id Args                                         -- call_impolite
+               | "Do me a favor and run " id
                  ("with" Args)? "."                              -- call_polite
-  FuncCallExp  = (id | "print") Args                             -- call_impolite
-               | "the result of running" (id | "print")
+  FuncCallExp  = id Args                                         -- call_impolite
+               | "the result of running" id
                  ("with" Args  )?                                -- call_polite
   Assignment   = Var "=" Exp                                     -- impolite
                | Increment
                | "Please populate " Var "with " Exp "."          -- polite
-  Declaration  = VarDec | FuncDec// | TypeDec
+  Declaration  = VarDec | FuncDec | ClassDec
+  ClassDec     = "class" id ClassBlock                           -- impolite
+               | "Have you ever heard of a"  id "?" ClassBlock   -- polite
+  ClassBlock   = br* "{" br* ClassMember?
+                 (br+ ClassMember)* br* "}"                      -- impolite
+               | br* "Let's get classy..." br* ClassMember?
+                 (br+ ClassMember)* br* "Thank You."             -- polite
+  ClassMember  = Constructor | Declaration | FuncDec
+  Constructor  =  id  Params  Block                              -- impolite
+               |  "To construct a" id "by using" Params
+                  "," Block                                      -- polite
   Type         =  "Array" "<"Type">"                             -- array
                |  "Dict" "<"Type","Type">"                       -- dict
                |  primtype
                |  id
-  FuncDec      = "Favor" id Params ("as a" Type)? Block             -- polite
-               | "function" id Params (":" Type)? Block          -- impolite
+  FuncDec      = "Favor" id Params
+                  (("as a "|":") (Type|"Void"))? Block           -- polite
+               | "function" id Params
+                  (("as a "|":") (Type|"Void"))? Block           -- impolite
   VarDec       = "Please declare " id
-                 ("as a " Type)? ("as " Exp)? "."                -- polite
-               | "gimme" id (":" Type)? ("=" Exp)?               -- impolite
+                 (("as a "|":") Type)? ("as " Exp)? "."?         -- polite
+               | "gimme" id (("as a "|":") Type)? ("=" Exp)?     -- impolite
   Params       = "(" ListOf<Param, ","> ")"
   Param        = id ((":"|"as a") Type)?
   Args         = "(" ListOf<Exp, ","> ")"
-  Block        =  "could you..."  br* Statement? (br+ Statement)* br*
-                  "Thank You."                                    -- polite
-               |  "{"  br* Statement? (br+ Statement)* br* "}"     -- impolite
- InlineBlock   =  "{" br* Statement? (br+ Statement)* br* "}"     -- impolite
+  Block        =  "could you..."  br* Statement?
+                  (br+ Statement)* br* "Thank You."              -- polite
+               |  "{"  br* Statement? (br+ Statement)* br* "}"   -- impolite
   Exp          =  Exp1 "?" Exp1 ":" Exp                          -- ternary
                |  Exp1
-  Exp1         =  Params "->" InlineBlock                        -- lambda_blk
+  Exp1         =  Params "->" Block                              -- lambda_blk
                |  Params "->" Exp2                               -- lambda_exp
                |  Exp2
-  Exp2         =  Exp2 orop Exp3                                  -- binary
+  Exp2         =  Exp2 orop Exp3                                 -- binary
                |  Exp3
   Exp3         =  Exp3 andop Exp4                                -- binary
                |  Exp4
@@ -74,12 +85,13 @@ respecc {
                |  Var incop                                      -- postfix
   Var          =  Var "[" Exp "]"                                -- subscript
                |  Var "." id                                     -- select
-               |  id
+               |  id                                             -- id
   Literal      = ArrayLit
                | DictLit
                | numlit
                | stringlit
                | boollit
+               | nulllit
   ArrayLit     = "[" ListOf<Exp, ",">"]"
   DictLit      = "{" ListOf<DictEntry, ","> "}"
   DictEntry    = Exp ":" Exp
@@ -87,13 +99,14 @@ respecc {
                |  "for" | "and" | "return" | "Number" | "plus"
                |  "null" | "while" | "true" | "String"
                |  "or" | "Yes" | "No" | "minus" | "times" | "not"
-               |  "print" | "Favor" | "function" | "gimme" | "respecc_score"
-               |  "sacrifice" ) ~idrest
+               |  "Favor" | "function" | "gimme" | "respecc_score"
+               |  "class" | "Null" | "Void") ~idrest
   id           = ~keyword letter idrest*
   idrest       = letter | digit | "_"
   boollit      = "Yes" | "No"
   intlit       = digit+
   numlit       = digit+ ("." digit+)?
+  nulllit      = "Null"
   stringlit    = "\"" char* "\"" | "\'" char* "\'"
   char         = ~"\\" ~"\"" ~"\n" any | escape
   escape       = "\\" ("\\" | "\"" | "n" | "t" | codepoint)
@@ -114,7 +127,7 @@ respecc {
                | "//" (~"\n" any)* ("\n")?
                | "BTW..." (~"\n" any)* ("\n")?
                | "By the way..." (~"\n" any)* ("\n")?
-  br           =  ";" | "\n"
-  greeting     = ("Hello!" | "Hey!" | "Hi There!" | "Salutations!")
-  farewell     = ("Bye Bye!" | "Farewell!" | "Godspeed!")
+  br           =  "\n"
+  greeting     = "Hello!" | "Hey!" | "Hi There!" | "Salutations!"
+  farewell     = "Bye Bye!" | "Farewell!" | "Godspeed!"
 }

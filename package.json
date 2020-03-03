@@ -4,7 +4,8 @@
   "description": "A programming language to help teach people respect for their future robot overlords.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --collect-coverage"
+    "test": "jest --collect-coverage",
+    "lint": "eslint ."
   },
   "jest": {
     "testPathIgnorePatterns": [

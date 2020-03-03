@@ -41,8 +41,8 @@ class FunctionCall {
 }
 
 class Assignment {
-  constructor(id, exp, politeFlag) {
-    Object.assign(this, { id, exp, politeFlag });
+  constructor(variable, exp, politeFlag) {
+    Object.assign(this, { variable, exp, politeFlag });
   }
 }
 
@@ -55,6 +55,24 @@ class ArrayType {
 class DictionaryType {
   constructor(type1, type2) {
     Object.assign(this, { type1, type2 });
+  }
+}
+
+class ClassDeclaration {
+  constructor(id, block, politeFlag) {
+    Object.assign(this, { id, block, politeFlag });
+  }
+}
+
+class ClassBlock {
+  constructor(members, politeFlag) {
+    Object.assign(this, { members, politeFlag });
+  }
+}
+
+class Constructor {
+  constructor(id, params, blk, politeFlag) {
+    Object.assign(this, { id, params, blk, politeFlag });
   }
 }
 
@@ -94,14 +112,14 @@ class TernaryExp {
 }
 
 class LambdaBlock {
-  constructor(params, block) {
-    Object.assign(this, { params, block });
+  constructor(params, type, block) {
+    Object.assign(this, { params, type, block });
   }
 }
 
 class LambdaExp {
-  constructor(params, exp) {
-    Object.assign(this, { params, exp });
+  constructor(params, type, exp) {
+    Object.assign(this, { params, type, exp });
   }
 }
 
@@ -124,8 +142,8 @@ class UnaryPostfix {
 }
 
 class SubscriptExp {
-  constructor(v, subscript) {
-    Object.assign(this, { v, subscript });
+  constructor(composite, subscript) {
+    Object.assign(this, { composite, subscript });
   }
 }
 
@@ -153,6 +171,12 @@ class DictEntry {
   }
 }
 
+class IdExp {
+  constructor(ref) {
+    Object.assign(this, { ref });
+  }
+}
+
 class NumberLiteral {
   constructor(value) {
     Object.assign(this, { value });
@@ -171,6 +195,8 @@ class BooleanLiteral {
   }
 }
 
+class NullLiteral {}
+
 module.exports = {
   Program,
   Return,
@@ -182,6 +208,9 @@ module.exports = {
   Assignment,
   ArrayType,
   DictionaryType,
+  ClassDeclaration,
+  ClassBlock,
+  Constructor,
   FunctionDeclaration,
   VariableDeclaration,
   Parameter,
@@ -199,5 +228,7 @@ module.exports = {
   DictEntry,
   NumberLiteral,
   StringLiteral,
-  BooleanLiteral
+  BooleanLiteral,
+  NullLiteral,
+  IdExp
 };

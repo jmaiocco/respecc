@@ -11,6 +11,9 @@ const {
   Assignment,
   ArrayType,
   DictionaryType,
+  ClassDeclaration,
+  ClassBlock,
+  Constructor,
   FunctionDeclaration,
   VariableDeclaration,
   Parameter,
@@ -28,7 +31,9 @@ const {
   DictEntry,
   NumberLiteral,
   StringLiteral,
-  BooleanLiteral
+  BooleanLiteral,
+  NullLiteral,
+  IdExp
 } = require("../ast");
 
 const grammar = ohm.grammar(fs.readFileSync("grammar/respecc.ohm"));
@@ -68,7 +73,6 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
     ifblk,
     _1,
     _elseif,
-    _eif,
     _po2,
     exps,
     pc2,
@@ -147,6 +151,26 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
   Type_dict(_dict, _open, type1, _comma, type2, _close) {
     return new DictionaryType(type1.ast(), type2.ast());
   },
+
+  ClassDec_impolite(_1, id, blk) {
+    return new ClassDeclaration(id.ast(), blk.ast(), false);
+  },
+  ClassDec_polite(_1, id, _2, blk) {
+    return new ClassDeclaration(id.ast(), blk.ast(), true);
+  },
+  ClassBlock_impolite(_1, _open, _2, fmember, _3, members, _4, _close) {
+    return new ClassBlock([...fmember.ast(), ...members.ast()], false);
+  },
+  ClassBlock_polite(_1, _open, _2, fmember, _3, members, _4, _close) {
+    return new ClassBlock([...fmember.ast(), ...members.ast()], true);
+  },
+  Constructor_impolite(id, params, blk) {
+    return new Constructor(id.ast(), params.ast(), blk.ast(), false);
+  },
+  Constructor_polite(_1, id, _2, params, _3, blk) {
+    return new Constructor(id.ast(), params.ast(), blk.ast(), true);
+  },
+
   FuncDec_polite(_favor, id, params, _colon, type, block) {
     return new FunctionDeclaration(
       id.ast(),
@@ -164,6 +188,9 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
       block.ast(),
       false
     );
+  },
+  Var_id(id) {
+    return new IdExp(id.ast());
   },
   VarDec_polite(_1, id, _2, type, _3, exp, _4) {
     return new VariableDeclaration(
@@ -200,9 +227,6 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
     return new Block([...sfirst.ast(), ...ss.ast()], true);
   },
   Block_impolite(_open, _1, sfirst, _2, ss, _3, _close) {
-    return new Block([...sfirst.ast(), ...ss.ast()], false);
-  },
-  InlineBlock_impolite(_open, _1, sfirst, _2, ss, _3, _close) {
     return new Block([...sfirst.ast(), ...ss.ast()], false);
   },
   Exp_ternary(exp1, _1, exp2, _2, exp3) {
@@ -272,7 +296,10 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
     return new StringLiteral(this.sourceString.slice(1, -1));
   },
   boollit(bool) {
-    return new BooleanLiteral(bool === "Yes");
+    return new BooleanLiteral(bool.ast() === "Yes");
+  },
+  nulllit(_null) {
+    return new NullLiteral();
   },
   NonemptyListOf(first, _separator, rest) {
     return [first.ast(), ...rest.ast()];

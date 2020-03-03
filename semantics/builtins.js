@@ -1,33 +1,31 @@
-/*
+const { FunctionDeclaration, Parameter } = require("../ast");
 
-const { Func, Param, PrimitiveType } = require('../ast');
+class PrimitiveType {
+  constructor(id) {
+    Object.assign(this, { id });
+  }
+}
 
-const IntType = new PrimitiveType('int');
-const StringType = new PrimitiveType('string');
-const NilType = new PrimitiveType('nil');
+const NumberType = new PrimitiveType("Number");
+const StringType = new PrimitiveType("String");
+const NullType = new PrimitiveType("Null");
+const BooleanType = new PrimitiveType("Boolean");
 
 const standardFunctions = [
-  new Func('print', [new Param('s', StringType)]),
-  new Func('ord', [new Param('s', StringType)], IntType),
-  new Func('chr', [new Param('x', IntType)], StringType),
-  new Func('size', [new Param('s', StringType)], IntType),
-  new Func('substring', [
-    new Param('s', StringType),
-    new Param('first', IntType),
-    new Param('n', IntType),
-  ], StringType),
-  new Func('concat', [
-    new Param('s', StringType),
-    new Param('t', StringType),
-  ], StringType),
-  new Func('not', [new Param('x', IntType)], IntType),
-  new Func('exit', [new Param('code', IntType)]),
+  new FunctionDeclaration("print", [new Parameter("s", StringType, null)])
+  //new FunctionDeclaration("sacrifice", [new Parameter("s", null, null)], IntType)
 ];
 
-// eslint-disable no-param-reassign
-standardFunctions.forEach((f) => { f.builtin = true; });
-// eslint-enable no-param-reassign 
+//eslint-disable no-param-reassign
+standardFunctions.forEach(f => {
+  f.builtin = true;
+});
+//eslint-enable no-param-reassign
 
-module.exports = { IntType, StringType, NilType, standardFunctions };
-
-*/
+module.exports = {
+  NumberType,
+  StringType,
+  NullType,
+  BooleanType,
+  standardFunctions
+};

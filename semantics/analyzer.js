@@ -1,18 +1,204 @@
 // The semantic analyzer
-/*
 const {
-  ArrayExp, ArrayType, Assignment, BinaryExp, Binding, Break, Call, ExpSeq, Field,
-  ForExp, Func, IdExp, IfExp, LetExp, Literal, MemberExp, NegationExp, Nil, Param,
-  RecordExp, RecordType, SubscriptedExp, TypeDec, Variable, WhileExp,
-} = require('../ast');
-const { IntType, StringType, NilType } = require('./builtins');
-const check = require('./check');
-const Context = require('./context');
+  Program,
+  Return,
+  Break,
+  Conditional,
+  WhileLoop,
+  ForLoop,
+  FunctionCall,
+  Assignment,
+  ArrayType,
+  DictionaryType,
+  ClassDeclaration,
+  ClassBlock,
+  Constructor,
+  FunctionDeclaration,
+  VariableDeclaration,
+  Parameter,
+  Block,
+  TernaryExp,
+  LambdaBlock,
+  LambdaExp,
+  BinaryExp,
+  UnaryPrefix,
+  UnaryPostfix,
+  SubscriptExp,
+  MemberExp,
+  ArrayLiteral,
+  DictionaryLiteral,
+  DictEntry,
+  NumberLiteral,
+  StringLiteral,
+  BooleanLiteral,
+  NullLiteral,
+  IdExp
+} = require("../ast");
+const { NumberType, StringType, NullType, BooleanType } = require("./builtins");
+const check = require("./check");
+const Context = require("./context");
 
-module.exports = function (exp) {
+module.exports = function(exp) {
   exp.analyze(Context.INITIAL);
 };
 
+Program.prototype.analyze = function(context) {
+  //So classes and functions seen everywhere within their block()?)
+  this.statements
+    .filter(d => d.constructor === ClassDeclaration)
+    .forEach(d => context.add(d));
+  this.statements
+    .filter(d => d.constructor === FunctionDeclaration)
+    .forEach(d => d.analyzeSignature(context));
+  this.statements
+    .filter(d => d.constructor === FunctionDeclaration)
+    .forEach(d => context.add(d));
+  this.statements.forEach(d => d.analyze(context));
+  //check.noRecursiveTypeCyclesWithoutRecordTypes(this.decs);
+};
+
+Assignment.prototype.analyze = function(context) {
+  this.exp.analyze(context);
+  this.variable.analyze(context);
+  if (this.variable.type !== null) {
+    check.isAssignableTo(this.exp, this.variable.type);
+  }
+  //check.isNotReadOnly(this.variable);
+};
+
+Conditional.prototype.analyze = function(context) {};
+
+WhileLoop.prototype.analyze = function(context) {};
+
+ForLoop.prototype.analyze = function(context) {};
+
+FunctionCall.prototype.analyze = function(context) {};
+
+Break.prototype.analyze = function(context) {
+  check.inLoop(context, "break");
+};
+
+Return.prototype.analyze = function(context) {
+  //
+  //Assign this AST a type? (Connection with function node(?))
+  check.inFunction(context, "return");
+  this.returnValue.analyze(context);
+  if (context.currentFunction.type !== null) {
+    check.isAssignableTo(
+      this.returnValue,
+      context.currentFunction.type,
+      "Type mismatch in function return"
+    );
+    //Must do control flow analysis to ensure this return occurs
+    context.currentFunction.typeResolved = true;
+  }
+};
+
+VariableDeclaration.prototype.analyze = function(context) {
+  this.expression.analyze(context);
+  if (this.type) {
+    this.type = context.lookup(this.type);
+    check.isAssignableTo(this.expression, this.type);
+  } else {
+    this.type = this.expression.type;
+  }
+  context.add(this);
+};
+
+// Function analysis is broken up into two parts in order to support (nutual)
+// recursion. First we have to do semantic analysis just on the signature
+// (including the return type). This is so other functions that may be declared
+// before this one have calls to this one checked.
+FunctionDeclaration.prototype.analyzeSignature = function(context) {
+  this.bodyContext = context.createChildContextForFunctionBody(this);
+  this.params.forEach(p => p.analyze(this.bodyContext));
+  this.type = !this.type ? null : context.lookup(this.type);
+  this.typeResolved = !this.type ? true : false;
+};
+FunctionDeclaration.prototype.analyze = function() {
+  this.block.analyze(this.bodyContext);
+  check.functiontypeResolved(this);
+  //If signature typed, make sure there is a return?
+  delete this.bodyContext; // This was only temporary, delete to keep output clean.
+};
+
+Block.prototype.analyze = function(context) {
+  //Disallow Class Declarations and Function Declartions in BLocks
+  this.statements.forEach(d => {
+    check.isNotClassDeclaration(d);
+    check.isNotFunctionDeclaration(d); //Do we want function declaration in functions?
+    d.analyze(context);
+  });
+};
+
+ClassDeclaration.prototype.analyze = function(context) {};
+
+SubscriptExp.prototype.analyze = function(context) {
+  this.composite.analyze(context);
+  check.isArrayOrDictionary(this.composite);
+  this.subscript.analyze(context);
+  if (this.composite.type.constructor === ArrayType) {
+    check.isAssignableTo(
+      this.subscript,
+      NumberType,
+      `Array Subscript must be of type Number`
+    );
+    this.type = this.composite.type.type;
+  } else {
+    check.isAssignableTo(
+      this.subscript,
+      this.composite.type.type1,
+      `Dict subscript must match key type`
+    );
+    this.type = this.composite.type.type1;
+  }
+};
+
+NumberLiteral.prototype.analyze = function(context) {
+  this.type = NumberType;
+};
+
+StringLiteral.prototype.analyze = function(context) {
+  this.type = StringType;
+};
+
+NullLiteral.prototype.analyze = function(context) {
+  this.type = NullType;
+};
+
+BooleanLiteral.prototype.analyze = function(context) {
+  this.type = BooleanType;
+};
+
+///* Types only need to be same is static typing demands in (isAssignable)
+ArrayLiteral.prototype.analyze = function(context) {
+  this.exps.map(e => e.analyze(context));
+  this.type = new ArrayType(check.propertyOfAll(this.exps, "type"));
+};
+
+DictionaryLiteral.prototype.analyze = function(context) {
+  this.keyValuePairs.forEach(e => e.analyze(context));
+  let [keyType, valueType] = [
+    check.propertyOfAll(this.keyValuePairs, "keyType"),
+    check.propertyOfAll(this.keyValuePairs, "valueType")
+  ];
+  this.type = new DictionaryType(keyType, valueType);
+};
+//*/
+
+DictEntry.prototype.analyze = function(context) {
+  this.key.analyze(context);
+  this.value.analyze(context);
+  this.keyType = this.key.type;
+  this.valueType = this.value.type;
+};
+
+IdExp.prototype.analyze = function(context) {
+  this.ref = context.lookup(this.ref);
+  this.type = this.ref.type;
+};
+
+/*
 ArrayExp.prototype.analyze = function (context) {
   this.type = context.lookup(this.type);
   check.isArrayType(this.type);
@@ -40,7 +226,7 @@ Break.prototype.analyze = function (context) {
 BinaryExp.prototype.analyze = function (context) {
   this.left.analyze(context);
   this.right.analyze(context);
-  if (/[-+*/&|]/.test(this.op)) {
+  if (/[-+&|]/.test(this.op)) {
     check.isInteger(this.left);
     check.isInteger(this.right);
   } else if (/<=?|>=?/.test(this.op)) {
@@ -88,26 +274,6 @@ ForExp.prototype.analyze = function (context) {
   this.body.analyze(bodyContext);
 };
 
-// Function analysis is broken up into two parts in order to support (nutual)
-// recursion. First we have to do semantic analysis just on the signature
-// (including the return type). This is so other functions that may be declared
-// before this one have calls to this one checked.
-Func.prototype.analyzeSignature = function (context) {
-  this.bodyContext = context.createChildContextForFunctionBody();
-  this.params.forEach(p => p.analyze(this.bodyContext));
-  this.returnType = !this.returnType ? undefined : context.lookup(this.returnType);
-};
-
-Func.prototype.analyze = function () {
-  this.body.analyze(this.bodyContext);
-  check.isAssignableTo(this.body, this.returnType, 'Type mismatch in function return');
-  delete this.bodyContext; // This was only temporary, delete to keep output clean.
-};
-
-IdExp.prototype.analyze = function (context) {
-  this.ref = context.lookup(this.ref);
-  this.type = this.ref.type;
-};
 
 IfExp.prototype.analyze = function (context) {
   this.test.analyze(context);
@@ -137,14 +303,6 @@ LetExp.prototype.analyze = function (context) {
   }
 };
 
-Literal.prototype.analyze = function () {
-  if (typeof this.value === 'number') {
-    this.type = IntType;
-  } else {
-    this.type = StringType;
-  }
-};
-
 MemberExp.prototype.analyze = function (context) {
   this.record.analyze(context);
   check.isRecord(this.record);
@@ -156,10 +314,6 @@ NegationExp.prototype.analyze = function (context) {
   this.operand.analyze(context);
   check.isInteger(this.operand, 'Operand of negation');
   this.type = IntType;
-};
-
-Nil.prototype.analyze = function () {
-  this.type = NilType;
 };
 
 Param.prototype.analyze = function (context) {

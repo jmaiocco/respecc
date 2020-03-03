@@ -4,11 +4,15 @@
  * These tests check that the analyzer will reject programs with various
  * static semantic errors.
  */
-/*
-const parse = require('../../ast/parser');
-const Context = require('../context');
+
+const parse = require("../../ast/parser");
+const Context = require("../context");
 
 const errors = [
+  ["use of undeclared variable rude", "x = 1"],
+  ["use of undeclared variable polite", "Please populate x with 1."]
+
+  /* **************Toal Examples***************************
   ['use of undeclared variable', 'x := 1'],
   ['non integer while condition', 'while "hello" do nil'],
   ['non integer if condition', 'if "hello" then nil'],
@@ -31,11 +35,12 @@ const errors = [
   ['call of nonfunction', 'let var x := 1 in x(5) end'],
   ['non integer subscript', 'let type list = array of int var a := list [1] of 0 in a["x"] end'],
   // Might need more here, depending on your test coverage report
+  */
 ];
 
-describe('The semantic analyzer', () => {
+describe("The semantic analyzer", () => {
   errors.forEach(([scenario, program]) => {
-    test(`detects the error ${scenario}`, (done) => {
+    test(`detects the error ${scenario}`, done => {
       const astRoot = parse(program);
       expect(astRoot).toBeTruthy();
       expect(() => astRoot.analyze(Context.INITIAL)).toThrow();
@@ -43,5 +48,3 @@ describe('The semantic analyzer', () => {
     });
   });
 });
-
-*/

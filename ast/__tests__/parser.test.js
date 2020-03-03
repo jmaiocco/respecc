@@ -20,6 +20,9 @@ const {
   Assignment,
   ArrayType,
   DictionaryType,
+  ClassDeclaration,
+  ClassBlock,
+  Constructor,
   FunctionDeclaration,
   VariableDeclaration,
   Parameter,
@@ -37,8 +40,9 @@ const {
   DictEntry,
   NumberLiteral,
   StringLiteral,
-  BooleanLiteral
-  //Classes added as of 02/23/2020
+  BooleanLiteral,
+  NullLiteral,
+  IdExp
 } = require("../../ast");
 
 const fixture = {
@@ -63,7 +67,7 @@ const fixture = {
     )
   ],
   returnRude: [
-    String.raw`gimme gimmeFive = ()->{return 5;}`,
+    String.raw`gimme gimmeFive = ()->{return 5}`,
     new Program(
       false,
       [
@@ -98,31 +102,138 @@ const fixture = {
       false
     )
   ],
-
-  /* UNIMPLEMENTED TESTS
-  breakRude: [String.raw``],
-  breakPolite: [String.raw``],
-  conditionalRude: [String.raw``],
-  conditionalPolite: [String.raw``],
-  WhileLoopRude: [String.raw``],
-  WhileLoopPolite: [String.raw``],
-  ForLooopRude: [String.raw``],
-  // ForLoopPolite: [String.raw``],
-  FunctionCallRude: [String.raw``],
-  FunctionCallPolite: [String.raw``],
-  // FunctionCallStmtRude:[String.raw``],
-  // FunctionCallStmtPolite:[String.raw``],
-  // FunctionCallExpRude:[String.raw``],
-  // FunctionCallExpPolite:[String.raw``],
+  breakRude: [String.raw`break`, new Program(false, [new Break(false)], false)],
+  breakPolite: [
+    String.raw`You deserve a break!`,
+    new Program(false, [new Break(true)], false)
+  ],
+  conditionalRude: [
+    String.raw`if(x is less than 3) {return 1}
+    else if(x >= 3) {return 2}
+    else {return 3}`,
+    new Program(
+      false,
+      [
+        new Conditional(
+          new BinaryExp(new IdExp("x"), "is less than", new NumberLiteral(3)),
+          new Block([new Return(new NumberLiteral(1), false)], false),
+          [new BinaryExp(new IdExp("x"), ">=", new NumberLiteral(3))],
+          [new Block([new Return(new NumberLiteral(2), false)], false)],
+          new Block([new Return(new NumberLiteral(3), false)], false),
+          false
+        )
+      ],
+      false
+    )
+  ],
+  ///*
+  conditionalPolite: [
+    String.raw`Excuse me, if x is less than 3, could you...
+      return 1
+    Thank You.
+    Otherwise, if x >= 3, could you...
+      return 2
+    Thank You.
+    Otherwise, could you...
+      return 3
+    Thank You.
+    `,
+    new Program(
+      false,
+      [
+        new Conditional(
+          new BinaryExp(new IdExp("x"), "is less than", new NumberLiteral(3)),
+          new Block([new Return(new NumberLiteral(1), false)], true),
+          [new BinaryExp(new IdExp("x"), ">=", new NumberLiteral(3))],
+          [new Block([new Return(new NumberLiteral(2), false)], true)],
+          new Block([new Return(new NumberLiteral(3), false)], true),
+          true
+        )
+      ],
+      false
+    )
+  ],
   //*/
-
+  WhileLoopRude: [
+    String.raw`while(x[1] < 3){break}`,
+    new Program(
+      false,
+      [
+        new WhileLoop(
+          new BinaryExp(
+            new SubscriptExp(new IdExp("x"), new NumberLiteral(1)),
+            "<",
+            new NumberLiteral(3)
+          ),
+          new Block([new Break(false)], false),
+          false
+        )
+      ],
+      false
+    )
+  ],
+  WhileLoopPolite: [
+    String.raw`Excuse me, while i is less than n, could you...
+    return 1
+  Thank You.`,
+    new Program(
+      false,
+      [
+        new WhileLoop(
+          new BinaryExp(new IdExp("i"), "is less than", new IdExp("n")),
+          new Block([new Return(new NumberLiteral(1), false)], true),
+          true
+        )
+      ],
+      false
+    )
+  ],
+  ForLoopRude: [
+    String.raw`for(gimme i = 0; i < n; i++) {
+      break
+    }`,
+    new Program(
+      false,
+      [
+        new ForLoop(
+          new VariableDeclaration("i", null, new NumberLiteral(0), false),
+          new BinaryExp(new IdExp("i"), "<", new IdExp("n")),
+          new UnaryPostfix(new IdExp("i"), "++"),
+          new Block([new Break(false)], false)
+        )
+      ],
+      false
+    )
+  ],
+  FunctionCallStmtRude: [
+    String.raw`init(x,y)`,
+    new Program(
+      false,
+      [new FunctionCall(`init`, [new IdExp("x"), new IdExp("y")], false)],
+      false
+    )
+  ],
+  FunctionCallStmtPolite: [
+    String.raw`Do me a favor and run init with (x,Yes).`,
+    new Program(
+      false,
+      [
+        new FunctionCall(
+          "init",
+          [new IdExp("x"), new BooleanLiteral(true)],
+          true
+        )
+      ],
+      false
+    )
+  ],
   AssignmentRude: [
-    String.raw`gimmeFive = ()->{return 5;}`,
+    String.raw`gimmeFive = ()->{return 5}`,
     new Program(
       false,
       [
         new Assignment(
-          "gimmeFive",
+          new IdExp("gimmeFive"),
           new LambdaBlock(
             [],
             new Block([new Return(new NumberLiteral(5), false)], false)
@@ -132,15 +243,14 @@ const fixture = {
       ],
       false
     )
-  ], //DOES NOT PASS AS OF 02/23/2020, here "gimme" is considered a keyword despite being connected to "Five"
-
+  ],
   AssignmentPolite: [
     String.raw`Please populate gimmeFive with () -> 5.`,
     new Program(
       false,
       [
         new Assignment(
-          "gimmeFive",
+          new IdExp("gimmeFive"),
           new LambdaExp([], new NumberLiteral(5)),
           true
         )
@@ -148,15 +258,36 @@ const fixture = {
       false
     )
   ],
-  // DeclarationRude:[String.raw``],
-  // DeclarationPolite:[String.raw``],
-
-  /*UNIMPLEMENTED TESTS
-  ArrayType: [String.raw``],
-
-  DictionaryType: [String.raw``],
-  //*/
-
+  DictionaryType: [
+    String.raw`Please declare x as a Dict<String, Number>`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "x",
+          new DictionaryType("String", "Number"),
+          null,
+          true
+        )
+      ],
+      false
+    )
+  ],
+  ArrayType: [
+    String.raw`Please declare x as a Array<Number> as [0, 1].`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "x",
+          new ArrayType("Number"),
+          new ArrayLiteral([new NumberLiteral(0), new NumberLiteral(1)]),
+          true
+        )
+      ],
+      false
+    )
+  ],
   functionDeclarationPolite: [
     String.raw`Hello!
     Favor sum(x as a Number, y as a Number) as a Number could you...
@@ -173,7 +304,15 @@ const fixture = {
             new Parameter("y", "Number", true)
           ],
           "Number",
-          new Block([new Return(new BinaryExp("x", "plus", "y"), true)], true),
+          new Block(
+            [
+              new Return(
+                new BinaryExp(new IdExp("x"), "plus", new IdExp("y")),
+                true
+              )
+            ],
+            true
+          ),
           true
         )
       ],
@@ -182,7 +321,7 @@ const fixture = {
   ],
 
   functionDeclarationRude: [
-    String.raw`function sum(x, y) {return x + y;}`,
+    String.raw`function sum(x, y) {return x + y}`,
     new Program(
       false,
       [
@@ -190,7 +329,15 @@ const fixture = {
           "sum",
           [new Parameter("x", null, null), new Parameter("y", null, null)],
           null,
-          new Block([new Return(new BinaryExp("x", "+", "y"), false)], false),
+          new Block(
+            [
+              new Return(
+                new BinaryExp(new IdExp("x"), "+", new IdExp("y")),
+                false
+              )
+            ],
+            false
+          ),
           false
         )
       ],
@@ -230,7 +377,7 @@ const fixture = {
   ], // may need review for polite punctuation
 
   ParameterNull: [
-    String.raw`function sum(x, y) {return x + y;}`,
+    String.raw`function sum(x, y) {return x + y}`,
     new Program(
       false,
       [
@@ -238,7 +385,15 @@ const fixture = {
           "sum",
           [new Parameter("x", null, null), new Parameter("y", null, null)],
           null,
-          new Block([new Return(new BinaryExp("x", "+", "y"), false)], false),
+          new Block(
+            [
+              new Return(
+                new BinaryExp(new IdExp("x"), "+", new IdExp("y")),
+                false
+              )
+            ],
+            false
+          ),
           false
         )
       ],
@@ -247,7 +402,7 @@ const fixture = {
   ], // same as function Declaration
 
   ParameterRude: [
-    String.raw`function sum(x:Number, y:Number) {return x + y;}`,
+    String.raw`function sum(x:Number, y:Number) {return x * y}`,
     new Program(
       false,
       [
@@ -258,7 +413,15 @@ const fixture = {
             new Parameter("y", "Number", false)
           ],
           null,
-          new Block([new Return(new BinaryExp("x", "+", "y"), false)], false),
+          new Block(
+            [
+              new Return(
+                new BinaryExp(new IdExp("x"), "*", new IdExp("y")),
+                false
+              )
+            ],
+            false
+          ),
           false
         )
       ],
@@ -267,7 +430,7 @@ const fixture = {
   ],
 
   ParameterPolite: [
-    String.raw`function sum(x as a Number, y as a Number) {return x + y;}`,
+    String.raw`function sum(x as a Number, y as a Number) {return x ** y}`,
     new Program(
       false,
       [
@@ -278,7 +441,15 @@ const fixture = {
             new Parameter("y", "Number", true)
           ],
           null,
-          new Block([new Return(new BinaryExp("x", "+", "y"), false)], false),
+          new Block(
+            [
+              new Return(
+                new BinaryExp(new IdExp("x"), "**", new IdExp("y")),
+                false
+              )
+            ],
+            false
+          ),
           false
         )
       ],
@@ -287,7 +458,7 @@ const fixture = {
   ],
 
   BlockRude: [
-    String.raw`gimme gimmeFive = ()->{return 5;}`,
+    String.raw`gimme gimmeFive = ()->{return 5}`,
     new Program(
       false,
       [
@@ -305,7 +476,7 @@ const fixture = {
     )
   ], //same as returnRude ast
   BlockPolite: [
-    String.raw`gimme gimmeFive = ()-> { return 5; }`,
+    String.raw`gimme gimmeFive = ()-> { return 5 }`,
     new Program(
       false,
       [
@@ -324,7 +495,7 @@ const fixture = {
   ],
 
   TernaryExp: [
-    String.raw`gimme five = 5>4? 5: 4;`,
+    String.raw`gimme five = 5>4? 5: 4`,
     new Program(
       false,
       [
@@ -344,7 +515,7 @@ const fixture = {
   ],
 
   LambdaBlock: [
-    String.raw`gimme gimmeFive = ()->{return 5;}`,
+    String.raw`gimme gimmeFive = ()->{return 5}`,
     new Program(
       false,
       [
@@ -376,32 +547,257 @@ const fixture = {
       ],
       false
     )
+  ],
+  UnaryPrefix: [
+    String.raw`y = !x`,
+    new Program(
+      false,
+      [
+        new Assignment(
+          new IdExp("y"),
+          new UnaryPrefix("!", new IdExp("x")),
+          false
+        )
+      ],
+      false
+    )
+  ],
+  /*
+  SubscriptExp: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  MemberExp: [
+    String.raw``,
+    new Program(
+
+    )
+  ],
+  */
+  ArrayLiteral: [
+    String.raw`x = [1,2]`,
+    new Program(
+      false,
+      [
+        new Assignment(
+          new IdExp("x"),
+          new ArrayLiteral([new NumberLiteral(1), new NumberLiteral(2)]),
+          false
+        )
+      ],
+      false
+    )
+  ],
+  DictionaryLiteral: [
+    String.raw`x = {a:6, b:7}`,
+    new Program(
+      false,
+      [
+        new Assignment(
+          new IdExp("x"),
+          new DictionaryLiteral([
+            new DictEntry(new IdExp("a"), new NumberLiteral(6)),
+            new DictEntry(new IdExp("b"), new NumberLiteral(7))
+          ]),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  NegativeExponent: [
+    String.raw`gimme x = 3**-2`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "x",
+          null,
+          new BinaryExp(
+            new NumberLiteral(3),
+            "**",
+            new UnaryPrefix("-", new NumberLiteral(2))
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  OrOperator: [
+    String.raw`gimme boolExp = No or Yes`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "boolExp",
+          null,
+          new BinaryExp(
+            new BooleanLiteral(false),
+            "or",
+            new BooleanLiteral(true)
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  AndOperator: [
+    String.raw`gimme boolExp = (No and Yes)`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "boolExp",
+          null,
+          new BinaryExp(
+            new BooleanLiteral(false),
+            "and",
+            new BooleanLiteral(true)
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  PoliteClass: [
+    String.raw`Hello!
+    Have you ever heard of a Dog? Let's get classy...
+        Please declare name as a String.
+        To construct a Dog by using (name as a String), could you...
+        	Please populate this.name with name.
+        Thank You.
+        Favor getName() as a String could you...
+        	Kindly return this.name
+        Thank You.
+    Thank You.
+    Bye Bye!`,
+    new Program(
+      true,
+      [
+        new ClassDeclaration(
+          "Dog",
+          new ClassBlock(
+            [
+              new VariableDeclaration("name", "String", null, true),
+              new Constructor(
+                "Dog",
+                [new Parameter("name", "String", true)],
+                new Block(
+                  [
+                    new Assignment(
+                      new MemberExp(new IdExp("this"), "name"),
+                      new IdExp("name"),
+                      true
+                    )
+                  ],
+                  true
+                ),
+                true
+              ),
+              new FunctionDeclaration(
+                "getName",
+                [],
+                "String",
+                new Block(
+                  [new Return(new MemberExp(new IdExp("this"), "name"), true)],
+                  true
+                ),
+                true
+              )
+            ],
+            true
+          ),
+          true
+        )
+      ],
+      true
+    )
+  ],
+
+  RudeClass: [
+    String.raw`class Dog {
+      gimme name : String
+      Dog(name) { this.name = name }
+      function getName() { return this.name }
+    }
+    `,
+    new Program(
+      false,
+      [
+        new ClassDeclaration(
+          "Dog",
+          new ClassBlock(
+            [
+              new VariableDeclaration("name", "String", null, false),
+              new Constructor(
+                "Dog",
+                [new Parameter("name", null, null)],
+                new Block(
+                  [
+                    new Assignment(
+                      new MemberExp(new IdExp("this"), "name"),
+                      new IdExp("name"),
+                      false
+                    )
+                  ],
+                  false
+                ),
+                false
+              ),
+              new FunctionDeclaration(
+                "getName",
+                [],
+                null,
+                new Block(
+                  [new Return(new MemberExp(new IdExp("this"), "name"), false)],
+                  false
+                ),
+                false
+              )
+            ],
+            false
+          ),
+          false
+        )
+      ],
+      false
+    )
   ]
+  /*
+  FunctionCallExpPolite: [
+    String.raw``,
+    new Program(
 
-  /* UNIMPLEMENTED TESTS
-  BinaryExp: [String.raw``],
+    )
+  ],
+  FunctionCallExpRude: [
+    String.raw``,
+    new Program(
 
-  UnaryPrefix: [String.raw``],
+    )
+  ],
+  UnaryPrefix: [
+    String.raw``,
+    new Program(
 
-  UnaryPostfix: [String.raw``],
+    )
+  ],
+  NullLiteral: [
+    String.raw``,
+    new Program(
 
-  SubscriptExp: [String.raw``],
-
-  MemberExp: [String.raw``],
-
-  ArrayLiteral: [String.raw``],
-
-  DictionaryLiteral: [String.raw``],
-
-  DictEntry: [String.raw``],
-
-  NumberLiteral: [String.raw``],
-
-  StringLiteral: [String.raw``],
-
-  BooleanLiteral: [String.raw``]
-  //Test necessary as of 02/23/2020
-  //*/
+    )
+  ],
+*/
 };
 
 describe("The parser", () => {

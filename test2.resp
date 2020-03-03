@@ -1,0 +1,16 @@
+Hello!
+
+Please declare US_Denominations as [6, "Yess"].
+
+gimme x = 6
+gimme y : Array<Number> = [1,2]
+y[1] = 2
+
+gimme z : Dict<String, Number> = {"y": 2, "z" : 3}
+
+
+function f() : Number {
+  return 6
+}
+
+Bye Bye!
