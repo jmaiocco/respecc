@@ -129,16 +129,29 @@ const fixture = {
   /*
   conditionalPolite: [
     String.raw`Excuse me, if x is less than 3, could you…
-
+      return 1
     Thank You.
     Otherwise, if x >= 3, could you…
-
+      return 2
     Thank You.
     Otherwise, could you…
-
+      return 3
     Thank You.
     `,
-    new Program(false, [], false)
+    new Program(
+      false,
+      [
+        new Conditional(
+          new BinaryExp(new IdExp("x"), "is less than", new NumberLiteral(3)),
+          new Block([new Return(new NumberLiteral(1), false)], false),
+          [new BinaryExp(new IdExp("x"), ">=", new NumberLiteral(3))],
+          [new Block([new Return(new NumberLiteral(2), false)], false)],
+          new Block([new Return(new NumberLiteral(3), false)], false),
+          true
+        )
+      ],
+      false
+    )
   ],
   */
   WhileLoopRude: [
@@ -155,14 +168,22 @@ const fixture = {
       false
     )
   ],
-  /*
   WhileLoopPolite: [
-    String.raw``,
+    String.raw`Excuse me, while i is less than n, could you...
+    return 1
+  Thank You.`,
     new Program(
-
+      false,
+      [
+        new WhileLoop(
+          new BinaryExp(new IdExp("i"), "is less than", new IdExp("n")),
+          new Block([new Return(new NumberLiteral(1), false)], true),
+          true
+        )
+      ],
+      false
     )
   ],
-   */
   ForLoopRude: [
     String.raw`for(gimme i = 0; i < n; i++) {
       break
@@ -188,14 +209,14 @@ const fixture = {
       false
     )
   ],
-  /*
   FunctionCallStmtPolite: [
-    String.raw`Do me a favor and run init.`,
+    String.raw`Do me a favor and run init with (x,y).`,
     new Program(
-
+      false,
+      [new FunctionCall("init", [new IdExp("x"), new IdExp("y")], true)],
+      false
     )
   ],
-  */
   AssignmentRude: [
     String.raw`gimmeFive = ()->{return 5}`,
     new Program(
@@ -227,20 +248,36 @@ const fixture = {
       false
     )
   ],
-  /*
   DictionaryType: [
-    String.raw``,
+    String.raw`Please declare x as a Dict<String, Number>`,
     new Program(
-
+      false,
+      [
+        new VariableDeclaration(
+          "x",
+          new DictionaryType("String", "Number"),
+          null,
+          true
+        )
+      ],
+      false
     )
   ],
   ArrayType: [
-    String.raw``,
+    String.raw`Please declare x as a Array<Number> as [0, 1].`,
     new Program(
-
+      false,
+      [
+        new VariableDeclaration(
+          "x",
+          new ArrayType("Number"),
+          new ArrayLiteral([new NumberLiteral(0), new NumberLiteral(1)]),
+          true
+        )
+      ],
+      false
     )
   ],
-  */
   functionDeclarationPolite: [
     String.raw`Hello!
     Favor sum(x as a Number, y as a Number) as a Number could you...
@@ -514,7 +551,7 @@ const fixture = {
       ],
       false
     )
-  ]
+  ],
   /*
   SubscriptExp: [
     String.raw``,
@@ -528,25 +565,38 @@ const fixture = {
 
     )
   ],
+  */
   ArrayLiteral: [
-    String.raw``,
+    String.raw`x = [1,2]`,
     new Program(
-
+      false,
+      [
+        new Assignment(
+          new IdExp("x"),
+          new ArrayLiteral([new NumberLiteral(1), new NumberLiteral(2)]),
+          false
+        )
+      ],
+      false
     )
   ],
   DictionaryLiteral: [
-    String.raw``,
+    String.raw`x = {a:6, b:7}`,
     new Program(
-
+      false,
+      [
+        new Assignment(
+          new IdExp("x"),
+          new DictionaryLiteral([
+            new DictEntry(new IdExp("a"), new NumberLiteral(6)),
+            new DictEntry(new IdExp("b"), new NumberLiteral(7))
+          ]),
+          false
+        )
+      ],
+      false
     )
-  ],
-  DictEntry: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
-  */
+  ]
   /*
   BooleanLiteral: [
     String.raw``,
