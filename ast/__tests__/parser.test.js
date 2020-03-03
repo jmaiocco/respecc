@@ -402,7 +402,7 @@ const fixture = {
   ], // same as function Declaration
 
   ParameterRude: [
-    String.raw`function sum(x:Number, y:Number) {return x + y}`,
+    String.raw`function sum(x:Number, y:Number) {return x * y}`,
     new Program(
       false,
       [
@@ -416,7 +416,7 @@ const fixture = {
           new Block(
             [
               new Return(
-                new BinaryExp(new IdExp("x"), "+", new IdExp("y")),
+                new BinaryExp(new IdExp("x"), "*", new IdExp("y")),
                 false
               )
             ],
@@ -430,7 +430,7 @@ const fixture = {
   ],
 
   ParameterPolite: [
-    String.raw`function sum(x as a Number, y as a Number) {return x + y}`,
+    String.raw`function sum(x as a Number, y as a Number) {return x ** y}`,
     new Program(
       false,
       [
@@ -444,7 +444,7 @@ const fixture = {
           new Block(
             [
               new Return(
-                new BinaryExp(new IdExp("x"), "+", new IdExp("y")),
+                new BinaryExp(new IdExp("x"), "**", new IdExp("y")),
                 false
               )
             ],
