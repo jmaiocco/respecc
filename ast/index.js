@@ -142,8 +142,8 @@ class UnaryPostfix {
 }
 
 class SubscriptExp {
-  constructor(v, subscript) {
-    Object.assign(this, { v, subscript });
+  constructor(composite, subscript) {
+    Object.assign(this, { composite, subscript });
   }
 }
 

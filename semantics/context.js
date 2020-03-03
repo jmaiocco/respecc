@@ -79,7 +79,7 @@ class Context {
     if (id.constructor === ArrayType) {
       return new ArrayType(this.lookup(id.type));
     }
-    if (id.constructor === ArrayType) {
+    if (id.constructor === DictionaryType) {
       return new DictionaryType(this.lookup(id.type1), this.lookup(id.type2));
     }
     for (let context = this; context !== null; context = context.parent) {

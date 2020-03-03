@@ -133,6 +133,27 @@ Block.prototype.analyze = function(context) {
 
 ClassDeclaration.prototype.analyze = function(context) {};
 
+SubscriptExp.prototype.analyze = function(context) {
+  this.composite.analyze(context);
+  check.isArrayOrDictionary(this.composite);
+  this.subscript.analyze(context);
+  if (this.composite.type.constructor === ArrayType) {
+    check.isAssignableTo(
+      this.subscript,
+      NumberType,
+      `Array Subscript must be of type Number`
+    );
+    this.type = this.composite.type.type;
+  } else {
+    check.isAssignableTo(
+      this.subscript,
+      this.composite.type.type1,
+      `Dict subscript must match key type`
+    );
+    this.type = this.composite.type.type1;
+  }
+};
+
 NumberLiteral.prototype.analyze = function(context) {
   this.type = NumberType;
 };
@@ -158,12 +179,19 @@ ArrayLiteral.prototype.analyze = function(context) {
 DictionaryLiteral.prototype.analyze = function(context) {
   this.keyValuePairs.forEach(e => e.analyze(context));
   let [keyType, valueType] = [
-    check.propertyOfAll(this.keyValuePairs, "type1"),
-    check.propertyOfAll(this.keyValuePairs, "type2")
+    check.propertyOfAll(this.keyValuePairs, "keyType"),
+    check.propertyOfAll(this.keyValuePairs, "valueType")
   ];
   this.type = new DictionaryType(keyType, valueType);
 };
 //*/
+
+DictEntry.prototype.analyze = function(context) {
+  this.key.analyze(context);
+  this.value.analyze(context);
+  this.keyType = this.key.type;
+  this.valueType = this.value.type;
+};
 
 IdExp.prototype.analyze = function(context) {
   this.ref = context.lookup(this.ref);
@@ -246,22 +274,6 @@ ForExp.prototype.analyze = function (context) {
   this.body.analyze(bodyContext);
 };
 
-// Function analysis is broken up into two parts in order to support (nutual)
-// recursion. First we have to do semantic analysis just on the signature
-// (including the return type). This is so other functions that may be declared
-// before this one have calls to this one checked.
-Func.prototype.analyzeSignature = function (context) {
-  this.bodyContext = context.createChildContextForFunctionBody();
-  this.params.forEach(p => p.analyze(this.bodyContext));
-  this.returnType = !this.returnType ? undefined : context.lookup(this.returnType);
-};
-
-Func.prototype.analyze = function () {
-  this.body.analyze(this.bodyContext);
-  check.isAssignableTo(this.body, this.returnType, 'Type mismatch in function return');
-  delete this.bodyContext; // This was only temporary, delete to keep output clean.
-};
-
 
 IfExp.prototype.analyze = function (context) {
   this.test.analyze(context);
@@ -288,14 +300,6 @@ LetExp.prototype.analyze = function (context) {
   this.body.map(e => e.analyze(newContext));
   if (this.body.length > 0) {
     this.type = this.body[this.body.length - 1].type;
-  }
-};
-
-Literal.prototype.analyze = function () {
-  if (typeof this.value === 'number') {
-    this.type = IntType;
-  } else {
-    this.type = StringType;
   }
 };
 

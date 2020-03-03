@@ -606,27 +606,192 @@ const fixture = {
       ],
       false
     )
+  ],
+
+  NegativeExponent: [
+    String.raw`gimme x = 3**-2`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "x",
+          null,
+          new BinaryExp(
+            new NumberLiteral(3),
+            "**",
+            new UnaryPrefix("-", new NumberLiteral(2))
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  OrOperator: [
+    String.raw`gimme boolExp = No or Yes`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "boolExp",
+          null,
+          new BinaryExp(
+            new BooleanLiteral(false),
+            "or",
+            new BooleanLiteral(true)
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  AndOperator: [
+    String.raw`gimme boolExp = (No and Yes)`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "boolExp",
+          null,
+          new BinaryExp(
+            new BooleanLiteral(false),
+            "and",
+            new BooleanLiteral(true)
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  PoliteClass: [
+    String.raw`Hello!
+    Have you ever heard of a Dog? Let's get classy...
+        Please declare name as a String.
+        To construct a Dog by using (name as a String), could you...
+        	Please populate this.name with name.
+        Thank You.
+        Favor getName() as a String could you...
+        	Kindly return this.name
+        Thank You.
+    Thank You.
+    Bye Bye!`,
+    new Program(
+      true,
+      [
+        new ClassDeclaration(
+          "Dog",
+          new ClassBlock(
+            [
+              new VariableDeclaration("name", "String", null, true),
+              new Constructor(
+                "Dog",
+                [new Parameter("name", "String", true)],
+                new Block(
+                  [
+                    new Assignment(
+                      new MemberExp(new IdExp("this"), "name"),
+                      new IdExp("name"),
+                      true
+                    )
+                  ],
+                  true
+                ),
+                true
+              ),
+              new FunctionDeclaration(
+                "getName",
+                [],
+                "String",
+                new Block(
+                  [new Return(new MemberExp(new IdExp("this"), "name"), true)],
+                  true
+                ),
+                true
+              )
+            ],
+            true
+          ),
+          true
+        )
+      ],
+      true
+    )
+  ],
+
+  RudeClass: [
+    String.raw`class Dog {
+      gimme name : String
+      Dog(name) { this.name = name }
+      function getName() { return this.name }
+    }
+    `,
+    new Program(
+      false,
+      [
+        new ClassDeclaration(
+          "Dog",
+          new ClassBlock(
+            [
+              new VariableDeclaration("name", "String", null, false),
+              new Constructor(
+                "Dog",
+                [new Parameter("name", null, null)],
+                new Block(
+                  [
+                    new Assignment(
+                      new MemberExp(new IdExp("this"), "name"),
+                      new IdExp("name"),
+                      false
+                    )
+                  ],
+                  false
+                ),
+                false
+              ),
+              new FunctionDeclaration(
+                "getName",
+                [],
+                null,
+                new Block(
+                  [new Return(new MemberExp(new IdExp("this"), "name"), false)],
+                  false
+                ),
+                false
+              )
+            ],
+            false
+          ),
+          false
+        )
+      ],
+      false
+    )
   ]
   /*
-  BooleanLiteral: [
+  FunctionCallExpPolite: [
     String.raw``,
     new Program(
 
     )
   ],
-  ClassDeclaration: [
+  FunctionCallExpRude: [
     String.raw``,
     new Program(
 
     )
   ],
-  Constructor: [
+  UnaryPrefix: [
     String.raw``,
     new Program(
 
     )
   ],
-  ClassMember: [
+  NullLiteral: [
     String.raw``,
     new Program(
 
