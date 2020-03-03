@@ -205,7 +205,7 @@ const fixture = {
       false
     )
   ],
-  FunctionCallRude: [
+  FunctionCallStmtRude: [
     String.raw`init(x,y)`,
     new Program(
       false,
@@ -213,7 +213,7 @@ const fixture = {
       false
     )
   ],
-  FunctionCallPolite: [
+  FunctionCallStmtPolite: [
     String.raw`Do me a favor and run init with (x,Yes).`,
     new Program(
       false,
@@ -227,6 +227,10 @@ const fixture = {
       false
     )
   ],
+
+  FunctionCallExpRude: [String.raw``, new Program()],
+  FunctionCallExpPolite: [String.raw``, new Program()],
+
   AssignmentRude: [
     String.raw`gimmeFive = ()->{return 5}`,
     new Program(
@@ -578,14 +582,7 @@ const fixture = {
       false
     )
   ],
-  /*
-  MemberExp: [
-    String.raw``,
-    new Program(
 
-    )
-  ],
-  */
   ArrayLiteral: [
     String.raw`x = [1,2]`,
     new Program(
@@ -785,6 +782,10 @@ const fixture = {
   UnaryPostfix: [
     String.raw`x--`,
     new Program(false, [new UnaryPostfix(new IdExp("x"), "--")], false)
+  ],
+  UnaryIncrement: [
+    String.raw`++x`,
+    new Program(false, [new UnaryPrefix(new IdExp("x"), "++")], false)
   ],
   NullLiteral: [
     String.raw`x= Null`,
