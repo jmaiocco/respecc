@@ -608,6 +608,66 @@ const fixture = {
     )
   ],
 
+  NegativeExponent: [
+    String.raw`gimme x = 3**-2`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "x",
+          null,
+          new BinaryExp(
+            new NumberLiteral(3),
+            "**",
+            new UnaryPrefix("-", new NumberLiteral(2))
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  OrOperator: [
+    String.raw`gimme boolExp = No or Yes`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "boolExp",
+          null,
+          new BinaryExp(
+            new BooleanLiteral(false),
+            "or",
+            new BooleanLiteral(true)
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  AndOperator: [
+    String.raw`gimme boolExp = (No and Yes)`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "boolExp",
+          null,
+          new BinaryExp(
+            new BooleanLiteral(false),
+            "and",
+            new BooleanLiteral(true)
+          ),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
   PoliteClass: [
     String.raw`Hello!
     Have you ever heard of a Dog? Let's get classy...
@@ -713,25 +773,25 @@ const fixture = {
     )
   ]
   /*
-  BooleanLiteral: [
+  FunctionCallExpPolite: [
     String.raw``,
     new Program(
 
     )
   ],
-  ClassDeclaration: [
+  FunctionCallExpRude: [
     String.raw``,
     new Program(
 
     )
   ],
-  Constructor: [
+  UnaryPrefix: [
     String.raw``,
     new Program(
 
     )
   ],
-  ClassMember: [
+  NullLiteral: [
     String.raw``,
     new Program(
 
