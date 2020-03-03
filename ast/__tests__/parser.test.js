@@ -129,30 +129,31 @@ const fixture = {
   /*
   conditionalPolite: [
     String.raw`Excuse me, if x is less than 3, could you…
-
+      return 1
     Thank You.
     Otherwise, if x >= 3, could you…
-
+      return 2
     Thank You.
     Otherwise, could you…
-
+      return 3
     Thank You.
     `,
     new Program(
       false,
       [
         new Conditional(
-          new BinaryExp("x", "less than", new NumberLiteral(3)),
-          new Block([new Break(false), false]),
-          [],
-          [],
-          new Block([new Break(false), false]),
+          new BinaryExp(new IdExp("x"), "is less than", new NumberLiteral(3)),
+          new Block([new Return(new NumberLiteral(1), false)], false),
+          [new BinaryExp(new IdExp("x"), ">=", new NumberLiteral(3))],
+          [new Block([new Return(new NumberLiteral(2), false)], false)],
+          new Block([new Return(new NumberLiteral(3), false)], false),
           true
         )
       ],
       false
     )
-  ],*/
+  ],
+  */
   WhileLoopRude: [
     String.raw`while(x < 3){break}`,
     new Program(
@@ -167,14 +168,22 @@ const fixture = {
       false
     )
   ],
-  /*
   WhileLoopPolite: [
-    String.raw``,
+    String.raw`Excuse me, while i is less than n, could you...
+    return 1
+  Thank You.`,
     new Program(
-
+      false,
+      [
+        new WhileLoop(
+          new BinaryExp(new IdExp("i"), "is less than", new IdExp("n")),
+          new Block([new Return(new NumberLiteral(1), false)], true),
+          true
+        )
+      ],
+      false
     )
   ],
-   */
   ForLoopRude: [
     String.raw`for(gimme i = 0; i < n; i++) {
       break
@@ -239,14 +248,21 @@ const fixture = {
       false
     )
   ],
-  /*
   DictionaryType: [
-    String.raw``,
+    String.raw`Please declare x as a Dict<String, Number>`,
     new Program(
-
+      false,
+      [
+        new VariableDeclaration(
+          "x",
+          new DictionaryType("String", "Number"),
+          null,
+          true
+        )
+      ],
+      false
     )
   ],
-    */
   ArrayType: [
     String.raw`Please declare x as a Array<Number> as [0, 1].`,
     new Program(
@@ -581,14 +597,6 @@ const fixture = {
       false
     )
   ]
-  /*
-  DictEntry: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
-  */
   /*
   BooleanLiteral: [
     String.raw``,
