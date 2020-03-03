@@ -2,6 +2,9 @@ Hello!
 
 Please declare US_Denominations as [6, "Yess"].
 
+gimme x = 6
+gimme y : Number = x
+
 function f() : Number {
   return 6
 }

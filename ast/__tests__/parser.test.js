@@ -126,15 +126,15 @@ const fixture = {
       false
     )
   ],
-  /*
+  ///*
   conditionalPolite: [
-    String.raw`Excuse me, if x is less than 3, could you…
+    String.raw`Excuse me, if x is less than 3, could you...
       return 1
     Thank You.
-    Otherwise, if x >= 3, could you…
+    Otherwise, if x >= 3, could you...
       return 2
     Thank You.
-    Otherwise, could you…
+    Otherwise, could you...
       return 3
     Thank You.
     `,
@@ -143,17 +143,17 @@ const fixture = {
       [
         new Conditional(
           new BinaryExp(new IdExp("x"), "is less than", new NumberLiteral(3)),
-          new Block([new Return(new NumberLiteral(1), false)], false),
+          new Block([new Return(new NumberLiteral(1), false)], true),
           [new BinaryExp(new IdExp("x"), ">=", new NumberLiteral(3))],
-          [new Block([new Return(new NumberLiteral(2), false)], false)],
-          new Block([new Return(new NumberLiteral(3), false)], false),
+          [new Block([new Return(new NumberLiteral(2), false)], true)],
+          new Block([new Return(new NumberLiteral(3), false)], true),
           true
         )
       ],
       false
     )
   ],
-  */
+  //*/
   WhileLoopRude: [
     String.raw`while(x < 3){break}`,
     new Program(

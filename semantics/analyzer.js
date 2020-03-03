@@ -89,6 +89,7 @@ Return.prototype.analyze = function(context) {
       context.currentFunction.type,
       "Type mismatch in function return"
     );
+    //Must do control flow analysis to ensure this return occurs
     context.currentFunction.typeResolved = true;
   }
 };
@@ -99,9 +100,7 @@ VariableDeclaration.prototype.analyze = function(context) {
     this.type = context.lookup(this.type);
     check.isAssignableTo(this.expression, this.type);
   } else {
-    //type inference way: this.type = this.expression.type;
-    //type ignore
-    this.type = null;
+    this.type = this.expression.type;
   }
   context.add(this);
 };
