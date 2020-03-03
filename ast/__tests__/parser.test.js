@@ -246,17 +246,22 @@ const fixture = {
 
     )
   ],
+    */
   ArrayType: [
-    String.raw`x = [1,2]`,
+    String.raw`Please declare x as a Array<Number> as [0, 1].`,
     new Program(
       false,
       [
-
+        new VariableDeclaration(
+          "x",
+          new ArrayType("Number"),
+          new ArrayLiteral([new NumberLiteral(0), new NumberLiteral(1)]),
+          true
+        )
       ],
       false
     )
   ],
-  */
   functionDeclarationPolite: [
     String.raw`Hello!
     Favor sum(x as a Number, y as a Number) as a Number could you...
