@@ -205,7 +205,7 @@ const fixture = {
       false
     )
   ],
-  FunctionCallStmtRude: [
+  FunctionCallRude: [
     String.raw`init(x,y)`,
     new Program(
       false,
@@ -213,7 +213,7 @@ const fixture = {
       false
     )
   ],
-  FunctionCallStmtPolite: [
+  FunctionCallPolite: [
     String.raw`Do me a favor and run init with (x,Yes).`,
     new Program(
       false,
@@ -562,13 +562,23 @@ const fixture = {
       false
     )
   ],
-  /*
-  SubscriptExp: [
-    String.raw``,
-    new Program(
 
+  SubscriptExp: [
+    String.raw`gimme item = arr[0]`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "item",
+          null,
+          new SubscriptExp(new IdExp("arr"), new NumberLiteral(0)),
+          false
+        )
+      ],
+      false
     )
   ],
+  /*
   MemberExp: [
     String.raw``,
     new Program(
@@ -771,33 +781,19 @@ const fixture = {
       ],
       false
     )
-  ]
-  /*
-  FunctionCallExpPolite: [
-    String.raw``,
-    new Program(
-
-    )
   ],
-  FunctionCallExpRude: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
-  UnaryPrefix: [
-    String.raw``,
-    new Program(
-
-    )
+  UnaryPostfix: [
+    String.raw`x--`,
+    new Program(false, [new UnaryPostfix(new IdExp("x"), "--")], false)
   ],
   NullLiteral: [
-    String.raw``,
+    String.raw`x= Null`,
     new Program(
-
+      false,
+      [new Assignment(new IdExp("x"), new NullLiteral(), false)],
+      false
     )
-  ],
-*/
+  ]
 };
 
 describe("The parser", () => {
