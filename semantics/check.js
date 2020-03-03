@@ -56,7 +56,7 @@ module.exports = {
     }
   },
   // Is the type of this expression an array or dictionary type? (For subscript)
-  isArrayorDictionary(expression) {
+  isArrayOrDictionary(expression) {
     doCheck(
       expression.type.constructor === ArrayType ||
         expression.type.constructor === DictionaryType,
