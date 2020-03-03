@@ -200,14 +200,14 @@ const fixture = {
       false
     )
   ],
-  /*
   FunctionCallStmtPolite: [
-    String.raw`Do me a favor and run init.`,
+    String.raw`Do me a favor and run init with (x,y).`,
     new Program(
-
+      false,
+      [new FunctionCall("init", [new IdExp("x"), new IdExp("y")], true)],
+      false
     )
   ],
-  */
   AssignmentRude: [
     String.raw`gimmeFive = ()->{return 5}`,
     new Program(
@@ -563,14 +563,25 @@ const fixture = {
       ],
       false
     )
+  ],
+  DictionaryLiteral: [
+    String.raw`x = {a:6, b:7}`,
+    new Program(
+      false,
+      [
+        new Assignment(
+          new IdExp("x"),
+          new DictionaryLiteral([
+            new DictEntry(new IdExp("a"), new NumberLiteral(6)),
+            new DictEntry(new IdExp("b"), new NumberLiteral(7))
+          ]),
+          false
+        )
+      ],
+      false
+    )
   ]
   /*
-  DictionaryLiteral: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
   DictEntry: [
     String.raw``,
     new Program(
