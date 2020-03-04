@@ -227,6 +227,36 @@ const fixture = {
       false
     )
   ],
+
+  FunctionCallExpRude: [
+    String.raw`x= plusOne(x)`,
+    new Program(
+      false,
+      [
+        new Assignment(
+          new IdExp("x"),
+          new FunctionCall("plusOne", [new IdExp("x")], false),
+          false
+        )
+      ],
+      false
+    )
+  ],
+  FunctionCallExpPolite: [
+    String.raw`Please populate x with the result of running plusOne with (x).`,
+    new Program(
+      false,
+      [
+        new Assignment(
+          new IdExp("x"),
+          new FunctionCall("plusOne", [new IdExp("x")], true),
+          true
+        )
+      ],
+      false
+    )
+  ],
+
   AssignmentRude: [
     String.raw`gimmeFive = ()->{return 5}`,
     new Program(
@@ -474,7 +504,7 @@ const fixture = {
       ],
       false
     )
-  ], //same as returnRude ast
+  ],
   BlockPolite: [
     String.raw`gimme gimmeFive = ()-> { return 5 }`,
     new Program(
@@ -556,6 +586,22 @@ const fixture = {
         new Assignment(
           new IdExp("y"),
           new UnaryPrefix("!", new IdExp("x")),
+          false
+        )
+      ],
+      false
+    )
+  ],
+
+  SubscriptExp: [
+    String.raw`gimme item = arr[0]`,
+    new Program(
+      false,
+      [
+        new VariableDeclaration(
+          "item",
+          null,
+          new SubscriptExp(new IdExp("arr"), new NumberLiteral(0)),
           false
         )
       ],
@@ -758,33 +804,24 @@ const fixture = {
       ],
       false
     )
-  ]
-  /*
-  FunctionCallExpPolite: [
-    String.raw``,
-    new Program(
-
-    )
   ],
-  FunctionCallExpRude: [
-    String.raw``,
-    new Program(
-
-    )
+  UnaryPostfix: [
+    String.raw`x--`,
+    new Program(false, [new UnaryPostfix(new IdExp("x"), "--")], false)
   ],
-  UnaryPrefixIncrement: [
-    String.raw``,
-    new Program(
 
-    )
+  UnaryIncrement: [
+    String.raw`++x`,
+    new Program(false, [new UnaryPrefix("++", new IdExp("x"))], false)
   ],
   NullLiteral: [
-    String.raw``,
+    String.raw`x= Null`,
     new Program(
-
+      false,
+      [new Assignment(new IdExp("x"), new NullLiteral(), false)],
+      false
     )
-  ],
-*/
+  ]
 };
 
 describe("The parser", () => {
