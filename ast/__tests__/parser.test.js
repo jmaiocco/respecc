@@ -126,7 +126,7 @@ const fixture = {
       false
     )
   ],
-  ///*
+
   conditionalPolite: [
     String.raw`Excuse me, if x is less than 3, could you...
       return 1
@@ -562,20 +562,7 @@ const fixture = {
       false
     )
   ],
-  /*
-  SubscriptExp: [
-    String.raw``,
-    new Program(
 
-    )
-  ],
-  MemberExp: [
-    String.raw``,
-    new Program(
-
-    )
-  ],
-  */
   ArrayLiteral: [
     String.raw`x = [1,2]`,
     new Program(
@@ -785,7 +772,7 @@ const fixture = {
 
     )
   ],
-  UnaryPrefix: [
+  UnaryPrefixIncrement: [
     String.raw``,
     new Program(
 
