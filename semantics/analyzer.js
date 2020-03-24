@@ -66,6 +66,10 @@ Assignment.prototype.analyze = function(context) {
   //check.isNotReadOnly(this.variable);
 };
 
+ArrayType.prototype.analyze = function(context) {};
+
+DictionaryType.prototype.analyze = function(context) {};
+
 Conditional.prototype.analyze = function(context) {};
 
 WhileLoop.prototype.analyze = function(context) {};
@@ -73,6 +77,29 @@ WhileLoop.prototype.analyze = function(context) {};
 ForLoop.prototype.analyze = function(context) {};
 
 FunctionCall.prototype.analyze = function(context) {};
+
+Parameter.prototype.analyze = function(context) {
+  //BROKEN, Parameter of Null type cant be assigned to anything
+  //Should Paramter assignment always be allowed or is there a way to force it?
+  if (this.type) {
+    this.type = context.lookup(this.type);
+  }
+  context.add(this);
+};
+
+TernaryExp.prototype.analyze = function(context) {};
+
+LambdaBlock.prototype.analyze = function(context) {};
+
+LambdaExp.prototype.analyze = function(context) {};
+
+BinaryExp.prototype.analyze = function(context) {};
+
+UnaryPrefix.prototype.analyze = function(context) {};
+
+UnaryPostfix.prototype.analyze = function(context) {};
+
+MemberExp.prototype.analyze = function(context) {};
 
 Break.prototype.analyze = function(context) {
   check.inLoop(context, "break");
@@ -95,12 +122,14 @@ Return.prototype.analyze = function(context) {
 };
 
 VariableDeclaration.prototype.analyze = function(context) {
-  this.expression.analyze(context);
-  if (this.type) {
-    this.type = context.lookup(this.type);
-    check.isAssignableTo(this.expression, this.type);
-  } else {
-    this.type = this.expression.type;
+  if (this.expression) {
+    this.expression.analyze(context);
+    if (this.type) {
+      this.type = context.lookup(this.type);
+      check.isAssignableTo(this.expression, this.type);
+    } else {
+      this.type = this.expression.type;
+    }
   }
   context.add(this);
 };
@@ -132,6 +161,10 @@ Block.prototype.analyze = function(context) {
 };
 
 ClassDeclaration.prototype.analyze = function(context) {};
+
+ClassBlock.prototype.analyze = function(context) {};
+
+Constructor.prototype.analyze = function(context) {};
 
 SubscriptExp.prototype.analyze = function(context) {
   this.composite.analyze(context);
