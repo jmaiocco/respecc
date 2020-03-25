@@ -5,7 +5,13 @@ const {
   FunctionDeclaration,
   ClassDeclaration
 } = require("../ast");
-const { NumberType, StringType, NullType, BooleanType } = require("./builtins");
+const {
+  NumberType,
+  StringType,
+  NullType,
+  BooleanType,
+  AnyType
+} = require("./builtins");
 
 function doCheck(condition, message) {
   if (!condition) {
@@ -52,7 +58,10 @@ module.exports = {
         errorMessage
       );
     } else {
-      doCheck(expression.type === type, errorMessage);
+      doCheck(
+        expression.type === type || expression.type === AnyType,
+        errorMessage
+      );
     }
   },
   // Is the type of this expression an array or dictionary type? (For subscript)

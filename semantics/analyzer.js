@@ -34,7 +34,13 @@ const {
   NullLiteral,
   IdExp
 } = require("../ast");
-const { NumberType, StringType, NullType, BooleanType } = require("./builtins");
+const {
+  NumberType,
+  StringType,
+  NullType,
+  BooleanType,
+  AnyType
+} = require("./builtins");
 const check = require("./check");
 const Context = require("./context");
 
@@ -80,10 +86,8 @@ FunctionCall.prototype.analyze = function(context) {};
 
 Parameter.prototype.analyze = function(context) {
   //BROKEN, Parameter of Null type cant be assigned to anything
-  //Should Paramter assignment always be allowed or is there a way to force it?
-  if (this.type) {
-    this.type = context.lookup(this.type);
-  }
+  //Should Paramter assignment always be allowed or is there a way to force it
+  this.type = context.lookup(this.type);
   context.add(this);
 };
 
@@ -110,7 +114,7 @@ Return.prototype.analyze = function(context) {
   //Assign this AST a type? (Connection with function node(?))
   check.inFunction(context, "return");
   this.returnValue.analyze(context);
-  if (context.currentFunction.type !== null) {
+  if (context.currentFunction.type !== AnyType) {
     check.isAssignableTo(
       this.returnValue,
       context.currentFunction.type,
@@ -122,10 +126,10 @@ Return.prototype.analyze = function(context) {
 };
 
 VariableDeclaration.prototype.analyze = function(context) {
+  this.type = context.lookup(this.type);
   if (this.expression) {
     this.expression.analyze(context);
     if (this.type) {
-      this.type = context.lookup(this.type);
       check.isAssignableTo(this.expression, this.type);
     } else {
       this.type = this.expression.type;
@@ -141,11 +145,13 @@ VariableDeclaration.prototype.analyze = function(context) {
 FunctionDeclaration.prototype.analyzeSignature = function(context) {
   this.bodyContext = context.createChildContextForFunctionBody(this);
   this.params.forEach(p => p.analyze(this.bodyContext));
-  this.type = !this.type ? null : context.lookup(this.type);
-  this.typeResolved = !this.type ? true : false;
+  this.type = context.lookup(this.type);
+  //Control Flow Analysis
+  this.typeResolved = this.type === AnyType ? true : false;
 };
 FunctionDeclaration.prototype.analyze = function() {
   this.block.analyze(this.bodyContext);
+  //Control Flow Analysis
   check.functiontypeResolved(this);
   //If signature typed, make sure there is a return?
   delete this.bodyContext; // This was only temporary, delete to keep output clean.

@@ -12,6 +12,7 @@ const {
   StringType,
   NullType,
   BooleanType,
+  AnyType,
   standardFunctions
 } = require("./builtins");
 require("./analyzer");
@@ -76,10 +77,10 @@ class Context {
   // Returns the entity bound to the given identifier, starting from this
   // context and searching "outward" through enclosing contexts if necessary.
   lookup(id) {
-    if (id.constructor === ArrayType) {
+    if (id != null && id.constructor === ArrayType) {
       return new ArrayType(this.lookup(id.type));
     }
-    if (id.constructor === DictionaryType) {
+    if (id != null && id.constructor === DictionaryType) {
       return new DictionaryType(this.lookup(id.type1), this.lookup(id.type2));
     }
     for (let context = this; context !== null; context = context.parent) {
@@ -92,10 +93,15 @@ class Context {
 }
 
 Context.INITIAL = new Context();
-[NumberType, StringType, NullType, BooleanType, ...standardFunctions].forEach(
-  entity => {
-    Context.INITIAL.add(entity);
-  }
-);
+[
+  NumberType,
+  StringType,
+  NullType,
+  BooleanType,
+  AnyType,
+  ...standardFunctions
+].forEach(entity => {
+  Context.INITIAL.add(entity);
+});
 
 module.exports = Context;

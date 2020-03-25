@@ -10,6 +10,7 @@ const NumberType = new PrimitiveType("Number");
 const StringType = new PrimitiveType("String");
 const NullType = new PrimitiveType("Null");
 const BooleanType = new PrimitiveType("Boolean");
+const AnyType = new PrimitiveType(null);
 
 const standardFunctions = [
   new FunctionDeclaration("print", [new Parameter("s", StringType, null)])
@@ -27,5 +28,6 @@ module.exports = {
   StringType,
   NullType,
   BooleanType,
+  AnyType,
   standardFunctions
 };
