@@ -15,10 +15,17 @@ Favor MakeChange(amount) could you...
     Please populate remaining with remaining modded with US_Denominations[ i ].
     i++
   Thank You.
+
+  Please declare sample.
+
+
   Kindly return result
 Thank You.
 
 Please declare exampleAmount as a Number as 105.
 Do me a favor and run MakeChange with (exampleAmount).
+
+
+
 
 Bye Bye!

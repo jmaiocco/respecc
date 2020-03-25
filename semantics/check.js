@@ -45,7 +45,8 @@ module.exports = {
 
   // Can we assign expression to a variable/param/field of type type?
   isAssignableTo(expression, type, message) {
-    if (type === null) {
+    console.log(expression);
+    if (type === AnyType) {
       return;
     }
     let errorMessage = message

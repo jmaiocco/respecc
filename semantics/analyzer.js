@@ -63,11 +63,22 @@ Program.prototype.analyze = function(context) {
   //check.noRecursiveTypeCyclesWithoutRecordTypes(this.decs);
 };
 
+VariableDeclaration.prototype.analyze = function(context) {
+  this.type = context.lookup(this.type);
+  if (this.expression) {
+    this.expression.analyze(context);
+    if (this.type) {
+      check.isAssignableTo(this.expression, this.type);
+    } else {
+      this.type = this.expression.type;
+    }
+  }
+  context.add(this);
+};
+
 Assignment.prototype.analyze = function(context) {
   this.exp.analyze(context);
   this.variable.analyze(context);
-  console.log(this.exp);
-  console.log(this.variable.type);
   check.isAssignableTo(this.exp, this.variable.type);
   //check.isNotReadOnly(this.variable);
 };
@@ -88,13 +99,13 @@ WhileLoop.prototype.analyze = function(context) {
 ForLoop.prototype.analyze = function(context) {
   this.bodyContext = context.createChildContextForLoop();
   if (this.dec) {
-    this.dec.analyze(bodyContext);
+    this.dec.analyze(this.bodyContext);
   }
   if (this.exp) {
-    this.exp.analyze(bodyContext);
+    this.exp.analyze(this.bodyContext);
   }
   if (this.assignment) {
-    this.exp.analyze(bodyContext);
+    this.exp.analyze(this.bodyContext);
   }
   //UNCOMMENT This when nested is Completed
   //this.block.analyze(this.bodyContext);
@@ -141,19 +152,6 @@ Return.prototype.analyze = function(context) {
     //Must do control flow analysis to ensure this return occurs
     context.currentFunction.typeResolved = true;
   }
-};
-
-VariableDeclaration.prototype.analyze = function(context) {
-  this.type = context.lookup(this.type);
-  if (this.expression) {
-    this.expression.analyze(context);
-    if (this.type) {
-      check.isAssignableTo(this.expression, this.type);
-    } else {
-      this.type = this.expression.type;
-    }
-  }
-  context.add(this);
 };
 
 // Function analysis is broken up into two parts in order to support (nutual)

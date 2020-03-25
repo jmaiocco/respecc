@@ -71,8 +71,8 @@ class ClassBlock {
 }
 
 class Constructor {
-  constructor(id, params, blk, politeFlag) {
-    Object.assign(this, { id, params, blk, politeFlag });
+  constructor(id, params, block, politeFlag) {
+    Object.assign(this, { id, params, block, politeFlag });
   }
 }
 
