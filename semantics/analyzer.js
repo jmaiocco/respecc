@@ -66,9 +66,9 @@ Program.prototype.analyze = function(context) {
 Assignment.prototype.analyze = function(context) {
   this.exp.analyze(context);
   this.variable.analyze(context);
-  if (this.variable.type !== null) {
-    check.isAssignableTo(this.exp, this.variable.type);
-  }
+  console.log(this.exp);
+  console.log(this.variable.type);
+  check.isAssignableTo(this.exp, this.variable.type);
   //check.isNotReadOnly(this.variable);
 };
 
@@ -78,7 +78,12 @@ DictionaryType.prototype.analyze = function(context) {};
 
 Conditional.prototype.analyze = function(context) {};
 
-WhileLoop.prototype.analyze = function(context) {};
+WhileLoop.prototype.analyze = function(context) {
+  this.exp.analyze(context);
+  this.bodyContext = context.createChildContextForLoop();
+  //UNCOMMENT This when nested is Completed
+  //this.block.analyze(this.bodyContext);
+};
 
 ForLoop.prototype.analyze = function(context) {};
 

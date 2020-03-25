@@ -126,7 +126,7 @@ module.exports = {
     return arr.length !== 0 &&
       arr.filter(e => e[prop] === arr[0][prop]).length === arr.length
       ? arr[0][prop]
-      : null;
+      : AnyType;
   }
 
   /*
