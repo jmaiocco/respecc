@@ -85,7 +85,20 @@ WhileLoop.prototype.analyze = function(context) {
   //this.block.analyze(this.bodyContext);
 };
 
-ForLoop.prototype.analyze = function(context) {};
+ForLoop.prototype.analyze = function(context) {
+  this.bodyContext = context.createChildContextForLoop();
+  if (this.dec) {
+    this.dec.analyze(bodyContext);
+  }
+  if (this.exp) {
+    this.exp.analyze(bodyContext);
+  }
+  if (this.assignment) {
+    this.exp.analyze(bodyContext);
+  }
+  //UNCOMMENT This when nested is Completed
+  //this.block.analyze(this.bodyContext);
+};
 
 FunctionCall.prototype.analyze = function(context) {};
 
