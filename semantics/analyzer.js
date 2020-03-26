@@ -117,7 +117,11 @@ TernaryExp.prototype.analyze = function(context) {
   [this.exp1, this.exp2, this.exp3].forEach(e => {
     e.analyze(context);
   });
-  this.type = this.exp2.type;
+  if (this.exp2.type === this.exp1.type) {
+    this.type = this.exp1.type;
+  } else {
+    this.type = AnyType;
+  }
 };
 
 LambdaBlock.prototype.analyze = function(context) {};
