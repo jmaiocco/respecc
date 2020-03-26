@@ -46,7 +46,7 @@ module.exports = {
   // Can we assign expression to a variable/param/field of type type?
   isAssignableTo(expression, type, message) {
     console.log(expression);
-    if (type === AnyType) {
+    if (type === AnyType || /*DELETE THIS*/ expression.type === undefined) {
       return;
     }
     let errorMessage = message
@@ -134,23 +134,18 @@ module.exports = {
   isRecord(expression) {
     doCheck(expression.type.constructor === RecordType, 'Not a record');
   },
-
   mustNotHaveAType(expression) {
     doCheck(!expression.type, 'Expression must not have a type');
   },
-
-
   isNotReadOnly(lvalue) {
     doCheck(
       !(lvalue.constructor === IdExp && lvalue.ref.readOnly),
       'Assignment to read-only variable',
     );
   },
-
   fieldHasNotBeenUsed(field, usedFields) {
     doCheck(!usedFields.has(field), `Field ${field} already declared`);
   },
-
   // If there is a cycle in types, they must go through a record
   noRecursiveTypeCyclesWithoutRecordTypes() {
     // TODO - not looking forward to this one

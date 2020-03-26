@@ -83,17 +83,12 @@ Assignment.prototype.analyze = function(context) {
   //check.isNotReadOnly(this.variable);
 };
 
-ArrayType.prototype.analyze = function(context) {};
-
-DictionaryType.prototype.analyze = function(context) {};
-
 Conditional.prototype.analyze = function(context) {};
 
 WhileLoop.prototype.analyze = function(context) {
   this.exp.analyze(context);
   this.bodyContext = context.createChildContextForLoop();
-  //UNCOMMENT This when nested is Completed
-  //this.block.analyze(this.bodyContext);
+  this.block.analyze(this.bodyContext);
 };
 
 ForLoop.prototype.analyze = function(context) {
@@ -107,20 +102,27 @@ ForLoop.prototype.analyze = function(context) {
   if (this.assignment) {
     this.exp.analyze(this.bodyContext);
   }
-  //UNCOMMENT This when nested is Completed
-  //this.block.analyze(this.bodyContext);
+  this.block.analyze(this.bodyContext);
 };
 
 FunctionCall.prototype.analyze = function(context) {};
 
 Parameter.prototype.analyze = function(context) {
-  //BROKEN, Parameter of Null type cant be assigned to anything
-  //Should Paramter assignment always be allowed or is there a way to force it
   this.type = context.lookup(this.type);
   context.add(this);
 };
 
-TernaryExp.prototype.analyze = function(context) {};
+TernaryExp.prototype.analyze = function(context) {
+  this.type = BooleanType;
+  [this.exp1, this.exp2, this.exp3].forEach(e => {
+    e.analyze(context);
+  });
+  if (this.exp2.type === this.exp1.type) {
+    this.type = this.exp1.type;
+  } else {
+    this.type = AnyType;
+  }
+};
 
 LambdaBlock.prototype.analyze = function(context) {};
 
