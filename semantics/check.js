@@ -5,7 +5,13 @@ const {
   FunctionDeclaration,
   ClassDeclaration
 } = require("../ast");
-const { NumberType, StringType, NullType, BooleanType } = require("./builtins");
+const {
+  NumberType,
+  StringType,
+  NullType,
+  BooleanType,
+  AnyType
+} = require("./builtins");
 
 function doCheck(condition, message) {
   if (!condition) {
@@ -39,7 +45,8 @@ module.exports = {
 
   // Can we assign expression to a variable/param/field of type type?
   isAssignableTo(expression, type, message) {
-    if (type === null) {
+    console.log(expression);
+    if (type === AnyType) {
       return;
     }
     let errorMessage = message
@@ -52,7 +59,10 @@ module.exports = {
         errorMessage
       );
     } else {
-      doCheck(expression.type === type, errorMessage);
+      doCheck(
+        expression.type === type || expression.type === AnyType,
+        errorMessage
+      );
     }
   },
   // Is the type of this expression an array or dictionary type? (For subscript)
@@ -117,7 +127,7 @@ module.exports = {
     return arr.length !== 0 &&
       arr.filter(e => e[prop] === arr[0][prop]).length === arr.length
       ? arr[0][prop]
-      : null;
+      : AnyType;
   }
 
   /*

@@ -34,7 +34,13 @@ const {
   NullLiteral,
   IdExp
 } = require("../ast");
-const { NumberType, StringType, NullType, BooleanType } = require("./builtins");
+const {
+  NumberType,
+  StringType,
+  NullType,
+  BooleanType,
+  AnyType
+} = require("./builtins");
 const check = require("./check");
 const Context = require("./context");
 
@@ -57,12 +63,23 @@ Program.prototype.analyze = function(context) {
   //check.noRecursiveTypeCyclesWithoutRecordTypes(this.decs);
 };
 
+VariableDeclaration.prototype.analyze = function(context) {
+  this.type = context.lookup(this.type);
+  if (this.expression) {
+    this.expression.analyze(context);
+    if (this.type) {
+      check.isAssignableTo(this.expression, this.type);
+    } else {
+      this.type = this.expression.type;
+    }
+  }
+  context.add(this);
+};
+
 Assignment.prototype.analyze = function(context) {
   this.exp.analyze(context);
   this.variable.analyze(context);
-  if (this.variable.type !== null) {
-    check.isAssignableTo(this.exp, this.variable.type);
-  }
+  check.isAssignableTo(this.exp, this.variable.type);
   //check.isNotReadOnly(this.variable);
 };
 
@@ -72,18 +89,34 @@ DictionaryType.prototype.analyze = function(context) {};
 
 Conditional.prototype.analyze = function(context) {};
 
-WhileLoop.prototype.analyze = function(context) {};
+WhileLoop.prototype.analyze = function(context) {
+  this.exp.analyze(context);
+  this.bodyContext = context.createChildContextForLoop();
+  //UNCOMMENT This when nested is Completed
+  //this.block.analyze(this.bodyContext);
+};
 
-ForLoop.prototype.analyze = function(context) {};
+ForLoop.prototype.analyze = function(context) {
+  this.bodyContext = context.createChildContextForLoop();
+  if (this.dec) {
+    this.dec.analyze(this.bodyContext);
+  }
+  if (this.exp) {
+    this.exp.analyze(this.bodyContext);
+  }
+  if (this.assignment) {
+    this.exp.analyze(this.bodyContext);
+  }
+  //UNCOMMENT This when nested is Completed
+  //this.block.analyze(this.bodyContext);
+};
 
 FunctionCall.prototype.analyze = function(context) {};
 
 Parameter.prototype.analyze = function(context) {
   //BROKEN, Parameter of Null type cant be assigned to anything
-  //Should Paramter assignment always be allowed or is there a way to force it?
-  if (this.type) {
-    this.type = context.lookup(this.type);
-  }
+  //Should Paramter assignment always be allowed or is there a way to force it
+  this.type = context.lookup(this.type);
   context.add(this);
 };
 
@@ -110,7 +143,7 @@ Return.prototype.analyze = function(context) {
   //Assign this AST a type? (Connection with function node(?))
   check.inFunction(context, "return");
   this.returnValue.analyze(context);
-  if (context.currentFunction.type !== null) {
+  if (context.currentFunction.type !== AnyType) {
     check.isAssignableTo(
       this.returnValue,
       context.currentFunction.type,
@@ -121,19 +154,6 @@ Return.prototype.analyze = function(context) {
   }
 };
 
-VariableDeclaration.prototype.analyze = function(context) {
-  if (this.expression) {
-    this.expression.analyze(context);
-    if (this.type) {
-      this.type = context.lookup(this.type);
-      check.isAssignableTo(this.expression, this.type);
-    } else {
-      this.type = this.expression.type;
-    }
-  }
-  context.add(this);
-};
-
 // Function analysis is broken up into two parts in order to support (nutual)
 // recursion. First we have to do semantic analysis just on the signature
 // (including the return type). This is so other functions that may be declared
@@ -141,11 +161,13 @@ VariableDeclaration.prototype.analyze = function(context) {
 FunctionDeclaration.prototype.analyzeSignature = function(context) {
   this.bodyContext = context.createChildContextForFunctionBody(this);
   this.params.forEach(p => p.analyze(this.bodyContext));
-  this.type = !this.type ? null : context.lookup(this.type);
-  this.typeResolved = !this.type ? true : false;
+  this.type = context.lookup(this.type);
+  //Control Flow Analysis
+  this.typeResolved = this.type === AnyType ? true : false;
 };
 FunctionDeclaration.prototype.analyze = function() {
   this.block.analyze(this.bodyContext);
+  //Control Flow Analysis
   check.functiontypeResolved(this);
   //If signature typed, make sure there is a return?
   delete this.bodyContext; // This was only temporary, delete to keep output clean.
