@@ -83,7 +83,18 @@ Assignment.prototype.analyze = function(context) {
   //check.isNotReadOnly(this.variable);
 };
 
-Conditional.prototype.analyze = function(context) {};
+Conditional.prototype.analyze = function(context) {
+  this.exp.analyze(context);
+  this.bodyContext = context.createChildContextForBlock();
+  this.ifBlock.analyze(this.bodyContext);
+  if (this.exps && this.blocks) {
+    this.exps.forEach(e => this.e.analyze(context));
+    this.blocks.forEach(b => this.b.analyze(this.bodyContext));
+  }
+  if (this.elseBlock) {
+    this.elseBlock.analyze(this.bodyContext);
+  }
+};
 
 WhileLoop.prototype.analyze = function(context) {
   this.exp.analyze(context);
@@ -105,7 +116,14 @@ ForLoop.prototype.analyze = function(context) {
   this.block.analyze(this.bodyContext);
 };
 
-FunctionCall.prototype.analyze = function(context) {};
+FunctionCall.prototype.analyze = function(context) {
+  /*Should callee be a member of function call (for decorated tree)?*/
+  this.callee = context.lookup(this.id);
+  check.isFunction(this.callee, "Attempt to call a non-function");
+  this.args.forEach(arg => arg.analyze(context));
+  check.legalArguments(this.args, this.callee.params);
+  this.type = this.callee.type;
+};
 
 Parameter.prototype.analyze = function(context) {
   this.type = context.lookup(this.type);
@@ -124,11 +142,36 @@ TernaryExp.prototype.analyze = function(context) {
   }
 };
 
-LambdaBlock.prototype.analyze = function(context) {};
+LambdaBlock.prototype.analyze = function(context) {
+  this.bodyContext = context.createChildContextForFunctionBody(this);
+  this.params.analyze(this.bodyContext);
+  this.block.analyze(this.bodyContext);
+  this.type = AnyType;
+};
 
-LambdaExp.prototype.analyze = function(context) {};
+LambdaExp.prototype.analyze = function(context) {
+  this.params.analyze(this.context);
+  this.exp.analyze(this.context);
+  this.type = this.exp.type;
+};
 
-BinaryExp.prototype.analyze = function(context) {};
+BinaryExp.prototype.analyze = function(context) {
+  /*TODO: Need to Transfer this toal code to our language
+  this.left.analyze(context);
+  this.right.analyze(context);
+  if (/[-+&|]/.test(this.op)) {
+    check.isInteger(this.left);
+    check.isInteger(this.right);
+  } else if (/<=?|>=?/.test(this.op)) {
+    check.expressionsHaveTheSameType(this.left, this.right);
+    check.isIntegerOrString(this.left);
+    check.isIntegerOrString(this.right);
+  } else {
+    check.expressionsHaveTheSameType(this.left, this.right);
+  }
+  this.type = IntType;
+  */
+};
 
 UnaryPrefix.prototype.analyze = function(context) {};
 
