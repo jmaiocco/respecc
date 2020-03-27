@@ -45,7 +45,6 @@ module.exports = {
 
   // Can we assign expression to a variable/param/field of type type?
   isAssignableTo(expression, type, message) {
-    console.log(expression);
     if (type === AnyType || /*DELETE THIS*/ expression.type === undefined) {
       return;
     }
@@ -69,7 +68,8 @@ module.exports = {
   isArrayOrDictionary(expression) {
     doCheck(
       expression.type.constructor === ArrayType ||
-        expression.type.constructor === DictionaryType,
+        expression.type.constructor === DictionaryType ||
+        expression.type.constructor === AnyType,
       "Not an array or a dictionary"
     );
   },
@@ -84,7 +84,17 @@ module.exports = {
   },
 
   isNumber(expression) {
-    doCheck(expression.type === NumberType, "Not a Number");
+    doCheck(
+      expression.type === NumberType || expression.type === AnyType,
+      "Not a Number"
+    );
+  },
+
+  isBoolean(expression) {
+    doCheck(
+      expression.type === BooleanType || expression.type === AnyType,
+      "Not a Number"
+    );
   },
 
   isFunction(value) {
@@ -98,7 +108,9 @@ module.exports = {
   // Is the type of this expression a number or string type? (For relational operators)
   isNumberOrString(expression) {
     doCheck(
-      expression.type === NumberType || expression.type === StringType,
+      expression.type === NumberType ||
+        expression.type === StringType ||
+        expression.type === AnyType,
       "Not an number or string"
     );
   },
@@ -131,12 +143,6 @@ module.exports = {
   }
 
   /*
-  isRecord(expression) {
-    doCheck(expression.type.constructor === RecordType, 'Not a record');
-  },
-  mustNotHaveAType(expression) {
-    doCheck(!expression.type, 'Expression must not have a type');
-  },
   isNotReadOnly(lvalue) {
     doCheck(
       !(lvalue.constructor === IdExp && lvalue.ref.readOnly),

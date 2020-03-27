@@ -44,6 +44,33 @@ const {
 const check = require("./check");
 const Context = require("./context");
 
+let orOperators = new Set(["||", "or"]);
+let andOperators = new Set(["&&", "and"]);
+let relOperators = new Set([
+  "<=",
+  "<",
+  ">=",
+  ">",
+  "==",
+  "!=",
+  "is less than or equal to",
+  "is greater than or equal to",
+  "is less than",
+  "is greater than",
+  "is equal to",
+  "is not equal to"
+]);
+let addOperators = new Set(["+", "-", "plus", "minus"]);
+let multOperators = new Set([
+  "*",
+  "/",
+  "%",
+  "times",
+  "divided by",
+  "modded with"
+]);
+let expoOperators = new Set(["**", "raised to the power of"]);
+
 module.exports = function(exp) {
   exp.analyze(Context.INITIAL);
 };
@@ -109,6 +136,7 @@ ForLoop.prototype.analyze = function(context) {
   }
   if (this.exp) {
     this.exp.analyze(this.bodyContext);
+    check.isBoolean(this.exp);
   }
   if (this.assignment) {
     this.exp.analyze(this.bodyContext);
@@ -156,28 +184,36 @@ LambdaExp.prototype.analyze = function(context) {
 };
 
 BinaryExp.prototype.analyze = function(context) {
-  /*TODO: Need to Transfer this toal code to our language
   this.left.analyze(context);
   this.right.analyze(context);
-  if (/[-+&|]/.test(this.op)) {
-    check.isInteger(this.left);
-    check.isInteger(this.right);
-  } else if (/<=?|>=?/.test(this.op)) {
-    check.expressionsHaveTheSameType(this.left, this.right);
-    check.isIntegerOrString(this.left);
-    check.isIntegerOrString(this.right);
+  if (
+    addOperators.has(this.operator) ||
+    multOperators.has(this.operator) ||
+    expoOperators.has(this.operator)
+  ) {
+    //Should this guarentee that the return type is the type of the first operand?
+    this.type = this.left.type;
   } else {
-    check.expressionsHaveTheSameType(this.left, this.right);
+    this.type = BooleanType;
   }
-  this.type = IntType;
-  */
 };
 
-UnaryPrefix.prototype.analyze = function(context) {};
+UnaryPrefix.prototype.analyze = function(context) {
+  this.right.analyze(context);
+  if (this.operator === "--" || this.operator === "-") {
+    check.isNumber(this.right);
+  } else {
+    check.isBoolean(this.right);
+  }
+  this.type = this.right.type;
+};
 
-UnaryPostfix.prototype.analyze = function(context) {};
-
-MemberExp.prototype.analyze = function(context) {};
+UnaryPostfix.prototype.analyze = function(context) {
+  //Only Allows Integer Incrementation
+  this.left.analyze(context);
+  check.isNumber(this.left);
+  this.type = this.left.type;
+};
 
 Break.prototype.analyze = function(context) {
   check.inLoop(context, "break");
@@ -227,24 +263,32 @@ Block.prototype.analyze = function(context) {
   });
 };
 
-ClassDeclaration.prototype.analyze = function(context) {};
+ClassDeclaration.prototype.analyze = function(context) {
+  /*TODO*/
+};
 
-ClassBlock.prototype.analyze = function(context) {};
+ClassBlock.prototype.analyze = function(context) {
+  /*TODO*/
+  //Allow nested classes?
+};
 
-Constructor.prototype.analyze = function(context) {};
+Constructor.prototype.analyze = function(context) {
+  /*TODO*/
+};
+
+MemberExp.prototype.analyze = function(context) {
+  //this.v.analyze(context);
+  /*TODO*/
+};
 
 SubscriptExp.prototype.analyze = function(context) {
   this.composite.analyze(context);
   check.isArrayOrDictionary(this.composite);
   this.subscript.analyze(context);
   if (this.composite.type.constructor === ArrayType) {
-    check.isAssignableTo(
-      this.subscript,
-      NumberType,
-      `Array Subscript must be of type Number`
-    );
+    check.isNumber(this.subscript, `Array Subscript must be of type Number`);
     this.type = this.composite.type.type;
-  } else {
+  } else if (this.composite.type.constructor === DictionaryType) {
     check.isAssignableTo(
       this.subscript,
       this.composite.type.type1,
