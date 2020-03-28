@@ -3,7 +3,7 @@ class Block {
   gimme x = 5
 
   Block() {
-
+    this.x = 6
   }
 }
 

@@ -283,9 +283,16 @@ ClassDeclaration.prototype.analyzeNames = function(context) {
 };
 
 ClassDeclaration.prototype.analyze = function() {
-  this.block.analyze(this.bodyContext);
   let constructorObj = this.bodyContext.lookup(this.id);
   constructorObj.type.locals = this.bodyContext.locals;
+
+  let typeClone = new ObjectType(this.id);
+  typeClone.locals = constructorObj.type.locals;
+  let constructorClone = new Constructor("this", constructorObj.params);
+  constructorClone.type = typeClone;
+  this.bodyContext.add(constructorClone);
+
+  this.block.analyze(this.bodyContext);
   delete this.bodyContext;
 };
 
@@ -328,7 +335,7 @@ Constructor.prototype.analyze = function(context) {
 
 MemberExp.prototype.analyze = function(context) {
   this.v.analyze(context);
-  console.log(this.v);
+
   check.isClass(this.v.type);
   if (this.v.type.locals.has(this.field)) {
     this.member = this.v.type.locals.get(this.field);
