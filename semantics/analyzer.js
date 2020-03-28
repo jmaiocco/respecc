@@ -289,10 +289,13 @@ ClassBlock.prototype.analyzeNames = function(context) {
       context.add(d);
       d.analyzeNames(context);
     });
-  this.statements
-    .filter(d => d.constructor === FunctionDeclaration || Constructor)
+  this.members
+    .filter(
+      d =>
+        d.constructor === FunctionDeclaration || d.constructor === Constructor
+    )
     .forEach(d => d.analyzeSignature(context));
-  this.statements
+  this.members
     .filter(d => d.constructor === FunctionDeclaration)
     .forEach(d => context.add(d));
   this.members.forEach(d => d.analyze(context));
