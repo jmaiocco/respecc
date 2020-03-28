@@ -63,7 +63,7 @@ class Context {
     return new Context({
       parent: this,
       currentFunction: this.currentFunction,
-      currentClass: this.currentClass,
+      currentClass: currentClass,
       inLoop: false
     });
   }
@@ -80,6 +80,7 @@ class Context {
 
   createChildContextForBlock() {
     // For a block, we have to retain both the function and loop settings.
+
     return new Context({
       parent: this,
       currentFunction: this.currentFunction,
@@ -100,6 +101,9 @@ class Context {
   // Returns the entity bound to the given identifier, starting from this
   // context and searching "outward" through enclosing contexts if necessary.
   lookup(id) {
+    if (id === "this" && this.currentClass) {
+      return this.currentClass;
+    }
     if (id != null && id.constructor === ArrayType) {
       return new ArrayType(this.lookup(id.type));
     }

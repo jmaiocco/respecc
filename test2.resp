@@ -1,5 +1,11 @@
+
 class Block {
+  gimme x = 5
 
+  Block() {
 
-
+  }
 }
+
+gimme y = Block()
+gimme z = y.x

@@ -66,7 +66,6 @@ module.exports = {
   },
   // Is the type of this expression an array or dictionary type? (For subscript)
   isArrayOrDictionary(expression) {
-    console.log(expression);
     doCheck(
       expression.type.constructor === ArrayType ||
         expression.type.constructor === DictionaryType ||
@@ -130,7 +129,7 @@ module.exports = {
 
   inFunction(context, keyword) {
     doCheck(
-      context.currentFunction !== null,
+      context.currentFunction,
       `${keyword} can only be used in a function`
     );
   },
@@ -144,7 +143,7 @@ module.exports = {
 
   inClass(context, keyword) {
     doCheck(
-      context.currentClass !== null,
+      context.currentClass,
       `Constructor ${keyword} can only be used in a ${keyword} class`
     );
   },

@@ -124,12 +124,14 @@ Conditional.prototype.analyze = function(context) {
   if (this.elseBlock) {
     this.elseBlock.analyze(this.bodyContext);
   }
+  delete this.bodyContext;
 };
 
 WhileLoop.prototype.analyze = function(context) {
   this.exp.analyze(context);
   this.bodyContext = context.createChildContextForLoop();
   this.block.analyze(this.bodyContext);
+  delete this.bodyContext;
 };
 
 ForLoop.prototype.analyze = function(context) {
@@ -145,6 +147,7 @@ ForLoop.prototype.analyze = function(context) {
     this.exp.analyze(this.bodyContext);
   }
   this.block.analyze(this.bodyContext);
+  delete this.bodyContext;
 };
 
 FunctionCall.prototype.analyze = function(context) {
@@ -178,6 +181,7 @@ LambdaBlock.prototype.analyze = function(context) {
   this.params.analyze(this.bodyContext);
   this.block.analyze(this.bodyContext);
   this.type = AnyType;
+  delete this.bodyContext;
 };
 
 LambdaExp.prototype.analyze = function(context) {
@@ -275,11 +279,12 @@ Block.prototype.analyze = function(context) {
 ClassDeclaration.prototype.analyzeNames = function(context) {
   this.bodyContext = context.createChildContextForClassBody(this);
   this.block.analyzeNames(this.bodyContext);
-  this.type = this;
+  //this.type = this;
 };
 
 ClassDeclaration.prototype.analyze = function(context) {
   this.block.analyze(this.bodyContext);
+  delete this.bodyContext;
 };
 
 ClassBlock.prototype.analyzeNames = function(context) {
@@ -298,7 +303,6 @@ ClassBlock.prototype.analyzeNames = function(context) {
   this.members
     .filter(d => d.constructor === FunctionDeclaration)
     .forEach(d => context.add(d));
-  this.members.forEach(d => d.analyze(context));
 };
 
 ClassBlock.prototype.analyze = function(context) {
@@ -310,11 +314,12 @@ Constructor.prototype.analyzeSignature = function(context) {
   check.constructorMatchesClass(this, context.currentClass);
   this.bodyContext = context.createChildContextForFunctionBody(this);
   this.params.forEach(p => p.analyze(this.bodyContext));
-  this.context.currentClass.params = this.params;
+  context.currentClass.params = this.params;
 };
 
 Constructor.prototype.analyze = function(context) {
   this.block.analyze(this.bodyContext);
+  delete this.bodyContext;
 };
 
 MemberExp.prototype.analyze = function(context) {
@@ -382,5 +387,9 @@ DictEntry.prototype.analyze = function(context) {
 
 IdExp.prototype.analyze = function(context) {
   this.ref = context.lookup(this.ref);
-  this.type = this.ref.type;
+  if (this.ref.constructor === ClassDeclaration) {
+    this.type = this.ref;
+  } else {
+    this.type = this.ref.type;
+  }
 };
