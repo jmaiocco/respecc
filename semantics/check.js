@@ -1,11 +1,13 @@
 const util = require("util");
 const {
+  Constructor,
   ArrayType,
   DictionaryType,
   FunctionDeclaration,
   ClassDeclaration
 } = require("../ast");
 const {
+  ObjectType,
   NumberType,
   StringType,
   NullType,
@@ -45,7 +47,6 @@ module.exports = {
 
   // Can we assign expression to a variable/param/field of type type?
   isAssignableTo(expression, type, message) {
-    console.log(expression);
     if (type === AnyType || /*DELETE THIS*/ expression.type === undefined) {
       return;
     }
@@ -69,7 +70,8 @@ module.exports = {
   isArrayOrDictionary(expression) {
     doCheck(
       expression.type.constructor === ArrayType ||
-        expression.type.constructor === DictionaryType,
+        expression.type.constructor === DictionaryType ||
+        expression.type === AnyType,
       "Not an array or a dictionary"
     );
   },
@@ -84,11 +86,29 @@ module.exports = {
   },
 
   isNumber(expression) {
-    doCheck(expression.type === NumberType, "Not a Number");
+    doCheck(
+      expression.type === NumberType || expression.type === AnyType,
+      "Not a Number"
+    );
+  },
+
+  isBoolean(expression) {
+    doCheck(
+      expression.type === BooleanType || expression.type === AnyType,
+      "Not a Number"
+    );
   },
 
   isFunction(value) {
-    doCheck(value.constructor === FunctionDeclaration, "Not a function");
+    doCheck(
+      value.constructor === FunctionDeclaration ||
+        value.constructor === Constructor,
+      "Not a function"
+    );
+  },
+
+  isClass(value) {
+    doCheck(value.constructor === ObjectType, "Not an object");
   },
 
   expressionsHaveTheSameType(e1, e2) {
@@ -98,7 +118,9 @@ module.exports = {
   // Is the type of this expression a number or string type? (For relational operators)
   isNumberOrString(expression) {
     doCheck(
-      expression.type === NumberType || expression.type === StringType,
+      expression.type === NumberType ||
+        expression.type === StringType ||
+        expression.type === AnyType,
       "Not an number or string"
     );
   },
@@ -109,8 +131,29 @@ module.exports = {
 
   inFunction(context, keyword) {
     doCheck(
-      context.currentFunction !== null,
+      context.currentFunction,
       `${keyword} can only be used in a function`
+    );
+  },
+
+  functionConstructorHasNoReturnValue(funcRef, returnVal) {
+    doCheck(
+      returnVal === null || funcRef.constructor === FunctionDeclaration,
+      `Constructor ${funcRef.id} returned a value. Constructors may not return values.`
+    );
+  },
+
+  inClass(context, keyword) {
+    doCheck(
+      context.currentClass,
+      `Constructor ${keyword} can only be used in a ${keyword} class`
+    );
+  },
+
+  constructorMatchesClass(constructorObj, classObj) {
+    doCheck(
+      classObj.id === constructorObj.id,
+      `Constructor ${constructorObj.id} can't be used in ${classObj.id} class`
     );
   },
 
@@ -131,12 +174,6 @@ module.exports = {
   }
 
   /*
-  isRecord(expression) {
-    doCheck(expression.type.constructor === RecordType, 'Not a record');
-  },
-  mustNotHaveAType(expression) {
-    doCheck(!expression.type, 'Expression must not have a type');
-  },
   isNotReadOnly(lvalue) {
     doCheck(
       !(lvalue.constructor === IdExp && lvalue.ref.readOnly),

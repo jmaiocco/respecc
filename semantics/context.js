@@ -33,10 +33,16 @@ require("./analyzer");
 //   4. A map for looking up all identifiers declared in this context.
 
 class Context {
-  constructor({ parent = null, currentFunction = null, inLoop = false } = {}) {
+  constructor({
+    parent = null,
+    currentFunction = null,
+    currentClass = null,
+    inLoop = false
+  } = {}) {
     Object.assign(this, {
       parent,
       currentFunction,
+      currentClass,
       inLoop,
       locals: new Map()
     });
@@ -44,7 +50,22 @@ class Context {
 
   createChildContextForFunctionBody(currentFunction) {
     // When entering a new function, we're not in a loop anymore
-    return new Context({ parent: this, currentFunction, inLoop: false });
+    return new Context({
+      parent: this,
+      currentFunction: currentFunction,
+      currentClass: this.currentClass,
+      inLoop: false
+    });
+  }
+
+  createChildContextForClassBody(currentClass) {
+    // When entering a new function, we're not in a loop anymore
+    return new Context({
+      parent: this,
+      currentFunction: this.currentFunction,
+      currentClass: currentClass,
+      inLoop: false
+    });
   }
 
   createChildContextForLoop() {
@@ -52,15 +73,18 @@ class Context {
     return new Context({
       parent: this,
       currentFunction: this.currentFunction,
+      currentClass: this.currentClass,
       inLoop: true
     });
   }
 
   createChildContextForBlock() {
     // For a block, we have to retain both the function and loop settings.
+
     return new Context({
       parent: this,
       currentFunction: this.currentFunction,
+      currentClass: this.currentClass,
       inLoop: this.inLoop
     });
   }
