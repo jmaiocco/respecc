@@ -79,7 +79,10 @@ Program.prototype.analyze = function(context) {
   //So classes and functions seen everywhere within their block()?)
   this.statements
     .filter(d => d.constructor === ClassDeclaration)
-    .forEach(d => context.add(d));
+    .forEach(d => {
+      context.add(d);
+      d.analyzeNames(context);
+    });
   this.statements
     .filter(d => d.constructor === FunctionDeclaration)
     .forEach(d => d.analyzeSignature(context));
@@ -223,15 +226,21 @@ Return.prototype.analyze = function(context) {
   //
   //Assign this AST a type? (Connection with function node(?))
   check.inFunction(context, "return");
-  this.returnValue.analyze(context);
-  if (context.currentFunction.type !== AnyType) {
-    check.isAssignableTo(
-      this.returnValue,
-      context.currentFunction.type,
-      "Type mismatch in function return"
-    );
-    //Must do control flow analysis to ensure this return occurs
-    context.currentFunction.typeResolved = true;
+  check.functionConstructorHasNoReturnValue(
+    context.currentFunction,
+    this.returnValue
+  );
+  if (this.returnValue) {
+    this.returnValue.analyze(context);
+    if (context.currentFunction.type !== AnyType) {
+      check.isAssignableTo(
+        this.returnValue,
+        context.currentFunction.type,
+        "Type mismatch in function return"
+      );
+      //Must do control flow analysis to ensure this return occurs
+      context.currentFunction.typeResolved = true;
+    }
   }
 };
 
@@ -263,22 +272,54 @@ Block.prototype.analyze = function(context) {
   });
 };
 
+ClassDeclaration.prototype.analyzeNames = function(context) {
+  this.bodyContext = context.createChildContextForClassBody(this);
+  this.block.analyzeNames(this.bodyContext);
+  this.type = this;
+};
+
 ClassDeclaration.prototype.analyze = function(context) {
-  /*TODO*/
+  this.block.analyze(this.bodyContext);
+};
+
+ClassBlock.prototype.analyzeNames = function(context) {
+  this.members
+    .filter(d => d.constructor === ClassDeclaration)
+    .forEach(d => {
+      context.add(d);
+      d.analyzeNames(context);
+    });
+  this.statements
+    .filter(d => d.constructor === FunctionDeclaration || Constructor)
+    .forEach(d => d.analyzeSignature(context));
+  this.statements
+    .filter(d => d.constructor === FunctionDeclaration)
+    .forEach(d => context.add(d));
+  this.members.forEach(d => d.analyze(context));
 };
 
 ClassBlock.prototype.analyze = function(context) {
-  /*TODO*/
-  //Allow nested classes?
+  this.members.forEach(d => d.analyze(context));
+};
+
+Constructor.prototype.analyzeSignature = function(context) {
+  check.inClass(context, this.id);
+  check.constructorMatchesClass(this, context.currentClass);
+  this.bodyContext = context.createChildContextForFunctionBody(this);
+  this.params.forEach(p => p.analyze(this.bodyContext));
+  this.context.currentClass.params = this.params;
 };
 
 Constructor.prototype.analyze = function(context) {
-  /*TODO*/
+  this.block.analyze(this.bodyContext);
 };
 
 MemberExp.prototype.analyze = function(context) {
-  //this.v.analyze(context);
-  /*TODO*/
+  this.v.analyze(context);
+  check.isClass(this.v.type);
+  //Should Member be included here as a property?
+  this.member = this.v.type.bodyContext.lookup(this.id);
+  this.type = this.member.type;
 };
 
 SubscriptExp.prototype.analyze = function(context) {

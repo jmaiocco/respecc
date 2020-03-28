@@ -66,10 +66,11 @@ module.exports = {
   },
   // Is the type of this expression an array or dictionary type? (For subscript)
   isArrayOrDictionary(expression) {
+    console.log(expression);
     doCheck(
       expression.type.constructor === ArrayType ||
         expression.type.constructor === DictionaryType ||
-        expression.type.constructor === AnyType,
+        expression.type === AnyType,
       "Not an array or a dictionary"
     );
   },
@@ -98,7 +99,15 @@ module.exports = {
   },
 
   isFunction(value) {
-    doCheck(value.constructor === FunctionDeclaration, "Not a function");
+    doCheck(
+      value.constructor === FunctionDeclaration ||
+        value.constructor === ClassDeclaration,
+      "Not a function"
+    );
+  },
+
+  isClass(value) {
+    doCheck(value.constructor === ClassDeclaration, "Not an object");
   },
 
   expressionsHaveTheSameType(e1, e2) {
@@ -123,6 +132,27 @@ module.exports = {
     doCheck(
       context.currentFunction !== null,
       `${keyword} can only be used in a function`
+    );
+  },
+
+  functionConstructorHasNoReturnValue(funcRef, returnVal) {
+    doCheck(
+      returnVal === null || funcRef.constructor === FunctionDeclaration,
+      `Constructor ${funcRef.id} returned a value. Constructors may not return values.`
+    );
+  },
+
+  inClass(context, keyword) {
+    doCheck(
+      context.currentClass !== null,
+      `Constructor ${keyword} can only be used in a ${keyword} class`
+    );
+  },
+
+  constructorMatchesClass(constructorObj, classObj) {
+    doCheck(
+      classObj.id === constructorObj.id,
+      `Constructor ${constructorObj.id} can't be used in ${classObj.id} class`
     );
   },
 
