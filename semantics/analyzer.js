@@ -95,6 +95,9 @@ Program.prototype.analyze = function(context) {
 
 VariableDeclaration.prototype.analyze = function(context) {
   this.type = context.lookup(this.type);
+  if (this.type.constructor === Constructor) {
+    this.type = this.type.type; //This is because ObjectType isnt filed, Constructor is.
+  }
   if (this.expression) {
     this.expression.analyze(context);
     if (this.type && this.type !== AnyType) {
@@ -293,6 +296,9 @@ ClassDeclaration.prototype.analyze = function() {
   this.bodyContext.add(constructorClone);
 
   this.block.analyze(this.bodyContext);
+
+  this.bodyContext.locals.delete("this");
+
   delete this.bodyContext;
 };
 

@@ -7,5 +7,5 @@ class Block {
   }
 }
 
-gimme y = Block()
+gimme y : Block = Block()
 gimme z = y.x
