@@ -6,6 +6,12 @@ class PrimitiveType {
   }
 }
 
+class ObjectType {
+  constructor(id) {
+    Object.assign(this, { id });
+  }
+}
+
 const NumberType = new PrimitiveType("Number");
 const StringType = new PrimitiveType("String");
 const NullType = new PrimitiveType("Null");
@@ -29,5 +35,6 @@ module.exports = {
   NullType,
   BooleanType,
   AnyType,
+  ObjectType,
   standardFunctions
 };

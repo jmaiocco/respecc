@@ -35,6 +35,7 @@ const {
   IdExp
 } = require("../ast");
 const {
+  ObjectType,
   NumberType,
   StringType,
   NullType,
@@ -80,7 +81,6 @@ Program.prototype.analyze = function(context) {
   this.statements
     .filter(d => d.constructor === ClassDeclaration)
     .forEach(d => {
-      context.add(d);
       d.analyzeNames(context);
     });
   this.statements
@@ -97,12 +97,13 @@ VariableDeclaration.prototype.analyze = function(context) {
   this.type = context.lookup(this.type);
   if (this.expression) {
     this.expression.analyze(context);
-    if (this.type) {
+    if (this.type && this.type !== AnyType) {
       check.isAssignableTo(this.expression, this.type);
     } else {
       this.type = this.expression.type;
     }
   }
+
   context.add(this);
 };
 
@@ -279,11 +280,12 @@ Block.prototype.analyze = function(context) {
 ClassDeclaration.prototype.analyzeNames = function(context) {
   this.bodyContext = context.createChildContextForClassBody(this);
   this.block.analyzeNames(this.bodyContext);
-  //this.type = this;
 };
 
-ClassDeclaration.prototype.analyze = function(context) {
+ClassDeclaration.prototype.analyze = function() {
   this.block.analyze(this.bodyContext);
+  let constructorObj = this.bodyContext.lookup(this.id);
+  constructorObj.type.locals = this.bodyContext.locals;
   delete this.bodyContext;
 };
 
@@ -291,15 +293,17 @@ ClassBlock.prototype.analyzeNames = function(context) {
   this.members
     .filter(d => d.constructor === ClassDeclaration)
     .forEach(d => {
-      context.add(d);
       d.analyzeNames(context);
     });
   this.members
-    .filter(
-      d =>
-        d.constructor === FunctionDeclaration || d.constructor === Constructor
-    )
+    .filter(d => d.constructor === Constructor)
     .forEach(d => d.analyzeSignature(context));
+  this.members
+    .filter(d => d.constructor === FunctionDeclaration)
+    .forEach(d => d.analyzeSignature(context));
+  this.members
+    .filter(d => d.constructor === Constructor)
+    .forEach(d => context.parent.add(d));
   this.members
     .filter(d => d.constructor === FunctionDeclaration)
     .forEach(d => context.add(d));
@@ -310,11 +314,11 @@ ClassBlock.prototype.analyze = function(context) {
 };
 
 Constructor.prototype.analyzeSignature = function(context) {
-  check.inClass(context, this.id);
+  check.inClass(context, this.id); //Constructor exists in the scope outside the class
   check.constructorMatchesClass(this, context.currentClass);
   this.bodyContext = context.createChildContextForFunctionBody(this);
   this.params.forEach(p => p.analyze(this.bodyContext));
-  context.currentClass.params = this.params;
+  this.type = new ObjectType(this.id);
 };
 
 Constructor.prototype.analyze = function(context) {
@@ -324,9 +328,13 @@ Constructor.prototype.analyze = function(context) {
 
 MemberExp.prototype.analyze = function(context) {
   this.v.analyze(context);
+  console.log(this.v);
   check.isClass(this.v.type);
-  //Should Member be included here as a property?
-  this.member = this.v.type.bodyContext.lookup(this.id);
+  if (this.v.type.locals.has(this.field)) {
+    this.member = this.v.type.locals.get(this.field);
+  } else {
+    throw new Error(`Identifier  has not been declared`);
+  }
   this.type = this.member.type;
 };
 
@@ -387,9 +395,5 @@ DictEntry.prototype.analyze = function(context) {
 
 IdExp.prototype.analyze = function(context) {
   this.ref = context.lookup(this.ref);
-  if (this.ref.constructor === ClassDeclaration) {
-    this.type = this.ref;
-  } else {
-    this.type = this.ref.type;
-  }
+  this.type = this.ref.type;
 };

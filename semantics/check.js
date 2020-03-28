@@ -1,11 +1,13 @@
 const util = require("util");
 const {
+  Constructor,
   ArrayType,
   DictionaryType,
   FunctionDeclaration,
   ClassDeclaration
 } = require("../ast");
 const {
+  ObjectType,
   NumberType,
   StringType,
   NullType,
@@ -100,13 +102,13 @@ module.exports = {
   isFunction(value) {
     doCheck(
       value.constructor === FunctionDeclaration ||
-        value.constructor === ClassDeclaration,
+        value.constructor === Constructor,
       "Not a function"
     );
   },
 
   isClass(value) {
-    doCheck(value.constructor === ClassDeclaration, "Not an object");
+    doCheck(value.constructor === ObjectType, "Not an object");
   },
 
   expressionsHaveTheSameType(e1, e2) {
