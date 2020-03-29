@@ -43,12 +43,12 @@ const errors = [
     "wrong type of function argument",
     'function plusOne(x:Number){return  x+1}\n plusOne("hi")'
   ],
-  // ["redeclared field"],does not apply to respec++ probably
-  ["no such field"],
-  ["member of nonrecord"],
-  ["subscript of nonarray"],
-  ["call of nonfunction"],
-  ["non integer subscript"]
+  ["redeclared field", "gimme x = {a:1, a:Yes}"], //does not apply to respec++ probably
+  ["no such field", "gimme x = {a:1} \n gimme y = x.b"],
+  ["member of nonrecord", "gimme x = 1 \n gimme y = x.z"],
+  ["subscript of nonarray", "gimme x = 1 \n gimme y = x[0]"],
+  ["call of nonfunction", "gimme x= 1 \n x()"],
+  ["non integer subscript", "gimme x = [1,2,3] \n gimme y = x[True]"]
 
   /* **************Toal Examples***************************
   ['use of undeclared variable', 'x := 1'],
