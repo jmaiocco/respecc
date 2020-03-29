@@ -7,8 +7,8 @@ class PrimitiveType {
 }
 
 class ObjectType {
-  constructor(id) {
-    Object.assign(this, { id });
+  constructor(id, callingParams = []) {
+    Object.assign(this, { id, callingParams });
   }
 }
 
