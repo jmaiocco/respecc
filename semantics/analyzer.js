@@ -165,6 +165,9 @@ FunctionCall.prototype.analyze = function(context) {
 
 Parameter.prototype.analyze = function(context) {
   this.type = context.lookup(this.type);
+  if (this.type.constructor === Constructor) {
+    this.type = this.type.type; //This is because ObjectType isnt filed, Constructor is.
+  }
   context.add(this);
 };
 
