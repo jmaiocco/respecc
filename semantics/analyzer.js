@@ -119,8 +119,8 @@ Conditional.prototype.analyze = function(context) {
   this.bodyContext = context.createChildContextForBlock();
   this.ifBlock.analyze(this.bodyContext);
   if (this.exps && this.blocks) {
-    this.exps.forEach(e => this.e.analyze(context));
-    this.blocks.forEach(b => this.b.analyze(this.bodyContext));
+    this.exps.forEach(e => e.analyze(context));
+    this.blocks.forEach(b => b.analyze(this.bodyContext));
   }
   if (this.elseBlock) {
     this.elseBlock.analyze(this.bodyContext);
@@ -155,8 +155,10 @@ FunctionCall.prototype.analyze = function(context) {
   /*Should callee be a member of function call (for decorated tree)?*/
   this.callee = context.lookup(this.id);
   check.isFunction(this.callee, "Attempt to call a non-function");
-  this.args.forEach(arg => arg.analyze(context));
-  check.legalArguments(this.args, this.callee.params);
+  if (this.args) {
+    this.args.forEach(arg => arg.analyze(context));
+    check.legalArguments(this.args, this.callee.params);
+  }
   this.type = this.callee.type;
 };
 
@@ -179,14 +181,14 @@ TernaryExp.prototype.analyze = function(context) {
 
 LambdaBlock.prototype.analyze = function(context) {
   this.bodyContext = context.createChildContextForFunctionBody(this);
-  this.params.analyze(this.bodyContext);
+  this.params.forEach(param => param.analyze(this.bodyContext));
   this.block.analyze(this.bodyContext);
   this.type = AnyType;
   delete this.bodyContext;
 };
 
 LambdaExp.prototype.analyze = function(context) {
-  this.params.analyze(this.context);
+  this.params.forEach(param => param.analyze(this.context));
   this.exp.analyze(this.context);
   this.type = this.exp.type;
 };
