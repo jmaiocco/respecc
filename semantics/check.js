@@ -47,10 +47,7 @@ module.exports = {
 
   // Can we assign expression to a variable/param/field of type type?
   isAssignableTo(expression, type, message) {
-    console.log(type);
-    console.log(expression.type);
-
-    if (type === AnyType || /*DELETE THIS*/ expression.type === undefined) {
+    if (type === AnyType) {
       return;
     }
     let errorMessage = message
@@ -103,10 +100,14 @@ module.exports = {
   },
 
   isFunction(value) {
+    doCheck(value.constructor === FunctionDeclaration, "Not a function");
+  },
+
+  isFunctionOrObject(value) {
     doCheck(
       value.constructor === FunctionDeclaration ||
-        value.constructor === Constructor,
-      "Not a function"
+        value.constructor === ObjectType,
+      "Not a function or Constructor"
     );
   },
 
@@ -167,6 +168,16 @@ module.exports = {
       `Expected ${params.length} args in call, got ${args.length}`
     );
     args.forEach((arg, i) => this.isAssignableTo(arg, params[i].type));
+  },
+
+  anyLegalArguments(args, paramsList) {
+    doCheck(
+      paramsList.every(params => args.length === params.length),
+      `No Constructor exists with params length ${args.length}`
+    );
+    paramsList.forEach(params =>
+      args.forEach((arg, i) => this.isAssignableTo(arg, params[i].type))
+    );
   },
 
   propertyOfAll(arr, prop) {

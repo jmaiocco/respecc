@@ -2,10 +2,10 @@
 class Block {
   gimme x = 5
 
-  Block() {
+  Block(gfg : Number) {
     this.x = 6
   }
 }
 
-gimme y : Block = Block()
+gimme y : Block = Block(6)
 gimme z = y.x
