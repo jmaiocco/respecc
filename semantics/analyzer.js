@@ -174,12 +174,13 @@ Parameter.prototype.analyze = function(context) {
 };
 
 TernaryExp.prototype.analyze = function(context) {
+  //TODO: type check is wrong, should check exp1
   this.type = BooleanType;
   [this.exp1, this.exp2, this.exp3].forEach(e => {
     e.analyze(context);
   });
-  if (this.exp2.type === this.exp1.type) {
-    this.type = this.exp1.type; //why exp1 and exp2?
+  if (this.exp2.type === this.exp3.type) {
+    this.type = this.exp2.type;
   } else {
     this.type = AnyType;
   }
