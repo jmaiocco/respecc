@@ -80,9 +80,10 @@ Program.prototype.analyze = function(context) {
   //So classes and functions seen everywhere within their block()?)
   this.statements
     .filter(d => d.constructor === ClassDeclaration)
-    .forEach(d => {
-      d.analyzeNames(context);
-    });
+    .forEach(d => context.add(new ObjectType(d.id)));
+  this.statements
+    .filter(d => d.constructor === ClassDeclaration)
+    .forEach(d => d.analyzeNames(context));
   this.statements
     .filter(d => d.constructor === FunctionDeclaration)
     .forEach(d => d.analyzeSignature(context));
@@ -154,12 +155,17 @@ ForLoop.prototype.analyze = function(context) {
 FunctionCall.prototype.analyze = function(context) {
   /*Should callee be a member of function call (for decorated tree)?*/
   this.callee = context.lookup(this.id);
-  check.isFunction(this.callee, "Attempt to call a non-function");
+  check.isFunctionOrObject(this.callee, "Attempt to call a non-function");
   if (this.args) {
     this.args.forEach(arg => arg.analyze(context));
-    check.legalArguments(this.args, this.callee.params);
+    if (this.callee.constructor === FunctionDeclaration) {
+      check.legalArguments(this.args, this.callee.params);
+      this.type = this.callee.type;
+    } else {
+      check.anyLegalArguments(this.args, this.callee.callingParams);
+      this.type = this.callee;
+    }
   }
-  this.type = this.callee.type;
 };
 
 Parameter.prototype.analyze = function(context) {
@@ -285,34 +291,31 @@ ClassDeclaration.prototype.analyzeNames = function(context) {
 };
 
 ClassDeclaration.prototype.analyze = function() {
-  let constructorObj = this.bodyContext.lookup(this.id);
-  constructorObj.type.locals = this.bodyContext.locals;
+  let objType = this.bodyContext.lookup(this.id);
+  objType.locals = this.bodyContext.locals;
 
-  let typeClone = new ObjectType(this.id);
-  typeClone.locals = constructorObj.type.locals;
-  let constructorClone = new Constructor("this", constructorObj.params);
-  constructorClone.type = typeClone;
-  this.bodyContext.add(constructorClone);
-
+  let typeClone = new ObjectType("this");
+  typeClone.locals = this.bodyContext.locals;
+  this.bodyContext.add(typeClone);
   this.block.analyze(this.bodyContext);
+  this.bodyContext.locals.delete("this");
+
   delete this.bodyContext;
 };
 
 ClassBlock.prototype.analyzeNames = function(context) {
   this.members
     .filter(d => d.constructor === ClassDeclaration)
-    .forEach(d => {
-      d.analyzeNames(context);
-    });
+    .forEach(d => context.add(new ObjectType(d.id)));
+  this.members
+    .filter(d => d.constructor === ClassDeclaration)
+    .forEach(d => d.analyzeNames(context));
   this.members
     .filter(d => d.constructor === Constructor)
     .forEach(d => d.analyzeSignature(context));
   this.members
     .filter(d => d.constructor === FunctionDeclaration)
     .forEach(d => d.analyzeSignature(context));
-  this.members
-    .filter(d => d.constructor === Constructor)
-    .forEach(d => context.parent.add(d));
   this.members
     .filter(d => d.constructor === FunctionDeclaration)
     .forEach(d => context.add(d));
@@ -325,9 +328,15 @@ ClassBlock.prototype.analyze = function(context) {
 Constructor.prototype.analyzeSignature = function(context) {
   check.inClass(context, this.id); //Constructor exists in the scope outside the class
   check.constructorMatchesClass(this, context.currentClass);
+
+  let objectType = context.lookup(this.id);
+
   this.bodyContext = context.createChildContextForFunctionBody(this);
   this.params.forEach(p => p.analyze(this.bodyContext));
-  this.type = new ObjectType(this.id);
+
+  objectType.callingParams = [...objectType.callingParams, this.params];
+
+  //this.this.type = objectType;
 };
 
 Constructor.prototype.analyze = function(context) {
@@ -337,7 +346,6 @@ Constructor.prototype.analyze = function(context) {
 
 MemberExp.prototype.analyze = function(context) {
   this.v.analyze(context);
-
   check.isClass(this.v.type);
   if (this.v.type.locals.has(this.field)) {
     this.member = this.v.type.locals.get(this.field);
@@ -405,4 +413,7 @@ DictEntry.prototype.analyze = function(context) {
 IdExp.prototype.analyze = function(context) {
   this.ref = context.lookup(this.ref);
   this.type = this.ref.type;
+  if (this.ref.constructor === ObjectType) {
+    this.type = this.ref;
+  }
 };

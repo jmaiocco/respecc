@@ -164,7 +164,7 @@ function bubbleSort(comparator, arr, arrlen) {
 bubbleSort((a,b)->(a-b),numbers,6)
 `, //GENERATE ERRORS
   String.raw`gimme five = 5>4? 5: 4`,
-  String.raw`gimme five = 5>4?6>5:3>4? 2 : 1`,
+  String.raw`gimme fiveish = 5>4?6>5:3>4? 2 : 1`,
   String.raw`gimme gimmeFive = ()->{return 5}`,
   String.raw`gimme gimmeFive = ()-> 5`,
   String.raw`
