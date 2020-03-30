@@ -98,20 +98,20 @@ Do me a favor and run linearCongruentialGenerator.
 Bye Bye!
 
 `,
-  // String.raw`
-  //   function Fibonacci(n, length) {
-  //   if (n == 1) {
-  //     gimme series = [0, 1]
-  //     return series
-  //   } else {
-  //     series = Fibonacci(n - 1, length - 1)
-  //     series[length] = series[length minus 1] plus series[length minus 2]
-  //     return series
-  //   }
-  // }
+  String.raw`
+    function Fibonacci(n, length) {
+    if (n == 1) {
+      gimme series = [0, 1]
+      return series
+    } else {
+      series = Fibonacci(n - 1, length - 1)
+      series[length] = series[length minus 1] plus series[length minus 2]
+      return series
+    }
+  }
 
-  // Fibonacci(12, 12)
-  // `, //GENERATES ERROR
+  Fibonacci(12, 12)
+  `, //GENERATES ERROR
   String.raw`
 function isPrime (num) {
   if (num <= 1) {
@@ -164,9 +164,17 @@ function bubbleSort(comparator, arr, arrlen) {
 bubbleSort((a,b)->(a-b),numbers,6)
 `, //GENERATE ERRORS
   String.raw`gimme five = 5>4? 5: 4`,
+  String.raw`gimme five = 5>4?6>5:3>4? 2 : 1`,
   String.raw`gimme gimmeFive = ()->{return 5}`,
   String.raw`gimme gimmeFive = ()-> 5`,
-  String.raw`gimme x = {a:6, b:7}`
+  String.raw`
+  gimme dict = {a:6, b:[1,True]}
+  gimme dict_item = dict[0]`, //GENERATES ERRORS
+  String.raw`gimme nullVar = Null`,
+  String.raw`
+  gimme array = [1,2,3]
+  gimme arr_item = array[0]`,
+  String.raw`gimme yes = !No`
 ];
 
 describe("The semantic analyzer", () => {

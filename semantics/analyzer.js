@@ -173,7 +173,7 @@ TernaryExp.prototype.analyze = function(context) {
     e.analyze(context);
   });
   if (this.exp2.type === this.exp1.type) {
-    this.type = this.exp1.type;
+    this.type = this.exp1.type; //why exp1 and exp2?
   } else {
     this.type = AnyType;
   }
@@ -342,7 +342,7 @@ MemberExp.prototype.analyze = function(context) {
   if (this.v.type.locals.has(this.field)) {
     this.member = this.v.type.locals.get(this.field);
   } else {
-    throw new Error(`Identifier  has not been declared`);
+    // throw new Error(`Identifier  has not been declared`);//SHOULD NOT THROW
   }
   this.type = this.member.type;
 };
