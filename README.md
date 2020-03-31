@@ -30,10 +30,7 @@ Respecc++ was developed by Timothy Herrmann, Luis Garcia, Joseph Maiocco, Bennet
   <li> A "politeness rating system" that gauges your relationship with the compiler based on the syntax style you adopt most frequently. This discourages programmers from coding too much with the rude syntax. </li>
   <li> Features a global function ***respecc_score()***, allowing users to find out in real time what the compiler truly thinks of them.  </li>
   <li> The compiler keeps track of how much rude syntax a programmer uses. Depending on how rude a programmer is, code may not even compile correctly! </li>
-  <li> A strong, dynamic type system that also permits users to manually impose static type restrictions with manifest typing. </li>
-  <ul>
-    <li> The basic type system contains number, string and boolean primitives, as well as array and dictionary types. </li>
-  </ul>
+  <li> A strong, dynamic type system that also permits users to manually impose static type restrictions with manifest typing. The basic type system contains number, string and boolean primitives, as well as array and dictionary types. </li>
   <li> Standard conditional (if, else if, and else) and loop (for, while) statements. </li>
   <li> Recursive functions. </li>
   <li> Anonymous lambda functions and expressions. </li>
@@ -42,7 +39,9 @@ Respecc++ was developed by Timothy Herrmann, Luis Garcia, Joseph Maiocco, Bennet
 </ul>
 
 <h2> List of Static Semantic Errors </h2>
- 
+<ul>
+  <li> </li>
+</ul>
 
   
   
@@ -50,5 +49,11 @@ Respecc++ was developed by Timothy Herrmann, Luis Garcia, Joseph Maiocco, Bennet
 <p>
   Here are a handful of programs in Respecc++ in both polite and rude variations, juxtaposed with equivalent JavaScript code for comparison:
 </p>
+<h3> Hello World </h3>
+<code style=display:block;white-space:pre-wrap>                       
+Hello!                                                                         
+Do me a favor and run print with ("Hello world!"). 
+Bye Bye! 
+</code>
   
 
