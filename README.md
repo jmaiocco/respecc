@@ -50,10 +50,10 @@ Respecc++ was developed by Timothy Herrmann, Luis Garcia, Joseph Maiocco, Bennet
   Here are a handful of programs in Respecc++ in both polite and rude variations, juxtaposed with equivalent JavaScript code for comparison:
 </p>
 <h3> Hello World </h3>
-<code style=display:block;white-space:pre-wrap>                       
+```                     
 Hello!                                                                         
 Do me a favor and run print with ("Hello world!"). 
 Bye Bye! 
-</code>
+```
   
 
