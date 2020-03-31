@@ -4,6 +4,8 @@
   <img width="440" height="168" src="https://github.com/jmaiocco/respecc/blob/master/general_images/LogoRev1.png">
 </p>
 
+**Tired of reading bland README.me files? Visit our website! https://jmaiocco.github.io/respecc/**
+
 ## Brief Description
 Respecc++ is a programming language designed to promote good manners and proper etiquette in our degenerate society. Many programmers nowadays view computers as tools rather than partners. When a cryptic error message is shown, programmers mutter curses and ask the compiler, "What the HECK are you doing today...?" Yet nobody ever asks the compiler, "How are you doing today?" We find this state of affairs to be deplorable, and we hope the creation of Respecc++ will improve human-computer interactions for years to come.
 
@@ -13,9 +15,9 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 
 ## List of Features
 
-* Two syntax styles: Polite longhand vs Rude shorthand, with the ability to mix and max different syntaxes at will.
-* Politeness rating system that gauges your reltionship with the compiler and discourages user from too much code with the rude syntax.
-* Features a global function **respecc_score()**, allowing users to find out in real time what their compiler truly thinks of them. 
+* Two syntax styles: Polite (longhand) vs Rude (shorthand), with the ability to mix and match different syntaxes at will.
+* Politeness rating system that gauges your relationship with the compiler and discourages users from coding too much with the rude syntax.
+* Features a global function **respecc_score()** that lets users find out in real time what their compiler truly thinks of them. 
 * Consequences for programmers with low program politeness, decreasing the odds that the compiler will compile code correctly.
 * Strong, dynamic typing for ease of use, but also allowing the user to manually impose static type restrictions with manifest typing.
   * Basic type system containing number, string, and boolean primitives, as well as array and dictionary types.
