@@ -2,15 +2,15 @@
 class Block {
   gimme x = 5
 
-  Block(gfg) {
+  Block(gfg : Number) {
     this.x = 6
   }
-  Block(gfg : String, g : Number ) {
+  Block(gfg : String) {
     this.x = 6
   }
 }
 
-gimme y : Block = Block("d", 0)
+gimme y : Block = Block("d")
 gimme z = y.x
 
 //What if multiple untyped constructors

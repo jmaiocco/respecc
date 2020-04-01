@@ -199,7 +199,8 @@ module.exports = {
           let paramsMatch = true;
           params[i].forEach((param, k) => {
             if (
-              param.type !== params[j][k].type /*|| param.type === AnyType*/
+              param.type !== params[j][k].type &&
+              (param.type !== AnyType && params[j][k].type !== AnyType)
             ) {
               paramsMatch = false;
             }
