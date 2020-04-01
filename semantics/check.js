@@ -187,7 +187,7 @@ module.exports = {
           this.isAssignableTo(arg, params[i].type, "", true)
         )
       ),
-      "No Constructor exists that can execept the specified types"
+      "No Constructor exists that can accept the specified types"
     );
   },
 
@@ -206,8 +206,6 @@ module.exports = {
         if (params[i].length === params[j].length) {
           let paramsMatch = true;
           params[i].forEach((param, k) => {
-            console.log(param.type !== params[j][k].type);
-            console.log(param.type === AnyType);
             if (param.type !== params[j][k].type || param.type === AnyType) {
               paramsMatch = false;
             }
