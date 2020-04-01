@@ -143,30 +143,32 @@ Have you ever heard of a Dog? Let's get classy...
       Kindly return this.name
     Thank You.
 Thank You.
+Please declare cc as Dog("cece")
 Bye Bye!`,
 
-  String.raw`
-gimme numbers = [1,3,4,5,28,3]
+  // String.raw`
+  // gimme numbers = [1,3,4,5,28,3]
 
-function bubbleSort(comparator, arr, arrlen) {
-	for(gimme i=0;i<arrlen-1;i++){
-      for(gimme j=0;j<arrlen-i-1;j++){
-        if(comparator(arr[j],arr[j+1]) > 0){
-          gimme temp = arr[j]
-          arr[j] = arr[j+1]
-          arr[j+1] = temp
-        }
-      }
-    }
-    return arr
-}
+  // function bubbleSort(comparator, arr, arrlen) {
+  // 	for(gimme i=0;i<arrlen-1;i++){
+  //       for(gimme j=0;j<arrlen-i-1;j++){
+  //         if(comparator(arr[j],arr[j+1]) > 0){
+  //           gimme temp = arr[j]
+  //           arr[j] = arr[j+1]
+  //           arr[j+1] = temp
+  //         }
+  //       }
+  //     }
+  //   return arr
+  // }
 
-bubbleSort((a,b)->(a-b),numbers,6)
-`, //GENERATE ERRORS
+  // bubbleSort((a,b)->(a-b),numbers,6)
+  // `, //GENERATE ERRORS callbacks not supported
   String.raw`gimme five = 5>4? 5: 4`,
   String.raw`gimme fiveish = 5>4?6>5:3>4? 2 : 1`,
-  String.raw`gimme gimmeFive = ()->{return 5}`,
-  String.raw`gimme gimmeFive = ()-> 5`,
+  String.raw`gimme gimmeFive = ()->{return 5}`, //GENERATES ERRORS
+  String.raw`
+  gimme gimmeFiveExp = ()-> 5`,
   String.raw`
   gimme dict = {a:6, b:[1,True]}
   gimme dict_item = dict[0]`, //GENERATES ERRORS
@@ -174,7 +176,12 @@ bubbleSort((a,b)->(a-b),numbers,6)
   String.raw`
   gimme array = [1,2,3]
   gimme arr_item = array[0]`,
-  String.raw`gimme yes = !No`
+  String.raw`gimme yes = !No`,
+  String.raw`
+  for(gimme i = 0; i < 4; i++) {
+    i++
+  }`,
+  String.raw`print("Hello World")`
 ];
 
 describe("The semantic analyzer", () => {

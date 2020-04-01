@@ -103,7 +103,7 @@ module.exports = {
   isFunctionOrObject(value) {
     doCheck(
       value.constructor === FunctionDeclaration ||
-        value.constructor === ObjectType,
+        value.constructor === ObjectType, //TODO:Does not check for Lambdas: value.constructor == Variable Declaration
       "Not a function or Constructor"
     );
   },
@@ -200,7 +200,8 @@ module.exports = {
           params[i].forEach((param, k) => {
             if (
               param.type !== params[j][k].type &&
-              (param.type !== AnyType && params[j][k].type !== AnyType)
+              param.type !== AnyType &&
+              params[j][k].type !== AnyType
             ) {
               paramsMatch = false;
             }
