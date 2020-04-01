@@ -22,15 +22,6 @@ function doCheck(condition, message) {
 }
 
 module.exports = {
-  // Is this type an array type?
-  isArrayType(type) {
-    doCheck(type.constructor === ArrayType, "Not an array type");
-  },
-
-  isDictionaryType(type) {
-    doCheck(type.constructor === DictionaryType, "Not a dictionary type");
-  },
-
   isNotClassDeclaration(statement) {
     doCheck(
       statement.constructor !== ClassDeclaration,
@@ -182,11 +173,13 @@ module.exports = {
       `No Constructor exists with params length ${args.length}`
     );
     doCheck(
-      paramsList.some(params =>
-        args.every((arg, i) =>
-          this.isAssignableTo(arg, params[i].type, "", true)
-        )
-      ),
+      paramsList
+        .filter(params => args.length === params.length)
+        .some(params =>
+          args.every((arg, i) =>
+            this.isAssignableTo(arg, params[i].type, "", true)
+          )
+        ),
       "No Constructor exists that can accept the specified types"
     );
   },

@@ -10,7 +10,7 @@ class Block {
   }
 }
 
-gimme y : Block = Block(6)
+gimme y : Block = Block("d", 0)
 gimme z = y.x
 
 //What if multiple untyped constructors
