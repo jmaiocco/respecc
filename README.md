@@ -40,7 +40,17 @@ Respecc++ was developed by Timothy Herrmann, Luis Garcia, Joseph Maiocco, Bennet
 
 <h2> List of Static Semantic Errors </h2>
 <ul>
-  <li> </li>
+  <li> Identifiers must be declared before they are used. </li>
+  <li> Identifiers cannot be redeclared within the same scope. </li>
+  <li> ```break``` statements may only appear in loops. </li>
+  <li> ```return``` statements may only appear in functions. </li>
+  <li> Subscripted identifiers must refer to arrays or dictionaries. </li>
+  <li> Arrays can only be accessed with Number subscripts. </li>
+  <li> Functions must be defined before they are called. </li>
+  <li> Arguments passed to a function must match the number, typing and ordering of the parameters of that function. </li>
+
+
+
 </ul>
 
   
@@ -309,4 +319,140 @@ function isEvenOrOdd(numericValue) {
 }
 
 isEvenOrOdd(43);
+```
+<h2> Language Grammar Specification in Ohm </h2>
+```
+respecc {
+  Program      = br* greeting? br* Statement (br+ Statement)* br* farewell? br*
+  Statement    = Assignment
+               | Declaration
+               | Conditional
+               | Loop
+               | FuncCallStmt
+               | SimpleStmt
+  SimpleStmt   = "return" Exp? "."?                              -- return_impolite
+               | "Kindly return" Exp? "."?                       -- return_polite
+               | "break"                                         -- break_impolite
+               | "You deserve a break!"                          -- break_polite
+  Conditional  = "if" "(" Exp ")" Block
+                 (br* "else if" "(" Exp ")" Block)*
+                 (br* "else" Block)?                             -- if_impolite
+               | "Excuse me, if " Exp "," Block
+                 (br* "Otherwise, if " Exp "," Block)*
+                 (br* "Otherwise," Block)?                       -- if_polite
+  Loop         = "while" "(" Exp ")" Block                       -- while_impolite
+               | "for"  "(" (VarDec)? ";" Exp?
+                 ";" Assignment? ")" Block                       -- for_impolite
+               | "Excuse me, while " Exp "," Block               -- while_polite
+  FuncCallStmt = id Args                                         -- call_impolite
+               | "Do me a favor and run " id
+                 ("with" Args)? "."                              -- call_polite
+  FuncCallExp  = id Args                                         -- call_impolite
+               | "the result of running" id
+                 ("with" Args  )?                                -- call_polite
+  Assignment   = Var "=" Exp                                     -- impolite
+               | Increment
+               | "Please populate " Var "with " Exp "."          -- polite
+  Declaration  = VarDec | FuncDec | ClassDec
+  ClassDec     = "class" id ClassBlock                           -- impolite
+               | "Have you ever heard of a"  id "?" ClassBlock   -- polite
+  ClassBlock   = br* "{" br* ClassMember?
+                 (br+ ClassMember)* br* "}"                      -- impolite
+               | br* "Let's get classy..." br* ClassMember?
+                 (br+ ClassMember)* br* "Thank You."             -- polite
+  ClassMember  = Constructor | Declaration | FuncDec
+  Constructor  =  id  Params  Block                              -- impolite
+               |  "To construct a" id "by using" Params
+                  "," Block                                      -- polite
+  Type         =  "Array" "<"Type">"                             -- array
+               |  "Dict" "<"Type","Type">"                       -- dict
+               |  primtype
+               |  id
+  FuncDec      = "Favor" id Params
+                  (("as a "|":") (Type|"Void"))? Block           -- polite
+               | "function" id Params
+                  (("as a "|":") (Type|"Void"))? Block           -- impolite
+  VarDec       = "Please declare " id
+                 (("as a "|":") Type)? ("as " Exp)? "."?         -- polite
+               | "gimme" id (("as a "|":") Type)? ("=" Exp)?     -- impolite
+  Params       = "(" ListOf<Param, ","> ")"
+  Param        = id ((":"|"as a") Type)?
+  Args         = "(" ListOf<Exp, ","> ")"
+  Block        =  "could you..."  br* Statement?
+                  (br+ Statement)* br* "Thank You."              -- polite
+               |  "{"  br* Statement? (br+ Statement)* br* "}"   -- impolite
+  Exp          =  Exp1 "?" Exp1 ":" Exp                          -- ternary
+               |  Exp1
+  Exp1         =  Params "->" Block                              -- lambda_blk
+               |  Params "->" Exp2                               -- lambda_exp
+               |  Exp2
+  Exp2         =  Exp2 orop Exp3                                 -- binary
+               |  Exp3
+  Exp3         =  Exp3 andop Exp4                                -- binary
+               |  Exp4
+  Exp4         =  Exp5 relop Exp5                                -- binary
+               |  Exp5
+  Exp5         =  Exp5 addop Exp6                                -- binary
+               |  Exp6
+  Exp6         =  Exp6 mulop Exp7                                -- binary
+               |  Exp7
+  Exp7         =  prefixop Exp9                                  -- prefix
+               |  Exp8
+  Exp8         =  Exp9 expoop Exp8                               -- binary
+               |  "-" Exp9                                       -- negate
+               |  Exp9
+  Exp9         =  Literal
+               |  FuncCallExp
+               |  Var
+               |  "(" Exp ")"                                    -- parens
+  Increment    =  incop Var                                      -- prefix
+               |  Var incop                                      -- postfix
+  Var          =  Var "[" Exp "]"                                -- subscript
+               |  Var "." id                                     -- select
+               |  id                                             -- id
+  Literal      = ArrayLit
+               | DictLit
+               | numlit
+               | stringlit
+               | boollit
+               | nulllit
+  ArrayLit     = "[" ListOf<Exp, ",">"]"
+  DictLit      = "{" ListOf<DictEntry, ","> "}"
+  DictEntry    = Exp ":" Exp
+  keyword      =  ("Boolean" | "if" | "break" | "else" | "int"
+               |  "for" | "and" | "return" | "Number" | "plus"
+               |  "null" | "while" | "true" | "String"
+               |  "or" | "Yes" | "No" | "minus" | "times" | "not"
+               |  "Favor" | "function" | "gimme" | "respecc_score"
+               |  "class" | "Null" | "Void") ~idrest
+  id           = ~keyword letter idrest*
+  idrest       = letter | digit | "_"
+  boollit      = "Yes" | "No"
+  intlit       = digit+
+  numlit       = digit+ ("." digit+)?
+  nulllit      = "Null"
+  stringlit    = "\"" char* "\"" | "\'" char* "\'"
+  char         = ~"\\" ~"\"" ~"\n" any | escape
+  escape       = "\\" ("\\" | "\"" | "n" | "t" | codepoint)
+  codepoint    = "u{" hexDigit+ "}"
+  andop        = "&&" | "and"
+  orop         = "||" | "or"
+  mulop        = "*" | "/" | "%" | "times" | "divided by" | "modded with"
+  addop        = "+" | "-" | "plus" | "minus"
+  expoop       = "**" | "raised to the power of"
+  relop        = "<=" | "<" | ">=" | ">" | "==" | "!="  | "is less than or equal to"
+               | "is greater than or equal to" | "is less than" | "is greater than"
+               | "is equal to" | "is not equal to"
+  incop        =  "++" | "--"
+  prefixop     =  ~"--" "-" | "!" | "not"
+  primtype     =  "Boolean" | "Number" | "String"
+  space        := comment | " " | "\t" | "\r"
+  comment      = "/*" (~"*/" any)* "*/"
+               | "//" (~"\n" any)* ("\n")?
+               | "BTW..." (~"\n" any)* ("\n")?
+               | "By the way..." (~"\n" any)* ("\n")?
+  br           =  "\n"
+  greeting     = "Hello!" | "Hey!" | "Hi There!" | "Salutations!"
+  farewell     = "Bye Bye!" | "Farewell!" | "Godspeed!"
+}
 ```
