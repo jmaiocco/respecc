@@ -42,13 +42,13 @@ Respecc++ was developed by Timothy Herrmann, Luis Garcia, Joseph Maiocco, Bennet
 <ul>
   <li> Identifiers must be declared before they are used. </li>
   <li> Identifiers cannot be redeclared within the same scope. </li>
-  <li> ```break``` statements may only appear in loops. </li>
-  <li> ```return``` statements may only appear in functions. </li>
+  <li> break statements may only appear in loops. </li>
+  <li> return statements may only appear in functions. </li>
   <li> Subscripted identifiers must refer to arrays or dictionaries. </li>
   <li> Arrays can only be accessed with Number subscripts. </li>
   <li> Functions must be defined before they are called. </li>
   <li> Arguments passed to a function must match the number, typing and ordering of the parameters of that function. </li>
-
+  <li> </li>
 
 
 </ul>
