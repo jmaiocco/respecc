@@ -22,15 +22,6 @@ function doCheck(condition, message) {
 }
 
 module.exports = {
-  // Is this type an array type?
-  isArrayType(type) {
-    doCheck(type.constructor === ArrayType, "Not an array type");
-  },
-
-  isDictionaryType(type) {
-    doCheck(type.constructor === DictionaryType, "Not a dictionary type");
-  },
-
   isNotClassDeclaration(statement) {
     doCheck(
       statement.constructor !== ClassDeclaration,
@@ -46,20 +37,26 @@ module.exports = {
   },
 
   // Can we assign expression to a variable/param/field of type type?
-  isAssignableTo(expression, type, message) {
+  isAssignableTo(expression, type, message, returnBool) {
     if (type === AnyType) {
-      return;
+      return true;
     }
     let errorMessage = message
       ? message
       : `Expression of type ${util.format(expression.type)}
          not compatible with type ${util.format(type)}`;
     if (type.constructor === ArrayType || type.constructor === DictionaryType) {
+      if (returnBool) {
+        return JSON.stringify(expression.type) === JSON.stringify(type);
+      }
       doCheck(
         JSON.stringify(expression.type) === JSON.stringify(type),
         errorMessage
       );
     } else {
+      if (returnBool) {
+        return expression.type === type || expression.type === AnyType;
+      }
       doCheck(
         expression.type === type || expression.type === AnyType,
         errorMessage
@@ -95,7 +92,7 @@ module.exports = {
   isBoolean(expression) {
     doCheck(
       expression.type === BooleanType || expression.type === AnyType,
-      "Not a Number"
+      "Not a Boolean"
     );
   },
 
@@ -172,11 +169,18 @@ module.exports = {
 
   anyLegalArguments(args, paramsList) {
     doCheck(
-      paramsList.every(params => args.length === params.length),
+      paramsList.some(params => args.length === params.length),
       `No Constructor exists with params length ${args.length}`
     );
-    paramsList.forEach(params =>
-      args.forEach((arg, i) => this.isAssignableTo(arg, params[i].type))
+    doCheck(
+      paramsList
+        .filter(params => args.length === params.length)
+        .some(params =>
+          args.every((arg, i) =>
+            this.isAssignableTo(arg, params[i].type, "", true)
+          )
+        ),
+      "No Constructor exists that can accept the specified types"
     );
   },
 
@@ -185,21 +189,37 @@ module.exports = {
       arr.filter(e => e[prop] === arr[0][prop]).length === arr.length
       ? arr[0][prop]
       : AnyType;
-  }
+  },
 
-  /*
-  isNotReadOnly(lvalue) {
+  objectNoMatchingConstructors(objectType) {
+    let params = objectType.callingParams;
+    for (let i = 0; i < params.length; i++) {
+      for (let j = i + 1; j < params.length; j++) {
+        if (params[i].length === params[j].length) {
+          let paramsMatch = true;
+          params[i].forEach((param, k) => {
+            if (
+              param.type !== params[j][k].type &&
+              (param.type !== AnyType && params[j][k].type !== AnyType)
+            ) {
+              paramsMatch = false;
+            }
+          });
+          doCheck(
+            !paramsMatch,
+            `Object ${objectType.id} cannot have multiple
+            Constructors of the same number and type`
+          );
+        }
+      }
+    }
+  },
+
+  memberExists(instance, memberID) {
     doCheck(
-      !(lvalue.constructor === IdExp && lvalue.ref.readOnly),
-      'Assignment to read-only variable',
+      instance.type.locals.has(memberID),
+      `Identifier ${memberID}
+    does not exist in ${instance.id}`
     );
-  },
-  fieldHasNotBeenUsed(field, usedFields) {
-    doCheck(!usedFields.has(field), `Field ${field} already declared`);
-  },
-  // If there is a cycle in types, they must go through a record
-  noRecursiveTypeCyclesWithoutRecordTypes() {
-    // TODO - not looking forward to this one
-  },
-  */
+  }
 };
