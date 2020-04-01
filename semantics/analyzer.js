@@ -175,7 +175,7 @@ Parameter.prototype.analyze = function(context) {
 
 TernaryExp.prototype.analyze = function(context) {
   //TODO: type check is wrong, should check exp1
-  this.type = BooleanType;
+  check.isBoolean(this.exp1.type);
   [this.exp1, this.exp2, this.exp3].forEach(e => {
     e.analyze(context);
   });
@@ -289,6 +289,8 @@ Block.prototype.analyze = function(context) {
 ClassDeclaration.prototype.analyzeNames = function(context) {
   this.bodyContext = context.createChildContextForClassBody(this);
   this.block.analyzeNames(this.bodyContext);
+  let objectType = context.lookup(this.id);
+  check.objectNoMatchingConstructors(objectType);
 };
 
 ClassDeclaration.prototype.analyze = function() {
@@ -348,11 +350,16 @@ Constructor.prototype.analyze = function(context) {
 MemberExp.prototype.analyze = function(context) {
   this.v.analyze(context);
   check.isClass(this.v.type);
+
+  check.memberExists(this.v, this.field);
+  this.member = this.v.type.locals.get(this.field);
+  /*
   if (this.v.type.locals.has(this.field)) {
     this.member = this.v.type.locals.get(this.field);
   } else {
     // throw new Error(`Identifier  has not been declared`);//SHOULD NOT THROW
   }
+  */
   this.type = this.member.type;
 };
 

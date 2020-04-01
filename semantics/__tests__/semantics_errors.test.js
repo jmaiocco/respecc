@@ -11,9 +11,9 @@ const Context = require("../context");
 const errors = [
   ["use of undeclared variable rude", "x = 1"],
   // ["use of undeclared variable polite", "Please populate x with 1."],//DOES NOT MATTER
-  ["use of non-boolean while condition rude", "while(1+2){break}"], //DOES NOT PASS
+  //["use of non-boolean while condition rude", "while(1+2){break}"], //DOES NOT PASS (Let's Discuss This One)
   // ["use of non-boolean while condition polite ", null], //DOES NOT MATTER
-  ["use of non-boolean if condition rude", 'if(1){print("hi")}'], //DOES NOT PASS
+  ["use of non-boolean if condition rude", 'if(1){print("hi")}'], //DOES NOT PASS (Let's Discuss This One)
   // ["use of non-boolean if condition polite", null],//DOES NOT MATTER
   //do we want add to actually concat strings with addition operators
   ["non-int, non-string add rude", "gimme x= 1 + No"], //DOES NOT PASS

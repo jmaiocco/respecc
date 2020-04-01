@@ -5,6 +5,9 @@ class Block {
   Block(gfg : Number) {
     this.x = 6
   }
+  Block(gfg : String) {
+    this.x = 6
+  }
 }
 
 gimme y : Block = Block(6)
