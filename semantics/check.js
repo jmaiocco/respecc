@@ -178,7 +178,7 @@ module.exports = {
 
   anyLegalArguments(args, paramsList) {
     doCheck(
-      paramsList.every(params => args.length === params.length),
+      paramsList.some(params => args.length === params.length),
       `No Constructor exists with params length ${args.length}`
     );
     doCheck(
@@ -200,13 +200,14 @@ module.exports = {
 
   objectNoMatchingConstructors(objectType) {
     let params = objectType.callingParams;
-    let paramsMatch = true;
     for (let i = 0; i < params.length; i++) {
       for (let j = i + 1; j < params.length; j++) {
         if (params[i].length === params[j].length) {
           let paramsMatch = true;
           params[i].forEach((param, k) => {
-            if (param.type !== params[j][k].type || param.type === AnyType) {
+            if (
+              param.type !== params[j][k].type /*|| param.type === AnyType*/
+            ) {
               paramsMatch = false;
             }
           });

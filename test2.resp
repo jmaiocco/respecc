@@ -2,13 +2,16 @@
 class Block {
   gimme x = 5
 
-  Block(gfg : Number) {
+  Block(gfg) {
     this.x = 6
   }
-  Block(gfg : String) {
+  Block(gfg : String, g : Number ) {
     this.x = 6
   }
 }
 
 gimme y : Block = Block(6)
 gimme z = y.x
+
+//What if multiple untyped constructors
+//have the same # of arguments?
