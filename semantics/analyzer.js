@@ -120,8 +120,8 @@ Conditional.prototype.analyze = function(context) {
   this.bodyContext = context.createChildContextForBlock();
   this.ifBlock.analyze(this.bodyContext);
   if (this.exps && this.blocks) {
-    this.exps.forEach(e => this.e.analyze(context));
-    this.blocks.forEach(b => this.b.analyze(this.bodyContext));
+    this.exps.forEach(e => e.analyze(context));
+    this.blocks.forEach(b => b.analyze(this.bodyContext));
   }
   if (this.elseBlock) {
     this.elseBlock.analyze(this.bodyContext);
@@ -156,13 +156,15 @@ FunctionCall.prototype.analyze = function(context) {
   /*Should callee be a member of function call (for decorated tree)?*/
   this.callee = context.lookup(this.id);
   check.isFunctionOrObject(this.callee, "Attempt to call a non-function");
-  this.args.forEach(arg => arg.analyze(context));
-  if (this.callee.constructor === FunctionDeclaration) {
-    check.legalArguments(this.args, this.callee.params);
-    this.type = this.callee.type;
-  } else {
-    check.anyLegalArguments(this.args, this.callee.callingParams);
-    this.type = this.callee;
+  if (this.args) {
+    this.args.forEach(arg => arg.analyze(context));
+    if (this.callee.constructor === FunctionDeclaration) {
+      check.legalArguments(this.args, this.callee.params);
+      this.type = this.callee.type;
+    } else {
+      check.anyLegalArguments(this.args, this.callee.callingParams);
+      this.type = this.callee;
+    }
   }
 };
 
@@ -172,12 +174,13 @@ Parameter.prototype.analyze = function(context) {
 };
 
 TernaryExp.prototype.analyze = function(context) {
+  //TODO: type check is wrong, should check exp1
   this.type = BooleanType;
   [this.exp1, this.exp2, this.exp3].forEach(e => {
     e.analyze(context);
   });
-  if (this.exp2.type === this.exp1.type) {
-    this.type = this.exp1.type;
+  if (this.exp2.type === this.exp3.type) {
+    this.type = this.exp2.type;
   } else {
     this.type = AnyType;
   }
@@ -185,14 +188,14 @@ TernaryExp.prototype.analyze = function(context) {
 
 LambdaBlock.prototype.analyze = function(context) {
   this.bodyContext = context.createChildContextForFunctionBody(this);
-  this.params.analyze(this.bodyContext);
+  this.params.forEach(param => param.analyze(this.bodyContext));
   this.block.analyze(this.bodyContext);
   this.type = AnyType;
   delete this.bodyContext;
 };
 
 LambdaExp.prototype.analyze = function(context) {
-  this.params.analyze(this.context);
+  this.params.forEach(param => param.analyze(this.context));
   this.exp.analyze(this.context);
   this.type = this.exp.type;
 };
@@ -348,7 +351,7 @@ MemberExp.prototype.analyze = function(context) {
   if (this.v.type.locals.has(this.field)) {
     this.member = this.v.type.locals.get(this.field);
   } else {
-    throw new Error(`Identifier  has not been declared`);
+    // throw new Error(`Identifier  has not been declared`);//SHOULD NOT THROW
   }
   this.type = this.member.type;
 };
