@@ -154,6 +154,21 @@ Thank You.
 Please declare cc as Dog("cece")
 print(cc.getName())
 Bye Bye!`,
+  String.raw`
+class Country{
+  gimme statePopulations : Dict<String, Number>
+  gimme states  : Array<String>
+
+  Country(states:Array<String>){
+    this.states = states
+  }
+  Country(pops:Dict<String,Number>){
+    this.statePopulations = pops
+  }
+}
+gimme calexit = Country(["The Bay", "NorCal", "SoCal"])
+gimme Brexit = Country({"Wales":200,"London":500,"Stratford-Upon-Avon":2})
+`,
 
   // String.raw`
   // gimme numbers = [1,3,4,5,28,3]
