@@ -146,7 +146,7 @@ ForLoop.prototype.analyze = function(context) {
     check.isBoolean(this.exp);
   }
   if (this.assignment) {
-    this.exp.analyze(this.bodyContext);
+    this.assignment.analyze(this.bodyContext);
   }
   this.block.analyze(this.bodyContext);
   delete this.bodyContext;
@@ -154,7 +154,7 @@ ForLoop.prototype.analyze = function(context) {
 
 FunctionCall.prototype.analyze = function(context) {
   /*Should callee be a member of function call (for decorated tree)?*/
-  this.callee = context.lookup(this.id);
+  this.callee = context.lookup(this.id); // TODO: Does not detect Lambda calls because lambda id's are under VariableDeclaration
   check.isFunctionOrObject(this.callee, "Attempt to call a non-function");
   if (this.args) {
     this.args.forEach(arg => arg.analyze(context));
@@ -174,10 +174,10 @@ Parameter.prototype.analyze = function(context) {
 };
 
 TernaryExp.prototype.analyze = function(context) {
-  check.isBoolean(this.exp1.type);
   [this.exp1, this.exp2, this.exp3].forEach(e => {
     e.analyze(context);
   });
+  check.isBoolean(this.exp1);
   if (this.exp2.type === this.exp3.type) {
     this.type = this.exp2.type;
   } else {
@@ -240,7 +240,7 @@ Return.prototype.analyze = function(context) {
   //Assign this AST a type? (Connection with function node(?))
   check.inFunction(context, "return");
   check.functionConstructorHasNoReturnValue(
-    context.currentFunction,
+    context.currentFunction, //undefined for lambda blocks
     this.returnValue
   );
   if (this.returnValue) {

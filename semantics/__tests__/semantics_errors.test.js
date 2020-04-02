@@ -10,31 +10,28 @@ const Context = require("../context");
 
 const errors = [
   ["use of undeclared variable rude", "x = 1"],
-  // ["use of undeclared variable polite", "Please populate x with 1."],//DOES NOT MATTER
-  //["use of non-boolean while condition rude", "while(1+2){break}"], //DOES NOT PASS (Let's Discuss This One)
-  // ["use of non-boolean while condition polite ", null], //DOES NOT MATTER
-  ["use of non-boolean if condition rude", 'if(1){print("hi")}'], //DOES NOT PASS (Let's Discuss This One)
-  // ["use of non-boolean if condition polite", null],//DOES NOT MATTER
-  //do we want add to actually concat strings with addition operators
-  ["non-int, non-string add rude", "gimme x= 1 + No"], //DOES NOT PASS
-  // ["non-int,non-string add polite"],//DOES NOT MATTER
-  ["non-int, subtract rude", "gimme x = 1 - Yes"],
-  // ["non-int, subtract polite"],//DOES NOT MATTER
+
+  /*//BINARY EXPRESSION TYPING WILL THROW AT RUNTIME
+  ["non Number,  add rude", "gimme x= 1 + No"], //DOES NOT PASS
+
+  ["non Number, subtract rude", "gimme x = 1 - Yes"],
+
   ["types don't match in equality test", "gimme x = 1 is equal to Yes"],
   ["types don't match in inequality test", "gimme x= 1 is not equal to Yes"],
   ["types do not match in declaration rude", 'gimme x:Number = "hello"'],
-  // ["types do not match in declaration polite"],//DOES NOT MATTER
+/**/
+
   // ["undeclared beacuse in other scope rude", "x= 0"], IDK HOW TO
-  // ["redeclaration because in other scope polite"],//DOES NOT MATTER
+
   ["redeclaration of variable", "gimme x:Number = 1\n gimme x:Number = 2"],
   ["type mismatch in assignment rude", 'gimme x:Number = "hello"'],
-  // ["type mismatch in assignment polite"],//DOES NOT MATTER
+
   // ["writing to (readonly) for loop index"],does not apply to respec++
   [
     "too many function arguments rude",
     "function plusOne(x:Number){return  x+1}\n plusOne(3,1)"
   ],
-  // ["too many function arguments polite"],//DOES NOT MATTER
+
   [
     "too few function arguments",
     "function plusOne(x:Number){return  x+1}\n plusOne()"
@@ -48,7 +45,42 @@ const errors = [
   ["member of nonrecord", "gimme x = 1 \n gimme y = x.z"],
   ["subscript of nonarray", "gimme x = 1 \n gimme y = x[0]"],
   ["call of nonfunction", "gimme x= 1 \n x()"],
-  ["non integer subscript", "gimme x = [1,2,3] \n gimme y = x[True]"]
+  ["non integer subscript", "gimme x = [1,2,3] \n gimme y = x[True]"],
+  [
+    "constructors have the same args",
+    String.raw`class Dog {
+      gimme name : String
+      gimme age : Number
+      Dog(name) { this.name = name }
+      Dog(name) {
+        this.name = name
+        this.age = 5
+      }
+  }`
+  ],
+  [
+    "constructors have ambiguous arg types",
+    String.raw`class Dog {
+      gimme name : String
+      gimme breed : String
+      gimme age : Number
+      Dog(name) { this.name = name }
+      Dog(breed) {
+        this.breed = breed
+      }
+  }`,
+    [
+      "Instantiate class with undefined constructor",
+      String.raw`
+      class Dog {
+        gimme name : String
+        gimme age : Number
+        Dog(name) { this.name = name }
+      }
+      gimme cc = Dog(10)
+  `
+    ]
+  ]
 
   /* **************Toal Examples***************************
   ['use of undeclared variable', 'x := 1'],
