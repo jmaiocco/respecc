@@ -84,6 +84,7 @@ respecc {
   Increment    =  incop Var                                      -- prefix
                |  Var incop                                      -- postfix
   Var          =  Var "[" Exp "]"                                -- subscript
+               |  Var "." FuncCallExp                            -- funcselect
                |  Var "." id                                     -- select
                |  id                                             -- id
   Literal      = ArrayLit

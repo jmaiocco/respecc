@@ -277,6 +277,9 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
   Var_select(v, _dot, field) {
     return new MemberExp(v.ast(), field.ast());
   },
+  Var_funcselect(v, _dot, field) {
+    return new MemberExp(v.ast(), field.ast().id);
+  },
   ArrayLit(_open, exps, _close) {
     return new ArrayLiteral([...exps.ast()]);
   },
