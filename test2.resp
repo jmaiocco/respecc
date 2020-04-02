@@ -1,4 +1,17 @@
+function Fibonacci(n, length) {
+if (n == 1) {
+  gimme series = [0, 1]
+  return series
+} else {
+  series = Fibonacci(n - 1, length - 1)
+  series[length] = series[length minus 1] plus series[length minus 2]
+  return series
+}
+}
 
+Fibonacci(12, 12)
+
+/*
 class Block {
   gimme x = 5
 
@@ -9,9 +22,9 @@ class Block {
     this.x = 6
   }
 }
-
 gimme y : Block = Block("d")
 gimme z = y.x
 
 //What if multiple untyped constructors
 //have the same # of arguments?
+*/
