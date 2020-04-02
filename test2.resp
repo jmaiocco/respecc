@@ -4,11 +4,11 @@ class Block {
     this.x = 6
   }
   function bark() {
-  
+
   }
 }
 gimme cc : Block = Block("d")
-gimme x = cc.bark()
+cc.bark()
 
 
 /*
