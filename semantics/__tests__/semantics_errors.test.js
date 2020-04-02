@@ -59,6 +59,12 @@ const errors = [
   }`
   ],
   [
+    "constructor has non-null return",
+    String.raw`class Dog {
+      Dog() { return 2 }
+  }`
+  ],
+  [
     "constructors have ambiguous arg types",
     String.raw`class Dog {
       gimme name : String

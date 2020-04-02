@@ -154,11 +154,15 @@ ForLoop.prototype.analyze = function(context) {
 
 FunctionCall.prototype.analyze = function(context) {
   /*Should callee be a member of function call (for decorated tree)?*/
-  this.callee = context.lookup(this.id); // TODO: Does not detect Lambda calls because lambda id's are under VariableDeclaration
-  check.isFunctionOrObject(this.callee, "Attempt to call a non-function");
+  this.callee = context.lookup(this.id);
+  check.isCallable(this.callee, "Attempt to call a non-function");
   if (this.args) {
     this.args.forEach(arg => arg.analyze(context));
-    if (this.callee.constructor === FunctionDeclaration) {
+    if (
+      this.callee.constructor === FunctionDeclaration ||
+      (this.callee.expression &&
+        this.callee.expression.constructor === LambdaExp)
+    ) {
       check.legalArguments(this.args, this.callee.params);
       this.type = this.callee.type;
     } else {
@@ -186,10 +190,10 @@ TernaryExp.prototype.analyze = function(context) {
 };
 
 LambdaBlock.prototype.analyze = function(context) {
+  this.type = AnyType;
   this.bodyContext = context.createChildContextForFunctionBody(this);
   this.params.forEach(param => param.analyze(this.bodyContext));
   this.block.analyze(this.bodyContext);
-  this.type = AnyType;
   delete this.bodyContext;
 };
 
@@ -243,6 +247,7 @@ Return.prototype.analyze = function(context) {
     context.currentFunction, //undefined for lambda blocks
     this.returnValue
   );
+
   if (this.returnValue) {
     this.returnValue.analyze(context);
     if (context.currentFunction.type !== AnyType) {

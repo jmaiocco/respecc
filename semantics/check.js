@@ -38,7 +38,7 @@ module.exports = {
 
   // Can we assign expression to a variable/param/field of type type?
   isAssignableTo(expression, type, message, returnBool) {
-    if (type === AnyType) {
+    if (type === AnyType || expression.type === AnyType) {
       return true;
     }
     let errorMessage = message
@@ -55,12 +55,9 @@ module.exports = {
       );
     } else {
       if (returnBool) {
-        return expression.type === type || expression.type === AnyType;
+        return expression.type === type;
       }
-      doCheck(
-        expression.type === type || expression.type === AnyType,
-        errorMessage
-      );
+      doCheck(expression.type === type, errorMessage);
     }
   },
   // Is the type of this expression an array or dictionary type? (For subscript)
@@ -96,15 +93,14 @@ module.exports = {
     );
   },
 
-  isFunction(value) {
-    doCheck(value.constructor === FunctionDeclaration, "Not a function");
-  }, //TODO: not used because isFunctionOrObject is used instead
-
-  isFunctionOrObject(value) {
+  isCallable(value) {
     doCheck(
       value.constructor === FunctionDeclaration ||
-        value.constructor === ObjectType, //TODO:Does not check for Lambdas: value.constructor == Variable Declaration
-      "Not a function or Constructor"
+        value.constructor === ObjectType ||
+        (value.expression &&
+          (value.expression.constructor === LambdaExp ||
+            value.expression.constructor === LambdaBlock)),
+      "Not Callable"
     );
   },
 
@@ -139,7 +135,7 @@ module.exports = {
 
   functionConstructorHasNoReturnValue(funcRef, returnVal) {
     doCheck(
-      returnVal === null || funcRef.constructor === FunctionDeclaration,
+      funcRef.constructor !== Constructor || returnVal === null,
       `Constructor ${funcRef.id} returned a value. Constructors may not return values.`
     );
   },
