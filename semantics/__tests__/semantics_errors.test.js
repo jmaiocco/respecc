@@ -85,6 +85,19 @@ const errors = [
       }
       gimme cc = Dog(10)
   `
+    ],
+    [
+      "class function called outside of scope",
+      String.raw`
+      class Dog {
+        gimme name : String
+        gimme age : Number
+        Dog(name) { this.name = name }
+        function getName(){ return this.name}
+      }
+      gimme cc = Dog(10)
+      print(getName())
+  `
     ]
   ]
 
