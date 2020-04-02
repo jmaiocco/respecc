@@ -48,7 +48,7 @@ module.exports = {
     if (type.constructor === ArrayType || type.constructor === DictionaryType) {
       if (returnBool) {
         return JSON.stringify(expression.type) === JSON.stringify(type);
-      } //TODO: This conditional is never used in analyzer
+      } //TODO: Test with Multiple Constructors with Array/Dict Params
       doCheck(
         JSON.stringify(expression.type) === JSON.stringify(type),
         errorMessage
@@ -107,10 +107,6 @@ module.exports = {
   isClass(value) {
     doCheck(value.constructor === ObjectType, "Not an object");
   },
-
-  expressionsHaveTheSameType(e1, e2) {
-    doCheck(e1.type === e2.type, "Types must match exactly");
-  }, //TODO: Never used in analyzer
 
   // Is the type of this expression a number or string type? (For relational operators)
   isNumberOrString(expression) {
