@@ -152,7 +152,7 @@ Have you ever heard of a Dog? Let's get classy...
 
 Thank You.
 Please declare cc as Dog("cece")
-// print(cc.getName())
+print(cc.getName())
 Bye Bye!`,
 
   // String.raw`
@@ -184,14 +184,15 @@ Bye Bye!`,
   String.raw`
   gimme compDict = {"a":6, "b":[1,Yes], "c":{"best":"cat"}}
   gimme dictItem = compDict["b"]
+  gimme one = dictItem[0]
   gimme theBest = compDict["c"]["best"]`,
   String.raw`gimme nullVar = Null`,
   String.raw`
   gimme array = [1,2,3]
   gimme arr_item = array[0]`,
   String.raw`
-  gimme twoDArray = [1,2,3]
-  gimme 2DArrItem = array[0]`,
+  gimme twoDArray = [[1,2,3],[4,5,6]]
+  gimme twoDArrIslacktem = array[0][0]`,
   String.raw`gimme yes = !No`,
   String.raw`
   for(gimme i = 0; i < 4; i++) {
