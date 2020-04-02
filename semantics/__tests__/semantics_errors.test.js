@@ -59,6 +59,20 @@ const errors = [
   }`
   ],
   [
+    "constructor name not equal to class name",
+    String.raw`
+  class Dog {
+    gimme name : String
+    gimme age : Number
+    Pup(name) {
+      this.name = name
+      this.age = 0
+    }
+  }
+  gimme pup = Pup("cat")
+  `
+  ],
+  [
     "constructor has non-null return",
     String.raw`class Dog {
       Dog() { return 2 }
