@@ -158,11 +158,7 @@ FunctionCall.prototype.analyze = function(context) {
   check.isCallable(this.callee, "Attempt to call a non-function");
   if (this.args) {
     this.args.forEach(arg => arg.analyze(context));
-    if (
-      this.callee.constructor === FunctionDeclaration ||
-      (this.callee.expression &&
-        this.callee.expression.constructor === LambdaExp)
-    ) {
+    if (this.callee.constructor !== ObjectType) {
       check.legalArguments(this.args, this.callee.params);
       this.type = this.callee.type;
     } else {
