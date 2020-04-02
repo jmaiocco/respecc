@@ -66,9 +66,20 @@ const errors = [
       gimme age : Number
       Dog(name) { this.name = name }
       Dog(breed) {
-        this.bree = breed
+        this.breed = breed
       }
-  }`
+  }`,
+    [
+      "Instantiate class with undefined constructor",
+      String.raw`
+      class Dog {
+        gimme name : String
+        gimme age : Number
+        Dog(name) { this.name = name }
+      }
+      gimme cc = Dog(10)
+  `
+    ]
   ]
 
   /* **************Toal Examples***************************

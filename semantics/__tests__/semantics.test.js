@@ -111,7 +111,7 @@ Bye Bye!
   }
 
   Fibonacci(12, 12)
-  `, //GENERATES ERROR
+  `, //GENERATES ERROR...Recursive call is causing type errors, may be relegated to run-time
   String.raw`
 function isPrime (num) {
   if (num <= 1) {
@@ -135,13 +135,21 @@ function isPrime (num) {
   String.raw`
 Hello!
 Have you ever heard of a Dog? Let's get classy...
+    Have you ever heard of a Ball? Let's get classy...
+      Please declare color as a String.
+      To construct a Ball by using (color as a String), could you...
+        Please populate this.color with color.
+      Thank You.
+    Thank You.
     Please declare name as a String.
+    Please declare ball as a Ball.
     To construct a Dog by using (name as a String), could you...
       Please populate this.name with name.
     Thank You.
     Favor getName() as a String could you...
       Kindly return this.name
     Thank You.
+
 Thank You.
 Please declare cc as Dog("cece")
 Bye Bye!`,
@@ -170,8 +178,11 @@ Bye Bye!`,
   String.raw`
   gimme gimmeFiveExp = ()-> 5`,
   String.raw`
-  gimme dict = {a:6, b:[1,True]}
-  gimme dict_item = dict[0]`, //GENERATES ERRORS
+  gimme dict = {"a":6}
+  gimme dict_item = dict["a"]`,
+  String.raw`
+  gimme compDict = {"a":6, "b":[1,Yes]}
+  gimme dictItem = compDict["b"]`,
   String.raw`gimme nullVar = Null`,
   String.raw`
   gimme array = [1,2,3]
@@ -179,9 +190,10 @@ Bye Bye!`,
   String.raw`gimme yes = !No`,
   String.raw`
   for(gimme i = 0; i < 4; i++) {
-    i++
+    break
   }`,
-  String.raw`print("Hello World")`
+  String.raw`print("Hello World")`,
+  String.raw`Please populate gimmeFive with ()-> { Kindly return 5 }.` //Generates Errors
 ];
 
 describe("The semantic analyzer", () => {

@@ -48,7 +48,7 @@ module.exports = {
     if (type.constructor === ArrayType || type.constructor === DictionaryType) {
       if (returnBool) {
         return JSON.stringify(expression.type) === JSON.stringify(type);
-      }
+      } //TODO: This conditional is never used in analyzer
       doCheck(
         JSON.stringify(expression.type) === JSON.stringify(type),
         errorMessage
@@ -98,7 +98,7 @@ module.exports = {
 
   isFunction(value) {
     doCheck(value.constructor === FunctionDeclaration, "Not a function");
-  },
+  }, //TODO: not used because isFunctionOrObject is used instead
 
   isFunctionOrObject(value) {
     doCheck(
@@ -114,7 +114,7 @@ module.exports = {
 
   expressionsHaveTheSameType(e1, e2) {
     doCheck(e1.type === e2.type, "Types must match exactly");
-  },
+  }, //TODO: Never used in analyzer
 
   // Is the type of this expression a number or string type? (For relational operators)
   isNumberOrString(expression) {
@@ -124,7 +124,7 @@ module.exports = {
         expression.type === AnyType,
       "Not an number or string"
     );
-  },
+  }, //TODO: Not used in analyzer
 
   inLoop(context, keyword) {
     doCheck(context.inLoop, `${keyword} can only be used in a loop`);
