@@ -189,9 +189,6 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
       false
     );
   },
-  Var_id(id) {
-    return new IdExp(id.ast());
-  },
   VarDec_polite(_1, id, _2, type, _3, exp, _4) {
     return new VariableDeclaration(
       id.ast(),
@@ -278,7 +275,10 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
     return new MemberExp(v.ast(), field.ast());
   },
   Var_funcselect(v, _dot, field) {
-    return new MemberExp(v.ast(), field.ast().id);
+    return new MemberExp(v.ast(), field.ast());
+  },
+  Var_id(id) {
+    return new IdExp(id.ast());
   },
   ArrayLit(_open, exps, _close) {
     return new ArrayLiteral([...exps.ast()]);

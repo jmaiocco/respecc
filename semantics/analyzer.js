@@ -154,7 +154,12 @@ ForLoop.prototype.analyze = function(context) {
 
 FunctionCall.prototype.analyze = function(context) {
   /*Should callee be a member of function call (for decorated tree)?*/
-  this.callee = context.lookup(this.id);
+  if (this.id.constructor === IdExp) {
+    this.id.analyze(context);
+    this.callee = this.id.ref;
+  } else {
+    this.callee = context.lookup(this.id);
+  }
   check.isCallable(this.callee, "Attempt to call a non-function");
   if (this.args) {
     this.args.forEach(arg => arg.analyze(context));

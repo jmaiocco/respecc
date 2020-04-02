@@ -51,7 +51,11 @@ const fixture = {
     new Program(
       false,
       [
-        new FunctionCall("print", [new StringLiteral("Hello, world\\n")], false)
+        new FunctionCall(
+          new IdExp("print"),
+          [new StringLiteral("Hello, world\\n")],
+          false
+        )
       ],
       false
     )
@@ -62,7 +66,13 @@ const fixture = {
     Bye Bye!`,
     new Program(
       true,
-      [new FunctionCall("print", [new StringLiteral("Hello, world\\n")], true)],
+      [
+        new FunctionCall(
+          new IdExp("print"),
+          [new StringLiteral("Hello, world\\n")],
+          true
+        )
+      ],
       true
     )
   ],
@@ -209,7 +219,13 @@ const fixture = {
     String.raw`init(x,y)`,
     new Program(
       false,
-      [new FunctionCall(`init`, [new IdExp("x"), new IdExp("y")], false)],
+      [
+        new FunctionCall(
+          new IdExp(`init`),
+          [new IdExp("x"), new IdExp("y")],
+          false
+        )
+      ],
       false
     )
   ],
@@ -219,7 +235,7 @@ const fixture = {
       false,
       [
         new FunctionCall(
-          "init",
+          new IdExp("init"),
           [new IdExp("x"), new BooleanLiteral(true)],
           true
         )
