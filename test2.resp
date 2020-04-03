@@ -1,15 +1,5 @@
-class Block {
-  gimme x = 5
-  Block(gfg : String) {
-    this.x = 6
-  }
-  function bark() {
 
-  }
-}
-gimme cc : Block = Block("d")
-cc.bark()
-
+gimme x = x.y.z.a[b].x
 
 /*
 function Fibonacci(n, length) {

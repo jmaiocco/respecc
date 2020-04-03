@@ -157,9 +157,9 @@ FunctionCall.prototype.analyze = function(context) {
   if (this.id.constructor === IdExp) {
     this.id.analyze(context);
     this.callee = this.id.ref;
-  } else {
-    this.callee = context.lookup(this.id);
   }
+  //this.callee = context.lookup(this.id);
+
   check.isCallable(this.callee, "Attempt to call a non-function");
   if (this.args) {
     this.args.forEach(arg => arg.analyze(context));
