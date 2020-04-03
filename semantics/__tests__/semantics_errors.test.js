@@ -59,6 +59,20 @@ const errors = [
   }`
   ],
   [
+    "constructor name not equal to class name",
+    String.raw`
+  class Dog {
+    gimme name : String
+    gimme age : Number
+    Pup(name) {
+      this.name = name
+      this.age = 0
+    }
+  }
+  gimme pup = Pup("cat")
+  `
+  ],
+  [
     "constructor has non-null return",
     String.raw`class Dog {
       Dog() { return 2 }
@@ -84,6 +98,19 @@ const errors = [
         Dog(name) { this.name = name }
       }
       gimme cc = Dog(10)
+  `
+    ],
+    [
+      "class function called outside of scope",
+      String.raw`
+      class Dog {
+        gimme name : String
+        gimme age : Number
+        Dog(name) { this.name = name }
+        function getName(){ return this.name}
+      }
+      gimme cc = Dog(10)
+      print(getName())
   `
     ]
   ]

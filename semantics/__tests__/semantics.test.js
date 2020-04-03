@@ -111,7 +111,7 @@ Bye Bye!
   }
 
   Fibonacci(12, 12)
-  `, //GENERATES ERROR...Recursive call is causing type errors, may be relegated to run-time
+  `,
   String.raw`
 function isPrime (num) {
   if (num <= 1) {
@@ -152,7 +152,23 @@ Have you ever heard of a Dog? Let's get classy...
 
 Thank You.
 Please declare cc as Dog("cece")
+print(cc.getName())
 Bye Bye!`,
+  String.raw`
+class Country{
+  gimme statePopulations : Dict<String, Number>
+  gimme states  : Array<String>
+
+  Country(states:Array<String>){
+    this.states = states
+  }
+  Country(pops:Dict<String,Number>){
+    this.statePopulations = pops
+  }
+}
+gimme calexit = Country(["The Bay", "NorCal", "SoCal"])
+gimme Brexit = Country({"Wales":200,"London":500,"Stratford-Upon-Avon":2})
+`,
 
   // String.raw`
   // gimme numbers = [1,3,4,5,28,3]
@@ -174,26 +190,34 @@ Bye Bye!`,
   // `, //GENERATE ERRORS callbacks not supported
   String.raw`gimme five = 5>4? 5: 4`,
   String.raw`gimme fiveish = 5>4?6>5:3>4? 2 : 1`,
-  String.raw`gimme gimmeFive = ()->{return 5}`, //GENERATES ERRORS
+  String.raw`gimme gimmeFive = ()->{return 5}`,
   String.raw`
   gimme gimmeFiveExp = ()-> 5`,
   String.raw`
   gimme dict = {"a":6}
   gimme dict_item = dict["a"]`,
   String.raw`
-  gimme compDict = {"a":6, "b":[1,Yes]}
-  gimme dictItem = compDict["b"]`,
+  gimme compDict = {"a":6, "b":[1,Yes], "c":{"best":"cat"}}
+  gimme dictItem = compDict["b"]
+  gimme one = dictItem[0]
+  gimme theBest = compDict["c"]["best"]`,
   String.raw`gimme nullVar = Null`,
   String.raw`
   gimme array = [1,2,3]
   gimme arr_item = array[0]`,
+  String.raw`
+  gimme twoDArray = [[1,2,3],[4,5,6]]
+  gimme twoDArrIslacktem = array[0][0]`,
   String.raw`gimme yes = !No`,
   String.raw`
   for(gimme i = 0; i < 4; i++) {
     break
   }`,
   String.raw`print("Hello World")`,
-  String.raw`Please populate gimmeFive with ()-> { Kindly return 5 }.` //Generates Errors
+  String.raw`
+  function speak(message){print(message)}
+  speak("hello")
+  `
 ];
 
 describe("The semantic analyzer", () => {
