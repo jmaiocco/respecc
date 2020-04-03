@@ -19,7 +19,10 @@ const BooleanType = new PrimitiveType("Boolean");
 const AnyType = new PrimitiveType(null);
 
 const standardFunctions = [
-  new FunctionDeclaration("print", [new Parameter("s", StringType, null)])
+  new FunctionDeclaration("print", [new Parameter("s", StringType, null)]),
+  new FunctionDeclaration("length", [new Parameter("s", StringType, null)]),
+  new FunctionDeclaration("concatenate", [new Parameter("s1", StringType, null), new Parameter("s2", StringType, null)]),
+  new FunctionDeclaration("absoluteValue", [new Parameter("n", NumberType, null)])
   //new FunctionDeclaration("sacrifice", [new Parameter("s", null, null)], IntType)
 ];
 
