@@ -157,14 +157,20 @@ FunctionCall.prototype.analyze = function(context) {
   if (this.id.constructor === IdExp) {
     this.id.analyze(context);
     this.callee = this.id.ref;
+  } else if (this.id.constructor === MemberExp) {
+    this.id.analyze(context);
+    let objectType = this.id.v.type;
+    this.callee = objectType.locals.get(this.id.field); /*TODO*/
+  } else {
+    //this.callee = context.lookup(this.id);
   }
-  //this.callee = context.lookup(this.id);
 
   check.isCallable(this.callee, "Attempt to call a non-function");
   if (this.args) {
     this.args.forEach(arg => arg.analyze(context));
     if (
       this.callee.constructor === FunctionDeclaration ||
+      this.callee.constructor === MemberExp ||
       (this.callee.expression &&
         this.callee.expression.constructor === LambdaExp)
     ) {
@@ -377,7 +383,7 @@ SubscriptExp.prototype.analyze = function(context) {
       this.composite.type.type1,
       `Dict subscript must match key type`
     );
-    this.type = this.composite.type.type1;
+    this.type = this.composite.type.type2;
   }
 };
 

@@ -1,6 +1,41 @@
 
-gimme x = x.y.z.a[b].x
+Hello!
+Have you ever heard of a Dog? Let's get classy...
+    Have you ever heard of a Ball? Let's get classy...
+      Please declare color as a String.
+      To construct a Ball by using (color as a String), could you...
+        Please populate this.color with color.
+      Thank You.
+    Thank You.
+    Please declare name as a String.
+    Please declare ball as a Ball.
+    To construct a Dog by using (name as a String), could you...
+      Please populate this.name with name.
+    Thank You.
+    Favor getName() as a String could you...
+      Kindly return this.name
+    Thank You.
 
+Thank You.
+Please declare cc as Dog("cece")
+print(cc.getName())
+Bye Bye!
+
+/*
+class Block {
+  gimme x = 5
+  Block(gfg : String) {
+    this.x = 6
+  }
+
+  function inner(var) {
+
+  }
+}
+
+gimme y : Block = Block("d")
+gimme zzz = the result of running y.inner with ("Hello")
+*/
 /*
 function Fibonacci(n, length) {
 if (n == 1) {
