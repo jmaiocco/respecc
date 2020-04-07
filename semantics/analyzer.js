@@ -170,7 +170,6 @@ FunctionCall.prototype.analyze = function(context) {
     this.args.forEach(arg => arg.analyze(context));
     if (
       this.callee.constructor === FunctionDeclaration ||
-      this.callee.constructor === MemberExp ||
       (this.callee.expression &&
         this.callee.expression.constructor === LambdaExp)
     ) {
@@ -364,7 +363,7 @@ Constructor.prototype.analyze = function(context) {
 
 MemberExp.prototype.analyze = function(context) {
   this.v.analyze(context);
-  check.isClass(this.v.type);
+  //check.isClass(this.v.type);
   check.memberExists(this.v, this.field);
   this.member = this.v.type.locals.get(this.field);
   this.type = this.member.type;

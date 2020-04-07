@@ -19,7 +19,12 @@ Have you ever heard of a Dog? Let's get classy...
 Thank You.
 Please declare cc as Dog("cece")
 print(cc.getName())
+
+gimme s : String = "Hi"
+gimme n : Number = s.length
+
 Bye Bye!
+
 
 /*
 class Block {
