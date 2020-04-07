@@ -191,7 +191,6 @@ TernaryExp.prototype.analyze = function(context) {
   [this.exp1, this.exp2, this.exp3].forEach(e => {
     e.analyze(context);
   });
-  check.isBoolean(this.exp1);
   if (this.exp2.type === this.exp3.type) {
     this.type = this.exp2.type;
   } else {
