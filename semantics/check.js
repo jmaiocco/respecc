@@ -210,7 +210,7 @@ module.exports = {
 
   memberExists(instance, memberID) {
     doCheck(
-      instance.type.locals.has(memberID),
+      instance.type === AnyType || instance.type.locals.has(memberID),
       `Identifier ${memberID}
     does not exist in ${instance.id}`
     );

@@ -170,7 +170,6 @@ FunctionCall.prototype.analyze = function(context) {
     this.args.forEach(arg => arg.analyze(context));
     if (
       this.callee.constructor === FunctionDeclaration ||
-      this.callee.constructor === MemberExp ||
       (this.callee.expression &&
         this.callee.expression.constructor === LambdaExp)
     ) {
@@ -192,7 +191,6 @@ TernaryExp.prototype.analyze = function(context) {
   [this.exp1, this.exp2, this.exp3].forEach(e => {
     e.analyze(context);
   });
-  check.isBoolean(this.exp1);
   if (this.exp2.type === this.exp3.type) {
     this.type = this.exp2.type;
   } else {
@@ -364,7 +362,7 @@ Constructor.prototype.analyze = function(context) {
 
 MemberExp.prototype.analyze = function(context) {
   this.v.analyze(context);
-  check.isClass(this.v.type);
+  //check.isClass(this.v.type);
   check.memberExists(this.v, this.field);
   this.member = this.v.type.locals.get(this.field);
   this.type = this.member.type;
