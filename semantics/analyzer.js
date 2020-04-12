@@ -157,9 +157,14 @@ FunctionCall.prototype.analyze = function(context) {
   if (this.id.constructor === IdExp) {
     this.id.analyze(context);
     this.callee = this.id.ref;
+  } else if (this.id.constructor === MemberExp) {
+    this.id.analyze(context);
+    let objectType = this.id.v.type;
+    this.callee = objectType.locals.get(this.id.field); /*TODO*/
   } else {
-    this.callee = context.lookup(this.id);
+    //this.callee = context.lookup(this.id);
   }
+
   check.isCallable(this.callee, "Attempt to call a non-function");
   if (this.args) {
     this.args.forEach(arg => arg.analyze(context));
@@ -186,7 +191,6 @@ TernaryExp.prototype.analyze = function(context) {
   [this.exp1, this.exp2, this.exp3].forEach(e => {
     e.analyze(context);
   });
-  check.isBoolean(this.exp1);
   if (this.exp2.type === this.exp3.type) {
     this.type = this.exp2.type;
   } else {
@@ -358,7 +362,7 @@ Constructor.prototype.analyze = function(context) {
 
 MemberExp.prototype.analyze = function(context) {
   this.v.analyze(context);
-  check.isClass(this.v.type);
+  //check.isClass(this.v.type);
   check.memberExists(this.v, this.field);
   this.member = this.v.type.locals.get(this.field);
   this.type = this.member.type;
@@ -377,7 +381,7 @@ SubscriptExp.prototype.analyze = function(context) {
       this.composite.type.type1,
       `Dict subscript must match key type`
     );
-    this.type = this.composite.type.type1;
+    this.type = this.composite.type.type2;
   }
 };
 

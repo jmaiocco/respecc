@@ -127,18 +127,6 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
       blk.ast()
     );
   },
-  FuncCallStmt_call_impolite(id, args) {
-    return new FunctionCall(id.ast(), args.ast(), false);
-  },
-  FuncCallStmt_call_polite(_1, id, _2, args, _3) {
-    return new FunctionCall(id.ast(), arrayToNullable(args.ast()), true);
-  },
-  FuncCallExp_call_impolite(id, args) {
-    return new FunctionCall(id.ast(), args.ast(), false);
-  },
-  FuncCallExp_call_polite(_1, id, _2, args) {
-    return new FunctionCall(id.ast(), arrayToNullable(args.ast()), true);
-  },
   Assignment_impolite(v, _eq, exp) {
     return new Assignment(v.ast(), exp.ast(), false);
   },
@@ -274,12 +262,22 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
   Var_select(v, _dot, field) {
     return new MemberExp(v.ast(), field.ast());
   },
-  Var_funcselect(v, _dot, field) {
-    return new MemberExp(v.ast(), field.ast());
-  },
   Var_id(id) {
     return new IdExp(id.ast());
   },
+  FuncCallStmt_call_impolite(id, args) {
+    return new FunctionCall(id.ast(), args.ast(), false);
+  },
+  FuncCallStmt_call_polite(_1, id, _2, args, _3) {
+    return new FunctionCall(id.ast(), arrayToNullable(args.ast()), true);
+  },
+  FuncCallExp_call_impolite(id, args) {
+    return new FunctionCall(id.ast(), args.ast(), false);
+  },
+  FuncCallExp_call_polite(_1, id, _2, args) {
+    return new FunctionCall(id.ast(), arrayToNullable(args.ast()), true);
+  },
+
   ArrayLit(_open, exps, _close) {
     return new ArrayLiteral([...exps.ast()]);
   },

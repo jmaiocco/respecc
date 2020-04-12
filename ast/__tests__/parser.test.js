@@ -251,7 +251,7 @@ const fixture = {
       [
         new Assignment(
           new IdExp("x"),
-          new FunctionCall("plusOne", [new IdExp("x")], false),
+          new FunctionCall(new IdExp("plusOne"), [new IdExp("x")], false),
           false
         )
       ],
@@ -265,7 +265,7 @@ const fixture = {
       [
         new Assignment(
           new IdExp("x"),
-          new FunctionCall("plusOne", [new IdExp("x")], true),
+          new FunctionCall(new IdExp("plusOne"), [new IdExp("x")], true),
           true
         )
       ],

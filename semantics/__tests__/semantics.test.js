@@ -207,7 +207,7 @@ gimme Brexit = Country({"Wales":200,"London":500,"Stratford-Upon-Avon":2})
   gimme arr_item = array[0]`,
   String.raw`
   gimme twoDArray = [[1,2,3],[4,5,6]]
-  gimme twoDArrIslacktem = array[0][0]`,
+  gimme twoDArrIslacktem = twoDArray[0][0]`,
   String.raw`gimme yes = !No`,
   String.raw`
   for(gimme i = 0; i < 4; i++) {
