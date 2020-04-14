@@ -4,13 +4,13 @@
  * These tests check that the JavaScript generator produces the target
  * JavaScript that we expect.
  */
-/*
+
 const parse = require("../../ast/parser");
 const analyze = require("../../semantics/analyzer");
 const generate = require("../javascript-generator");
-*/
-//const fixture = {
-/*
+
+const fixture = {
+  /*
   hello: [
     String.raw`print("Hello, world\n")`,
     String.raw`console.log("Hello, world\n")`
@@ -73,7 +73,7 @@ const generate = require("../javascript-generator");
     String.raw`(not(1) ; size(""); exit(3))`,
     /\(!\(1\)\);\s*"".length;\s*process\.exit\(3\)/
   ]
-
+*/
 };
 describe("The JavaScript generator", () => {
   Object.entries(fixture).forEach(([name, [source, expected]]) => {
@@ -85,4 +85,3 @@ describe("The JavaScript generator", () => {
     });
   });
 });
-*/

@@ -42,6 +42,7 @@ DictionaryType.locals.set(
 const standardFunctions = [
   new FunctionDeclaration("print", [new Parameter("s", AnyType, null)])
   //new FunctionDeclaration("sacrifice", [new Parameter("s", null, null)], IntType)
+  //new FunctionDeclaration("getRespecc", [new Parameter("s", null, null)], IntType)
 ];
 
 //eslint-disable no-param-reassign

@@ -174,12 +174,12 @@ gimme Brexit = Country({"Wales":200,"London":500,"Stratford-Upon-Avon":2})
   `,
   String.raw`
   gimme prefAny:Boolean = !(Yes? 5:["a"])
-  `,
+  `
 ];
 
 describe("The semantic analyzer", () => {
-  programs.map((program) => {
-    test(`accepts ${program}`, (done) => {
+  programs.map(program => {
+    test(`accepts ${program}`, done => {
       const astRoot = parse(program);
       expect(astRoot).toBeTruthy();
       analyze(astRoot);

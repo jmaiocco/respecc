@@ -6,7 +6,7 @@ const {
   FunctionDeclaration,
   ClassDeclaration,
   LambdaBlock,
-  LambdaExp,
+  LambdaExp
 } = require("../ast");
 const {
   ObjectType,
@@ -14,7 +14,7 @@ const {
   StringType,
   NullType,
   BooleanType,
-  AnyType,
+  AnyType
 } = require("./builtins");
 
 function doCheck(condition, message) {
@@ -38,7 +38,6 @@ module.exports = {
     );
   },
 
-  // Can we assign expression to a variable/param/field of type type?
   isAssignableTo(expression, type, message, returnBool) {
     if (type === AnyType || expression.type === AnyType) {
       return true;
@@ -62,7 +61,7 @@ module.exports = {
       doCheck(expression.type === type, errorMessage);
     }
   },
-  // Is the type of this expression an array or dictionary type? (For subscript)
+
   isArrayOrDictionary(expression) {
     doCheck(
       expression.type.constructor === ArrayType ||
@@ -138,7 +137,6 @@ module.exports = {
     );
   },
 
-  // Same number of args and params; all types compatible
   legalArguments(args, params) {
     doCheck(
       args.length === params.length,
@@ -149,13 +147,13 @@ module.exports = {
 
   anyLegalArguments(args, paramsList) {
     doCheck(
-      paramsList.some((params) => args.length === params.length),
+      paramsList.some(params => args.length === params.length),
       `No Constructor exists with params length ${args.length}`
     );
     doCheck(
       paramsList
-        .filter((params) => args.length === params.length)
-        .some((params) =>
+        .filter(params => args.length === params.length)
+        .some(params =>
           args.every((arg, i) =>
             this.isAssignableTo(arg, params[i].type, "", true)
           )
@@ -166,7 +164,7 @@ module.exports = {
 
   propertyOfAll(arr, prop) {
     return arr.length !== 0 &&
-      arr.filter((e) => e[prop] === arr[0][prop]).length === arr.length
+      arr.filter(e => e[prop] === arr[0][prop]).length === arr.length
       ? arr[0][prop]
       : AnyType;
   },
@@ -202,5 +200,5 @@ module.exports = {
       `Identifier ${memberID}
     does not exist in ${instance.id}`
     );
-  },
+  }
 };
