@@ -4,7 +4,9 @@ const {
   ArrayType,
   DictionaryType,
   FunctionDeclaration,
-  ClassDeclaration
+  ClassDeclaration,
+  LambdaBlock,
+  LambdaExp,
 } = require("../ast");
 const {
   ObjectType,
@@ -12,7 +14,7 @@ const {
   StringType,
   NullType,
   BooleanType,
-  AnyType
+  AnyType,
 } = require("./builtins");
 
 function doCheck(condition, message) {
@@ -104,20 +106,6 @@ module.exports = {
     );
   },
 
-  isClass(value) {
-    doCheck(value.constructor === ObjectType, "Not an object");
-  },
-
-  // Is the type of this expression a number or string type? (For relational operators)
-  isNumberOrString(expression) {
-    doCheck(
-      expression.type === NumberType ||
-        expression.type === StringType ||
-        expression.type === AnyType,
-      "Not an number or string"
-    );
-  }, //TODO: Not used in analyzer
-
   inLoop(context, keyword) {
     doCheck(context.inLoop, `${keyword} can only be used in a loop`);
   },
@@ -161,13 +149,13 @@ module.exports = {
 
   anyLegalArguments(args, paramsList) {
     doCheck(
-      paramsList.some(params => args.length === params.length),
+      paramsList.some((params) => args.length === params.length),
       `No Constructor exists with params length ${args.length}`
     );
     doCheck(
       paramsList
-        .filter(params => args.length === params.length)
-        .some(params =>
+        .filter((params) => args.length === params.length)
+        .some((params) =>
           args.every((arg, i) =>
             this.isAssignableTo(arg, params[i].type, "", true)
           )
@@ -178,7 +166,7 @@ module.exports = {
 
   propertyOfAll(arr, prop) {
     return arr.length !== 0 &&
-      arr.filter(e => e[prop] === arr[0][prop]).length === arr.length
+      arr.filter((e) => e[prop] === arr[0][prop]).length === arr.length
       ? arr[0][prop]
       : AnyType;
   },
@@ -214,5 +202,5 @@ module.exports = {
       `Identifier ${memberID}
     does not exist in ${instance.id}`
     );
-  }
+  },
 };

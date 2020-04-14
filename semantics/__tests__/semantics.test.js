@@ -169,25 +169,6 @@ class Country{
 gimme calexit = Country(["The Bay", "NorCal", "SoCal"])
 gimme Brexit = Country({"Wales":200,"London":500,"Stratford-Upon-Avon":2})
 `,
-
-  // String.raw`
-  // gimme numbers = [1,3,4,5,28,3]
-
-  // function bubbleSort(comparator, arr, arrlen) {
-  // 	for(gimme i=0;i<arrlen-1;i++){
-  //       for(gimme j=0;j<arrlen-i-1;j++){
-  //         if(comparator(arr[j],arr[j+1]) > 0){
-  //           gimme temp = arr[j]
-  //           arr[j] = arr[j+1]
-  //           arr[j+1] = temp
-  //         }
-  //       }
-  //     }
-  //   return arr
-  // }
-
-  // bubbleSort((a,b)->(a-b),numbers,6)
-  // `, //GENERATE ERRORS callbacks not supported
   String.raw`gimme five = 5>4? 5: 4`,
   String.raw`gimme fiveish = 5>4?6>5:3>4? 2 : 1`,
   String.raw`gimme gimmeFive = ()->{return 5}`,
@@ -217,12 +198,15 @@ gimme Brexit = Country({"Wales":200,"London":500,"Stratford-Upon-Avon":2})
   String.raw`
   function speak(message){print(message)}
   speak("hello")
-  `
+  `,
+  String.raw`
+  gimme prefAny:Boolean = !(Yes? 5:["a"])
+  `,
 ];
 
 describe("The semantic analyzer", () => {
-  programs.map(program => {
-    test(`accepts ${program}`, done => {
+  programs.map((program) => {
+    test(`accepts ${program}`, (done) => {
       const astRoot = parse(program);
       expect(astRoot).toBeTruthy();
       analyze(astRoot);
