@@ -277,26 +277,7 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
   FuncCallExp_call_polite(_1, id, _2, args) {
     return new FunctionCall(id.ast(), arrayToNullable(args.ast()), true);
   },
-  /*
-  FuncCallee(calleeVar, id) {
-    return new FunctionCallee(arrayToNullable(calleeVar.ast(), id.ast()));
-  },
 
-  CalleeVar_subscript(cv, id, _open, subscript, _close, _dot) {
-    return new SubscriptExp(cv.ast(), subscript.ast());
-
-    return new MemberExp()
-  },
-  CalleeVar_func(cv, id, args, _dot) {
-    return new FunctionCall(cv.ast(), args.ast());
-  },
-  CalleeVar_select(cv, id, _dot) {
-    return new MemberExp(cv.ast(), id.ast());
-  },
-  CalleeVar_id(id, _dot) {
-    return new IdExp(id.ast());
-  },
-*/
   ArrayLit(_open, exps, _close) {
     return new ArrayLiteral([...exps.ast()]);
   },
