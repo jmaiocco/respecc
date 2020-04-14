@@ -111,6 +111,35 @@ const errors = [
       print(getName())
   `,
   ],
+  [
+    "class has no matching constructors",
+    String.raw`
+    class Bird{
+      gimme name : String
+      gimme color : String
+      gimme age : Number
+      Bird(name, age){
+        this.name = name
+        this.age = color
+      }
+    }
+    gimme pirate = Bird("blue", "red")
+    `,
+  ],
+  [
+    "constructors with same number of args",
+    String.raw`
+    class Cat {
+      gimme name: String
+      gimme age: Number
+      gimme breed : String
+      Cat(age){this.age = age}
+      Cat(name){this.name = name}
+      Cat(breed){this.breed = breed}
+    }
+    gimme cat = Cat("mochi")
+  `,
+  ],
 ];
 
 describe("The semantic analyzer", () => {
