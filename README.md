@@ -38,7 +38,7 @@ Respecc++ was developed by Timothy Herrmann, Luis Garcia, Joseph Maiocco, Bennet
   <li> More features on the way as development progresses! </li>
 </ul>
 
-<h2> List of Static Semantic Errors </h2>
+<h2> List of Static Semantic Rules </h2>
 <ul>
   <li> Identifiers must be declared before they are used. </li>
   <li> Identifiers cannot be redeclared within the same scope. </li>
@@ -47,10 +47,9 @@ Respecc++ was developed by Timothy Herrmann, Luis Garcia, Joseph Maiocco, Bennet
   <li> Subscripted identifiers must refer to arrays or dictionaries. </li>
   <li> Arrays can only be accessed with Number subscripts. </li>
   <li> Functions must be defined before they are called. </li>
+  <li> Functions must return values of the same type with which they are defined. </li>
   <li> Arguments passed to a function must match the number, typing and ordering of the parameters of that function. </li>
-  <li> </li>
-
-
+  <li> Arguments passed to an instance of a class must match the number, typing and ordering of the parameters/fields of the class constructor. </li>
 </ul>
 
   
