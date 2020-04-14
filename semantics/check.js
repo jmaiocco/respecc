@@ -4,7 +4,9 @@ const {
   ArrayType,
   DictionaryType,
   FunctionDeclaration,
-  ClassDeclaration
+  ClassDeclaration,
+  LambdaExp,
+  LambdaBlock
 } = require("../ast");
 const {
   ObjectType,
