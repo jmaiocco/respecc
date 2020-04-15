@@ -1,1 +1,14 @@
-gimme x = 3
+//gimme x = 3
+Hello!
+Please declare x as 3 plus 3.
+Please declare y as "ssss".
+Please declare z as Yes.
+Please declare z1 as No.
+Please declare a as [Yes, No, 1, "yum"].
+Please declare d as {1:"drink", Yes:"Pipe", "Num":Null}.
+
+if(Yes) {
+    Please declare z1 as No.
+}
+
+Godspeed!

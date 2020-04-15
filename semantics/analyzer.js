@@ -267,7 +267,11 @@ Return.prototype.analyze = function(context) {
 FunctionDeclaration.prototype.analyzeSignature = function(context) {
   this.bodyContext = context.createChildContextForFunctionBody(this);
   this.params.forEach(p => p.analyze(this.bodyContext));
-  this.type = context.lookup(this.type);
+  if (this.type === "Void") {
+    this.type = AnyType;
+  } else {
+    this.type = context.lookup(this.type);
+  }
   //Control Flow Analysis
   this.typeResolved = this.type === AnyType ? true : false;
 };

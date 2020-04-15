@@ -88,7 +88,8 @@ const fixture = {
             [],
             new Block([new Return(new NumberLiteral(5), false)], false)
           ),
-          false
+          false,
+          null
         )
       ],
       false
@@ -106,7 +107,8 @@ const fixture = {
             [],
             new Block([new Return(new NumberLiteral(5), true)], false)
           ),
-          true
+          true,
+          null
         )
       ],
       false
@@ -206,7 +208,7 @@ const fixture = {
       false,
       [
         new ForLoop(
-          new VariableDeclaration("i", null, new NumberLiteral(0), false),
+          new VariableDeclaration("i", null, new NumberLiteral(0), false, null),
           new BinaryExp(new IdExp("i"), "<", new IdExp("n")),
           new UnaryPostfix(new IdExp("i"), "++"),
           new Block([new Break(false)], false)
@@ -313,6 +315,7 @@ const fixture = {
           "x",
           new DictionaryType("String", "Number"),
           null,
+          true,
           true
         )
       ],
@@ -328,6 +331,7 @@ const fixture = {
           "x",
           new ArrayType("Number"),
           new ArrayLiteral([new NumberLiteral(0), new NumberLiteral(1)]),
+          true,
           true
         )
       ],
@@ -346,8 +350,8 @@ const fixture = {
         new FunctionDeclaration(
           "sum",
           [
-            new Parameter("x", "Number", true),
-            new Parameter("y", "Number", true)
+            new Parameter("x", "Number", true, true),
+            new Parameter("y", "Number", true, true)
           ],
           "Number",
           new Block(
@@ -359,6 +363,7 @@ const fixture = {
             ],
             true
           ),
+          true,
           true
         )
       ],
@@ -373,7 +378,10 @@ const fixture = {
       [
         new FunctionDeclaration(
           "sum",
-          [new Parameter("x", null, null), new Parameter("y", null, null)],
+          [
+            new Parameter("x", null, true, null),
+            new Parameter("y", null, true, null)
+          ],
           null,
           new Block(
             [
@@ -384,7 +392,8 @@ const fixture = {
             ],
             false
           ),
-          false
+          false,
+          null
         )
       ],
       false
@@ -400,7 +409,8 @@ const fixture = {
           "gimmeFive",
           null,
           new LambdaExp([], new NumberLiteral(5)),
-          false
+          false,
+          null
         )
       ],
       false
@@ -415,7 +425,8 @@ const fixture = {
           "gimmeFive",
           null,
           new LambdaExp([], new NumberLiteral(5)),
-          true
+          true,
+          null
         )
       ],
       false
@@ -429,7 +440,10 @@ const fixture = {
       [
         new FunctionDeclaration(
           "sum",
-          [new Parameter("x", null, null), new Parameter("y", null, null)],
+          [
+            new Parameter("x", null, true, null),
+            new Parameter("y", null, true, null)
+          ],
           null,
           new Block(
             [
@@ -440,7 +454,8 @@ const fixture = {
             ],
             false
           ),
-          false
+          false,
+          null
         )
       ],
       false
@@ -455,8 +470,8 @@ const fixture = {
         new FunctionDeclaration(
           "sum",
           [
-            new Parameter("x", "Number", false),
-            new Parameter("y", "Number", false)
+            new Parameter("x", "Number", true, false),
+            new Parameter("y", "Number", true, false)
           ],
           null,
           new Block(
@@ -468,7 +483,8 @@ const fixture = {
             ],
             false
           ),
-          false
+          false,
+          null
         )
       ],
       false
@@ -483,8 +499,8 @@ const fixture = {
         new FunctionDeclaration(
           "sum",
           [
-            new Parameter("x", "Number", true),
-            new Parameter("y", "Number", true)
+            new Parameter("x", "Number", true, true),
+            new Parameter("y", "Number", true, true)
           ],
           null,
           new Block(
@@ -496,7 +512,8 @@ const fixture = {
             ],
             false
           ),
-          false
+          false,
+          null
         )
       ],
       false
@@ -515,7 +532,8 @@ const fixture = {
             [],
             new Block([new Return(new NumberLiteral(5), false)], false)
           ),
-          false
+          false,
+          null
         )
       ],
       false
@@ -533,7 +551,8 @@ const fixture = {
             [],
             new Block([new Return(new NumberLiteral(5), false)], false)
           ),
-          false
+          false,
+          null
         )
       ],
       false
@@ -553,7 +572,8 @@ const fixture = {
             new NumberLiteral(5),
             new NumberLiteral(4)
           ),
-          false
+          false,
+          null
         )
       ],
       false
@@ -572,7 +592,8 @@ const fixture = {
             [],
             new Block([new Return(new NumberLiteral(5), false)], false)
           ),
-          false
+          false,
+          null
         )
       ],
       false
@@ -588,7 +609,8 @@ const fixture = {
           "gimmeFive",
           null,
           new LambdaExp([], new NumberLiteral(5)),
-          false
+          false,
+          null
         )
       ],
       false
@@ -618,7 +640,8 @@ const fixture = {
           "item",
           null,
           new SubscriptExp(new IdExp("arr"), new NumberLiteral(0)),
-          false
+          false,
+          null
         )
       ],
       false
@@ -670,7 +693,8 @@ const fixture = {
             "**",
             new UnaryPrefix("-", new NumberLiteral(2))
           ),
-          false
+          false,
+          null
         )
       ],
       false
@@ -690,7 +714,8 @@ const fixture = {
             "or",
             new BooleanLiteral(true)
           ),
-          false
+          false,
+          null
         )
       ],
       false
@@ -710,7 +735,8 @@ const fixture = {
             "and",
             new BooleanLiteral(true)
           ),
-          false
+          false,
+          null
         )
       ],
       false
@@ -736,10 +762,10 @@ const fixture = {
           "Dog",
           new ClassBlock(
             [
-              new VariableDeclaration("name", "String", null, true),
+              new VariableDeclaration("name", "String", null, true, true),
               new Constructor(
                 "Dog",
-                [new Parameter("name", "String", true)],
+                [new Parameter("name", "String", true, true)],
                 new Block(
                   [
                     new Assignment(
@@ -760,6 +786,7 @@ const fixture = {
                   [new Return(new MemberExp(new IdExp("this"), "name"), true)],
                   true
                 ),
+                true,
                 true
               )
             ],
@@ -786,10 +813,10 @@ const fixture = {
           "Dog",
           new ClassBlock(
             [
-              new VariableDeclaration("name", "String", null, false),
+              new VariableDeclaration("name", "String", null, false, false),
               new Constructor(
                 "Dog",
-                [new Parameter("name", null, null)],
+                [new Parameter("name", null, true, null)],
                 new Block(
                   [
                     new Assignment(
@@ -810,7 +837,8 @@ const fixture = {
                   [new Return(new MemberExp(new IdExp("this"), "name"), false)],
                   false
                 ),
-                false
+                false,
+                null
               )
             ],
             false
