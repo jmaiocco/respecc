@@ -194,9 +194,20 @@ Program.prototype.gen = function(randomize = null) {
 };
 VariableDeclaration.prototype.gen = function() {
   setScore(this);
-  return `let ${javaScriptId(this)} ${
-    this.expression ? `= ${this.expression.gen()}` : ""
-  }`;
+  console.log(this);
+  let exp = "";
+  if (this.expression === null && this.type.constructor === ArrayType) {
+    exp = "[]";
+  } else if (
+    this.expression === null &&
+    this.type.constructor === DictionaryType
+  ) {
+    exp = "{}";
+  } else {
+    exp = `${this.expression.gen()}`;
+  }
+
+  return `let ${javaScriptId(this)} ${exp ? `= ${exp}` : ""}`;
 };
 Return.prototype.gen = function() {
   setScore(this);
@@ -220,13 +231,14 @@ WhileLoop.prototype.gen = function() {
 };
 ForLoop.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
   return `for(${this.dec.gen()} ;${this.exp.gen()} ;${this.assignment.gen()}) ${this.block.gen()}`;
 };
 FunctionCall.prototype.gen = function() {
   setScore(this);
   /*TODO*/
-  /*
+  if (this.id.constructor === MemberExp) {
+    return this.id.gen();
+  }
   const args = this.args.map(a => a.gen());
   if (this.callee.builtin) {
     return builtin[this.callee.id](args);
@@ -234,28 +246,23 @@ FunctionCall.prototype.gen = function() {
   return `${javaScriptId(this.callee)}(${this.args
     .map(a => a.gen())
     .join(",")})`;
-    */
-  return;
 };
 Assignment.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
   return `${this.variable.gen()} = ${this.exp.gen()}`;
 };
 ClassDeclaration.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `class ${javaScriptId(this)} ${this.block.gen()}`;
 };
 ClassBlock.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `{${this.members.map(e => e.gen()).join(";")}}`;
 };
 Constructor.prototype.gen = function() {
   setScore(this);
   /*TODO*/
-  return;
+  return `constructor() ${this.block}`;
 };
 FunctionDeclaration.prototype.gen = function() {
   setScore(this);
@@ -265,7 +272,6 @@ FunctionDeclaration.prototype.gen = function() {
 };
 Parameter.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
   return javaScriptId(this);
 };
 Block.prototype.gen = function() {
@@ -274,38 +280,36 @@ Block.prototype.gen = function() {
 };
 TernaryExp.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `(${this.exp1}?${this.exp2}:${this.exp3})`;
 };
 LambdaBlock.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `((${this.params.map(p => p.gen()).join(",")}) => ${this.block})`;
 };
 LambdaExp.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `((${this.params.map(p => p.gen()).join(",")}) => ${this.exp})`;
 };
 BinaryExp.prototype.gen = function() {
   setScore(this);
   return `(${this.left.gen()} ${makeOp(this.operator)} ${this.right.gen()})`;
 };
 UnaryPrefix.prototype.gen = function() {
-  /*TODO*/
   return `${makeOp(this.operator)} ${this.right.gen()}`;
 };
 UnaryPostfix.prototype.gen = function() {
-  /*TODO*/
   return `${this.left.gen()} ${makeOp(this.operator)}`;
 };
 SubscriptExp.prototype.gen = function() {
-  /*TODO*/
-  return;
+  return `${this.composite.gen()}[${this.subscript.gen()}]`;
 };
 MemberExp.prototype.gen = function() {
   /*TODO*/
-  return;
+  console.log(this);
+  if (this.field.constructor === FunctionCall) {
+    return `${this.v.gen()} . ${this.field.gen()}`;
+  }
+  return `${this.v.gen()} . ${javaScriptId({ id: this.field })}`;
 };
 ArrayLiteral.prototype.gen = function() {
   return `[${[...this.exps].map(e => e.gen())}]`;
@@ -317,7 +321,6 @@ DictEntry.prototype.gen = function() {
   return `${this.key.gen()} : ${this.value.gen()}`;
 };
 NumberLiteral.prototype.gen = function() {
-  //Check what respecc level
   return this.value;
 };
 StringLiteral.prototype.gen = function() {
