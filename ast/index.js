@@ -205,7 +205,7 @@ class BooleanLiteral {
 class NullLiteral {}
 
 function addAllScoreProps() {
-  addScoreProps(Program, [5, 5], [-5, -5]); //Four isGreeting and isFarewell
+  addScoreProps(Program, [5, 5], [-5, -5]);
   addScoreProps(Return, 5, -5);
   addScoreProps(Break, 5, -5);
   addScoreProps(Conditional, 5, -5);
@@ -213,8 +213,6 @@ function addAllScoreProps() {
   addScoreProps(ForLoop, 5, -5);
   addScoreProps(FunctionCall, 5, -5);
   addScoreProps(Assignment, 5, 5);
-  //addScoreProps(ArrayType, ); //No Politness
-  //addScoreProps(DictionaryType, ); //No Politness
   addScoreProps(ClassDeclaration, 5, -5);
   addScoreProps(ClassBlock, 5, -5);
   addScoreProps(Constructor, 5, -5);
@@ -222,16 +220,18 @@ function addAllScoreProps() {
   addScoreProps(VariableDeclaration, 5, -5, [2, 0, -2]);
   addScoreProps(Parameter, 5, -2, [2, 0, -2]);
   addScoreProps(Block, 5, -5);
-  addScoreProps(TernaryExp, 0, -5); //Only 1 (Use Based)
-  addScoreProps(LambdaBlock, 0, -5); //Only 1 (Use Based)
-  addScoreProps(LambdaExp, 0, -5); //Only 1 (Use Based)
-  addScoreProps(BinaryExp, 2, -2); //Based on Operator
+  addScoreProps(TernaryExp, 0, -5);
+  addScoreProps(LambdaBlock, 0, -5);
+  addScoreProps(LambdaExp, 0, -5);
+  addScoreProps(BinaryExp, 2, -2);
   //addScoreProps(UnaryPrefix, ); //No Politness
   //addScoreProps(UnaryPostfix, ); //No Politness
   //addScoreProps(SubscriptExp, ); //No Politness
   //addScoreProps(MemberExp, ); //No Politness
   //addScoreProps(ArrayLiteral, ); //No Politness
   //addScoreProps(DictionaryLiteral, ); //No Politness
+  //addScoreProps(ArrayType, ); //No Politness
+  //addScoreProps(DictionaryType, ); //No Politness
   //addScoreProps(DictEntry, ); //No Politness
   //addScoreProps(NumberLiteral, ); //No Politness
   //addScoreProps(StringLiteral, ); //No Politness

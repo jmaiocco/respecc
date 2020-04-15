@@ -60,9 +60,31 @@ const {
 } = require("../semantics/builtins");
 
 let respecc_score = 50;
+let respecc_modes = ["RudeAF", "Rude", "Impolite", "Polite", "Angelic"];
+let respecc_level = 4;
+
+let politeOps = {
+  or: "||",
+  and: "&&",
+  "is less than or equal to": "<=",
+  "is greater than or equal to": ">=",
+  "is less than": "<",
+  "is greater than": ">",
+  "is equal to": "===",
+  "is not equal to": "!==",
+  plus: "+",
+  minus: "-",
+  times: "*",
+  "divided by": "/",
+  "modded with": "%",
+  "raised to the power of": "**"
+};
+
+function makeOp(op) {
+  return politeOps[op] || op;
+}
 
 function setScore(object) {
-  /* TODO Include Type based things as seperate, declarations*/
   if (object.constructor === Program) {
     respecc_score += object.isGreeting
       ? object.constructor.politeFactor[0]
@@ -71,7 +93,9 @@ function setScore(object) {
       ? object.constructor.politeFactor[1]
       : object.constructor.rudeFactor[1];
   } else if (object.constructor === BinaryExp) {
-    return; /*TODO*/
+    respecc_score += politeOps[object.operator]
+      ? object.constructor.politeFactor
+      : object.constructor.rudeFactor;
   } else if (
     object.constructor === VariableDeclaration ||
     object.constructor === FunctionDeclaration ||
@@ -99,11 +123,11 @@ function setScore(object) {
         ? object.constructor.politeFactor
         : object.constructor.rudeFactor;
   }
-  console.log(respecc_score);
-}
-
-function makeOp(op) {
-  return { "=": "===", "<>": "!==", "&": "&&", "|": "||" }[op] || op;
+  respecc_score = Math.max(0, Math.min(respecc_score, 100));
+  respecc_level = Math.min(Math.floor(respecc_score / 20), 4);
+  console.log(
+    `${object.constructor.name}: ${respecc_score} is ${respecc_modes[respecc_level]}`
+  );
 }
 
 // javaScriptId(e) takes any Tiger object with an id property, such as a Variable,
@@ -241,7 +265,7 @@ LambdaExp.prototype.gen = function() {
 };
 BinaryExp.prototype.gen = function() {
   setScore(this);
-  return;
+  return `(${this.left.gen()} ${makeOp(this.operator)} ${this.right.gen()})`;
 };
 UnaryPrefix.prototype.gen = function() {
   return;
