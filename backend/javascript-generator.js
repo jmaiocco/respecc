@@ -77,7 +77,16 @@ function setScore(object) {
     object.constructor === FunctionDeclaration ||
     object.constructor === Parameter
   ) {
-    return; /*TODO*/
+    respecc_score +=
+      object.politeFlag === true
+        ? object.constructor.politeFactor
+        : object.constructor.rudeFactor;
+    respecc_score +=
+      object.typePoliteness === true
+        ? object.constructor.typeFactor[0]
+        : object.typePoliteness === false
+        ? object.constructor.typeFactor[1]
+        : object.constructor.typeFactor[2];
   } else if (
     object.constructor === TernaryExp ||
     object.constructor === LambdaBlock ||
@@ -86,10 +95,11 @@ function setScore(object) {
     respecc_score += object.constructor.rudeFactor;
   } else if (object.constructor.politeFactor && object.constructor.rudeFactor) {
     respecc_score +=
-      object.politeFlag === false
+      object.politeFlag === true
         ? object.constructor.politeFactor
         : object.constructor.rudeFactor;
   }
+  console.log(respecc_score);
 }
 
 function makeOp(op) {
@@ -151,7 +161,6 @@ module.exports = function(exp) {
 
 Program.prototype.gen = function() {
   setScore(this);
-  console.log(respecc_score);
   return this.statements.map(e => e.gen()).join(";");
 };
 
