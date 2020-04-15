@@ -4,6 +4,9 @@ const {
   ArrayType,
   DictionaryType,
   FunctionDeclaration,
+  VariableDeclaration,
+  IdExp,
+  FunctionCall,
   ClassDeclaration,
   LambdaBlock,
   LambdaExp
@@ -170,16 +173,16 @@ module.exports = {
   },
 
   objectNoMatchingConstructors(objectType) {
-    let params = objectType.callingParams;
-    for (let i = 0; i < params.length; i++) {
-      for (let j = i + 1; j < params.length; j++) {
-        if (params[i].length === params[j].length) {
+    let paramsList = objectType.callingParams;
+    for (let i = 0; i < paramsList.length; i++) {
+      for (let j = i + 1; j < paramsList.length; j++) {
+        if (paramsList[i].length === paramsList[j].length) {
           let paramsMatch = true;
-          params[i].forEach((param, k) => {
+          paramsList[i].forEach((param, k) => {
             if (
-              param.type !== params[j][k].type &&
+              param.type !== paramsList[j][k].type &&
               param.type !== AnyType &&
-              params[j][k].type !== AnyType
+              paramsList[j][k].type !== AnyType
             ) {
               paramsMatch = false;
             }

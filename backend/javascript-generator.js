@@ -59,6 +59,26 @@ const {
   standardFunctions
 } = require("../semantics/builtins");
 
+let respecc_score = 50;
+
+function setScore(object) {
+  if (object.constructor === Program) {
+    return;
+  } else if (object.constructor === BinaryExp) {
+    return;
+  } else if (
+    object.constructor === TernaryExp ||
+    object.constructor === LambdaBlock ||
+    object.constructor === LambdaExp
+  ) {
+    return;
+  } else if (object.constructor.politeFactor && object.constructor.rudeFactor) {
+    respecc_score += object.politeFlag
+      ? object.constructor.politeFactor
+      : object.constructor.rudeFactor;
+  }
+}
+
 function makeOp(op) {
   return { "=": "===", "<>": "!==", "&": "&&", "|": "||" }[op] || op;
 }
@@ -81,10 +101,13 @@ const javaScriptId = (() => {
 // Let's inline the built-in functions, because we can!
 
 const builtin = {
-  /*
+  respecc() {
+    return `${respecc_score}`;
+  },
   print([s]) {
     return `console.log(${s})`;
-  },
+  }
+  /*
   ord([s]) {
     return `(${s}).charCodeAt(0)`;
   },
@@ -138,7 +161,10 @@ function makeReturn(exp) {
   */
 }
 
-Program.prototype.gen = function() {};
+Program.prototype.gen = function() {
+  //return this.statements.map(e => e.gen()).join(";");
+  //return `${this}`;
+};
 
 /*
 ArrayExp.prototype.gen = function () {
@@ -209,11 +235,11 @@ LetExp.prototype.gen = function () {
   const filteredDecs = this.decs.filter(d => d.constructor !== TypeDec);
   return [...filteredDecs, ...this.body].map(e => e.gen()).join(';');
 };
-
-Literal.prototype.gen = function () {
-  return this.type === StringType ? `"${this.value}"` : this.value;
+*/
+NumberLiteral.prototype.gen = function() {
+  return this.value;
 };
-
+/*
 MemberExp.prototype.gen = function () {
   return `${this.record.gen()}.${this.id}`;
 };
@@ -233,11 +259,11 @@ Nil.prototype.gen = function () {
 RecordExp.prototype.gen = function () {
   return `{${this.bindings.map(b => b.gen()).join(',')}}`;
 };
-
-Variable.prototype.gen = function () {
-  return `let ${javaScriptId(this)} = ${this.init.gen()}`;
+*/
+VariableDeclaration.prototype.gen = function() {
+  return `let ${javaScriptId(this)} = ${this.expression.gen()}`;
 };
-
+/*
 WhileExp.prototype.gen = function () {
   return `while (${this.test.gen()}) { ${this.body.gen()} }`;
 };
