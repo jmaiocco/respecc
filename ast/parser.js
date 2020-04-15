@@ -33,7 +33,8 @@ const {
   StringLiteral,
   BooleanLiteral,
   NullLiteral,
-  IdExp
+  IdExp,
+  addAllScoreProps
 } = require("../ast");
 
 const grammar = ohm.grammar(fs.readFileSync("grammar/respecc.ohm"));
@@ -47,6 +48,7 @@ function arrayToNullable(a) {
 
 const astGenerator = grammar.createSemantics().addOperation("ast", {
   Program(_1, greet, _2, sfirst, _3, ss, _4, farewell, _5) {
+    addAllScoreProps();
     return new Program(
       greet.ast().length !== 0,
       [sfirst.ast(), ...ss.ast()],

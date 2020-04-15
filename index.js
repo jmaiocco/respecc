@@ -14,7 +14,7 @@ const yargs = require("yargs");
 const parse = require("./ast/parser");
 const analyze = require("./semantics/analyzer");
 //require('./semantics/optimizer');
-//const generate = require('./backend/javascript-generator');
+const generate = require("./backend/javascript-generator");
 
 // If compiling from a string, return the AST
 function compile(sourceCode, { astOnly, frontEndOnly, shouldOptimize }) {
@@ -29,7 +29,7 @@ function compile(sourceCode, { astOnly, frontEndOnly, shouldOptimize }) {
   if (frontEndOnly) {
     return util.inspect(program, { depth: null });
   }
-  //return generate(program);
+  return generate(program);
 }
 
 // If compiling from a file, write to standard output.
