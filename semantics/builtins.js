@@ -20,35 +20,33 @@ class ObjectType {
 
 const NumberType = new PrimitiveType("Number");
 const StringType = new PrimitiveType("String");
-StringType.locals.set(
-  "length",
-  new VariableDeclaration("length", NumberType, null, null)
-);
 const NullType = new PrimitiveType("Null");
 const BooleanType = new PrimitiveType("Boolean");
 const AnyType = new PrimitiveType(null);
 
-ArrayType.locals = new Map();
-ArrayType.locals.set(
+let lengthFunction = new FunctionDeclaration(
   "length",
-  new VariableDeclaration("length", NumberType, null, null)
-);
-DictionaryType.locals = new Map();
-DictionaryType.locals.set(
-  "length",
-  new VariableDeclaration("length", NumberType, null, null)
+  [],
+  NumberType,
+  null,
+  null
 );
 
+StringType.locals.set("length", lengthFunction);
 const standardFunctions = [
-  new FunctionDeclaration("print", [new Parameter("s", AnyType, null)])
-  //new FunctionDeclaration("sacrifice", [new Parameter("s", null, null)], IntType)
-  //new FunctionDeclaration("getRespecc", [new Parameter("s", null, null)], IntType)
+  new FunctionDeclaration("print", [new Parameter("s", AnyType, null)]),
+  new FunctionDeclaration(
+    "getRespecc",
+    [new Parameter("s", null, null)],
+    NumberType
+  )
 ];
 
 //eslint-disable no-param-reassign
 standardFunctions.forEach(f => {
   f.builtin = true;
 });
+lengthFunction.builtin = true;
 //eslint-enable no-param-reassign
 
 module.exports = {
@@ -58,5 +56,6 @@ module.exports = {
   BooleanType,
   AnyType,
   ObjectType,
-  standardFunctions
+  standardFunctions,
+  lengthFunction
 };

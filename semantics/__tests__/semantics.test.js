@@ -174,6 +174,11 @@ gimme Brexit = Country({"Wales":200,"London":500,"Stratford-Upon-Avon":2})
   `,
   String.raw`
   gimme prefAny:Boolean = !(Yes? 5:["a"])
+  `,
+  String.raw`
+  function voidFunc() : Void {
+    return
+  }
   `
 ];
 

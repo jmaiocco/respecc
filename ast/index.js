@@ -47,14 +47,14 @@ class Assignment {
 }
 
 class ArrayType {
-  constructor(type) {
-    Object.assign(this, { type });
+  constructor(type, locals = new Map()) {
+    Object.assign(this, { type, locals });
   }
 }
 
 class DictionaryType {
-  constructor(type1, type2) {
-    Object.assign(this, { type1, type2 });
+  constructor(type1, type2, locals = new Map()) {
+    Object.assign(this, { type1, type2, locals });
   }
 }
 
@@ -77,14 +77,21 @@ class Constructor {
 }
 
 class FunctionDeclaration {
-  constructor(id, params, type, block, politeFlag) {
-    Object.assign(this, { id, params, type, block, politeFlag });
+  constructor(id, params, type, block, politeFlag, typePoliteness) {
+    Object.assign(this, {
+      id,
+      params,
+      type,
+      block,
+      politeFlag,
+      typePoliteness
+    });
   }
 }
 
 class VariableDeclaration {
-  constructor(id, type, expression, politeFlag) {
-    Object.assign(this, { id, type, expression, politeFlag });
+  constructor(id, type, expression, politeFlag, typePoliteness) {
+    Object.assign(this, { id, type, expression, politeFlag, typePoliteness });
   }
 }
 
@@ -94,8 +101,8 @@ class VariableDeclaration {
   If it's "as a", flag is true.
  */
 class Parameter {
-  constructor(id, type, politeFlag) {
-    Object.assign(this, { id, type, politeFlag });
+  constructor(id, type, politeFlag, typePoliteness) {
+    Object.assign(this, { id, type, politeFlag, typePoliteness });
   }
 }
 
@@ -197,6 +204,50 @@ class BooleanLiteral {
 
 class NullLiteral {}
 
+function addAllScoreProps() {
+  addScoreProps(Program, [5, 5], [-5, -5]);
+  addScoreProps(Return, 5, -5);
+  addScoreProps(Break, 5, -5);
+  addScoreProps(Conditional, 5, -5);
+  addScoreProps(WhileLoop, 5, -5);
+  addScoreProps(ForLoop, 5, -5);
+  addScoreProps(FunctionCall, 5, -5);
+  addScoreProps(Assignment, 5, 5);
+  addScoreProps(ClassDeclaration, 5, -5);
+  addScoreProps(ClassBlock, 5, -5);
+  addScoreProps(Constructor, 5, -5);
+  addScoreProps(FunctionDeclaration, 5, -5, [2, 0, -2]);
+  addScoreProps(VariableDeclaration, 5, -5, [2, 0, -2]);
+  addScoreProps(Parameter, 5, -2, [2, 0, -2]);
+  addScoreProps(Block, 5, -5);
+  addScoreProps(TernaryExp, 0, -5);
+  addScoreProps(LambdaBlock, 0, -5);
+  addScoreProps(LambdaExp, 0, -5);
+  addScoreProps(BinaryExp, 2, -2);
+  //addScoreProps(UnaryPrefix, ); //No Politness
+  //addScoreProps(UnaryPostfix, ); //No Politness
+  //addScoreProps(SubscriptExp, ); //No Politness
+  //addScoreProps(MemberExp, ); //No Politness
+  //addScoreProps(ArrayLiteral, ); //No Politness
+  //addScoreProps(DictionaryLiteral, ); //No Politness
+  //addScoreProps(ArrayType, ); //No Politness
+  //addScoreProps(DictionaryType, ); //No Politness
+  //addScoreProps(DictEntry, ); //No Politness
+  //addScoreProps(NumberLiteral, ); //No Politness
+  //addScoreProps(StringLiteral, ); //No Politness
+  //addScoreProps(BooleanLiteral, ); //No Politness
+  //addScoreProps(NullLiteral, ); //No Politness
+  //addScoreProps(IdExp, ); //No Politness
+}
+
+function addScoreProps(object, politeFactor, rudeFactor, typeFactor) {
+  object.politeFactor = politeFactor;
+  object.rudeFactor = rudeFactor;
+  if (typeFactor) {
+    object.typeFactor = typeFactor;
+  }
+}
+
 module.exports = {
   Program,
   Return,
@@ -230,5 +281,6 @@ module.exports = {
   StringLiteral,
   BooleanLiteral,
   NullLiteral,
-  IdExp
+  IdExp,
+  addAllScoreProps
 };

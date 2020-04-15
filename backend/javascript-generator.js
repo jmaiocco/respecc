@@ -59,8 +59,75 @@ const {
   standardFunctions
 } = require("../semantics/builtins");
 
+let respecc_score = 50;
+let respecc_modes = ["RudeAF", "Rude", "Impolite", "Polite", "Angelic"];
+let respecc_level = 4;
+
+let politeOps = {
+  or: "||",
+  and: "&&",
+  "is less than or equal to": "<=",
+  "is greater than or equal to": ">=",
+  "is less than": "<",
+  "is greater than": ">",
+  "is equal to": "===",
+  "is not equal to": "!==",
+  plus: "+",
+  minus: "-",
+  times: "*",
+  "divided by": "/",
+  "modded with": "%",
+  "raised to the power of": "**"
+};
+
 function makeOp(op) {
-  return { "=": "===", "<>": "!==", "&": "&&", "|": "||" }[op] || op;
+  return politeOps[op] || op;
+}
+
+function setScore(object) {
+  if (object.constructor === Program) {
+    respecc_score += object.isGreeting
+      ? object.constructor.politeFactor[0]
+      : object.constructor.rudeFactor[0];
+    respecc_score += object.isFarewell
+      ? object.constructor.politeFactor[1]
+      : object.constructor.rudeFactor[1];
+  } else if (object.constructor === BinaryExp) {
+    respecc_score += politeOps[object.operator]
+      ? object.constructor.politeFactor
+      : object.constructor.rudeFactor;
+  } else if (
+    object.constructor === VariableDeclaration ||
+    object.constructor === FunctionDeclaration ||
+    object.constructor === Parameter
+  ) {
+    respecc_score +=
+      object.politeFlag === true
+        ? object.constructor.politeFactor
+        : object.constructor.rudeFactor;
+    respecc_score +=
+      object.typePoliteness === true
+        ? object.constructor.typeFactor[0]
+        : object.typePoliteness === false
+        ? object.constructor.typeFactor[1]
+        : object.constructor.typeFactor[2];
+  } else if (
+    object.constructor === TernaryExp ||
+    object.constructor === LambdaBlock ||
+    object.constructor === LambdaExp
+  ) {
+    respecc_score += object.constructor.rudeFactor;
+  } else if (object.constructor.politeFactor && object.constructor.rudeFactor) {
+    respecc_score +=
+      object.politeFlag === true
+        ? object.constructor.politeFactor
+        : object.constructor.rudeFactor;
+  }
+  respecc_score = Math.max(0, Math.min(respecc_score, 100));
+  respecc_level = Math.min(Math.floor(respecc_score / 20), 4);
+  console.log(
+    `${object.constructor.name}: ${respecc_score} is ${respecc_modes[respecc_level]}`
+  );
 }
 
 // javaScriptId(e) takes any Tiger object with an id property, such as a Variable,
@@ -81,10 +148,13 @@ const javaScriptId = (() => {
 // Let's inline the built-in functions, because we can!
 
 const builtin = {
-  /*
+  respecc() {
+    return `${respecc_score}`;
+  },
   print([s]) {
     return `console.log(${s})`;
-  },
+  }
+  /*
   ord([s]) {
     return `(${s}).charCodeAt(0)`;
   },
@@ -113,32 +183,140 @@ module.exports = function(exp) {
   return beautify(exp.gen(), { indent_size: 2 });
 };
 
-// This only exists because Tiger is expression-oriented and JavaScript is not.
-// It's pretty crazy! In the case where the expression is actually a sequence,
-// we have to dig in and stick a 'return' before the last expression. And this
-// as to be recursive, because the last expression of a sequence could actually
-// be a sequence....
-function makeReturn(exp) {
-  /*
-  if (!exp) {
-    return undefined;
-  }
-  if (exp.constructor === LetExp) {
-    const filteredDecs = exp.decs.filter(d => d.constructor !== TypeDec);
-    const all = [...filteredDecs, ...exp.body.slice(0, -1)].map(e => e.gen());
-    all.push(makeReturn(exp.body[exp.body.length - 1]));
-    return all.join(";");
-  }
-  if (exp.constructor === ExpSeq) {
-    const generated = exp.exps.slice(0, -1).map(e => e.gen());
-    generated.push(makeReturn(exp.exps[exp.exps.length - 1]));
-    return generated.join(";");
-  }
-  return `return ${exp.gen()}`;
-  */
-}
-
-Program.prototype.gen = function() {};
+Program.prototype.gen = function() {
+  setScore(this);
+  return this.statements.map(e => e.gen()).join(";");
+};
+VariableDeclaration.prototype.gen = function() {
+  setScore(this);
+  return `let ${javaScriptId(this)} ${
+    this.expression ? `= ${this.expression.gen()}` : ""
+  }`;
+};
+Return.prototype.gen = function() {
+  setScore(this);
+  return `return ${this.returnValue ? this.returnValue.gen() : ""}`;
+};
+Break.prototype.gen = function() {
+  setScore(this);
+  return "break";
+};
+Conditional.prototype.gen = function() {
+  setScore(this);
+  return `if(${this.exp.gen()}) ${this.ifBlock.gen()} ${this.exps
+    .map((exp, i) => {
+      `else if(${exp.gen()}) ${this.blocks[i].gen()}`;
+    })
+    .join("")} ${this.elseBlock ? `else ${this.elseBlock}` : ""}`;
+};
+WhileLoop.prototype.gen = function() {
+  setScore(this);
+  return `while(${this.exp.gen()}) ${this.block.gen()}`;
+};
+ForLoop.prototype.gen = function() {
+  setScore(this);
+  /*TODO*/
+  return;
+};
+FunctionCall.prototype.gen = function() {
+  setScore(this);
+  /*TODO*/
+  return;
+};
+Assignment.prototype.gen = function() {
+  setScore(this);
+  /*TODO*/
+  return;
+};
+ClassDeclaration.prototype.gen = function() {
+  setScore(this);
+  /*TODO*/
+  return;
+};
+ClassBlock.prototype.gen = function() {
+  setScore(this);
+  /*TODO*/
+  return;
+};
+Constructor.prototype.gen = function() {
+  setScore(this);
+  /*TODO*/
+  return;
+};
+FunctionDeclaration.prototype.gen = function() {
+  setScore(this);
+  return `function ${this.id}(${this.params
+    .map(p => p.gen())
+    .join(",")}) ${this.block.gen()}`;
+};
+Parameter.prototype.gen = function() {
+  setScore(this);
+  /*TODO*/
+  return;
+};
+Block.prototype.gen = function() {
+  setScore(this);
+  return `{${this.statements.map(e => e.gen()).join(";")}}`;
+};
+TernaryExp.prototype.gen = function() {
+  setScore(this);
+  /*TODO*/
+  return;
+};
+LambdaBlock.prototype.gen = function() {
+  setScore(this);
+  /*TODO*/
+  return;
+};
+LambdaExp.prototype.gen = function() {
+  setScore(this);
+  /*TODO*/
+  return;
+};
+BinaryExp.prototype.gen = function() {
+  setScore(this);
+  return `(${this.left.gen()} ${makeOp(this.operator)} ${this.right.gen()})`;
+};
+UnaryPrefix.prototype.gen = function() {
+  /*TODO*/
+  return;
+};
+UnaryPostfix.prototype.gen = function() {
+  /*TODO*/
+  return;
+};
+SubscriptExp.prototype.gen = function() {
+  /*TODO*/
+  return;
+};
+MemberExp.prototype.gen = function() {
+  /*TODO*/
+  return;
+};
+ArrayLiteral.prototype.gen = function() {
+  return `[${[...this.exps].map(e => e.gen())}]`;
+};
+DictionaryLiteral.prototype.gen = function() {
+  return `{${this.keyValuePairs.map(e => e.gen()).join(",")}}`; //Allows multiple of same named prop?
+};
+DictEntry.prototype.gen = function() {
+  return `${this.key.gen()} : ${this.value.gen()}`;
+};
+NumberLiteral.prototype.gen = function() {
+  return this.value;
+};
+StringLiteral.prototype.gen = function() {
+  return `"${this.value}"`;
+};
+BooleanLiteral.prototype.gen = function() {
+  return this.value;
+};
+NullLiteral.prototype.gen = function() {
+  return "null";
+};
+IdExp.prototype.gen = function() {
+  return javaScriptId(this.ref);
+};
 
 /*
 ArrayExp.prototype.gen = function () {
@@ -149,17 +327,6 @@ Assignment.prototype.gen = function () {
   return `${this.target.gen()} = ${this.source.gen()}`;
 };
 
-BinaryExp.prototype.gen = function () {
-  return `(${this.left.gen()} ${makeOp(this.op)} ${this.right.gen()})`;
-};
-
-Binding.prototype.gen = function () {
-  return `${this.id} : ${this.value.gen()}`;
-};
-
-Break.prototype.gen = function () {
-  return 'break';
-};
 
 Call.prototype.gen = function () {
   const args = this.args.map(a => a.gen());
@@ -191,10 +358,6 @@ Func.prototype.gen = function () {
   return `function ${name} (${params.join(',')}) {${body}}`;
 };
 
-IdExp.prototype.gen = function () {
-  return javaScriptId(this.ref);
-};
-
 IfExp.prototype.gen = function () {
   const thenPart = this.consequent.gen();
   const elsePart = this.alternate ? this.alternate.gen() : 'null';
@@ -210,10 +373,6 @@ LetExp.prototype.gen = function () {
   return [...filteredDecs, ...this.body].map(e => e.gen()).join(';');
 };
 
-Literal.prototype.gen = function () {
-  return this.type === StringType ? `"${this.value}"` : this.value;
-};
-
 MemberExp.prototype.gen = function () {
   return `${this.record.gen()}.${this.id}`;
 };
@@ -224,18 +383,6 @@ SubscriptedExp.prototype.gen = function () {
 
 NegationExp.prototype.gen = function () {
   return `(- (${this.operand.gen()}))`;
-};
-
-Nil.prototype.gen = function () {
-  return 'null';
-};
-
-RecordExp.prototype.gen = function () {
-  return `{${this.bindings.map(b => b.gen()).join(',')}}`;
-};
-
-Variable.prototype.gen = function () {
-  return `let ${javaScriptId(this)} = ${this.init.gen()}`;
 };
 
 WhileExp.prototype.gen = function () {
