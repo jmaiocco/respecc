@@ -167,7 +167,10 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
       params.ast(),
       arrayToNullable(type.ast()),
       block.ast(),
-      true
+      true,
+      arrayToNullable(_colon.ast()) === null
+        ? null
+        : arrayToNullable(_colon.ast()) !== ":"
     );
   },
   FuncDec_impolite(_function, id, params, _colon, type, block) {
@@ -176,7 +179,10 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
       params.ast(),
       arrayToNullable(type.ast()),
       block.ast(),
-      false
+      false,
+      arrayToNullable(_colon.ast()) === null
+        ? null
+        : arrayToNullable(_colon.ast()) !== ":"
     );
   },
   VarDec_polite(_1, id, _2, type, _3, exp, _4) {
@@ -184,7 +190,10 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
       id.ast(),
       arrayToNullable(type.ast()),
       arrayToNullable(exp.ast()),
-      true
+      true,
+      arrayToNullable(_2.ast()) === null
+        ? null
+        : arrayToNullable(_2.ast()) !== ":"
     );
   },
   VarDec_impolite(_1, id, _2, type, _3, exp) {
@@ -192,7 +201,10 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
       id.ast(),
       arrayToNullable(type.ast()),
       arrayToNullable(exp.ast()),
-      false
+      false,
+      arrayToNullable(_2.ast()) === null
+        ? null
+        : arrayToNullable(_2.ast()) !== ":"
     );
   },
   Params(_open, params, _close) {
@@ -202,6 +214,7 @@ const astGenerator = grammar.createSemantics().addOperation("ast", {
     return new Parameter(
       id.ast(),
       arrayToNullable(type.ast()),
+      true,
       arrayToNullable(sep.ast()) === null
         ? null
         : arrayToNullable(sep.ast()) !== ":"

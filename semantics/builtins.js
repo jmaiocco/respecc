@@ -46,6 +46,7 @@ const standardFunctions = [
 standardFunctions.forEach(f => {
   f.builtin = true;
 });
+lengthFunction.builtin = true;
 //eslint-enable no-param-reassign
 
 module.exports = {

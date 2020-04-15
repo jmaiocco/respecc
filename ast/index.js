@@ -77,14 +77,21 @@ class Constructor {
 }
 
 class FunctionDeclaration {
-  constructor(id, params, type, block, politeFlag) {
-    Object.assign(this, { id, params, type, block, politeFlag });
+  constructor(id, params, type, block, politeFlag, typePoliteness) {
+    Object.assign(this, {
+      id,
+      params,
+      type,
+      block,
+      politeFlag,
+      typePoliteness
+    });
   }
 }
 
 class VariableDeclaration {
-  constructor(id, type, expression, politeFlag) {
-    Object.assign(this, { id, type, expression, politeFlag });
+  constructor(id, type, expression, politeFlag, typePoliteness) {
+    Object.assign(this, { id, type, expression, politeFlag, typePoliteness });
   }
 }
 
@@ -94,8 +101,8 @@ class VariableDeclaration {
   If it's "as a", flag is true.
  */
 class Parameter {
-  constructor(id, type, politeFlag) {
-    Object.assign(this, { id, type, politeFlag });
+  constructor(id, type, politeFlag, typePoliteness) {
+    Object.assign(this, { id, type, politeFlag, typePoliteness });
   }
 }
 
@@ -211,9 +218,9 @@ function addAllScoreProps() {
   addScoreProps(ClassDeclaration, 5, -5);
   addScoreProps(ClassBlock, 5, -5);
   addScoreProps(Constructor, 5, -5);
-  addScoreProps(FunctionDeclaration, 5, -5);
-  addScoreProps(VariableDeclaration, 5, -5);
-  addScoreProps(Parameter, 5, -5);
+  addScoreProps(FunctionDeclaration, 5, -5, [2, 0, -2]);
+  addScoreProps(VariableDeclaration, 5, -5, [2, 0, -2]);
+  addScoreProps(Parameter, 5, -2, [2, 0, -2]);
   addScoreProps(Block, 5, -5);
   addScoreProps(TernaryExp, 0, -5); //Only 1 (Use Based)
   addScoreProps(LambdaBlock, 0, -5); //Only 1 (Use Based)
@@ -233,9 +240,12 @@ function addAllScoreProps() {
   //addScoreProps(IdExp, ); //No Politness
 }
 
-function addScoreProps(object, politeFactor, rudeFactor) {
+function addScoreProps(object, politeFactor, rudeFactor, typeFactor) {
   object.politeFactor = politeFactor;
   object.rudeFactor = rudeFactor;
+  if (typeFactor) {
+    object.typeFactor = typeFactor;
+  }
 }
 
 module.exports = {
