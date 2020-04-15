@@ -62,6 +62,7 @@ const {
 let respecc_score = 50;
 let respecc_modes = ["RudeAF", "Rude", "Impolite", "Polite", "Angelic"];
 let respecc_level = 4;
+let toggleRandom = null;
 
 let politeOps = {
   or: "||",
@@ -130,7 +131,7 @@ function setScore(object) {
   );
 }
 
-// javaScriptId(e) takes any Tiger object with an id property, such as a Variable,
+// javaScriptId(e) takes any object with an id property, such as a Variable,
 // Param, or Func, and produces a JavaScript name by appending a unique identifying
 // suffix, such as '_1' or '_503'. It uses a cache so it can return the same exact
 // string each time it is called with a particular entity.
@@ -153,6 +154,9 @@ const builtin = {
   },
   print([s]) {
     return `console.log(${s})`;
+  },
+  length() {
+    return `length()`;
   }
   /*
   ord([s]) {
@@ -183,7 +187,8 @@ module.exports = function(exp) {
   return beautify(exp.gen(), { indent_size: 2 });
 };
 
-Program.prototype.gen = function() {
+Program.prototype.gen = function(randomize = null) {
+  toggleRandom = randomize;
   setScore(this);
   return this.statements.map(e => e.gen()).join(";");
 };
@@ -216,17 +221,26 @@ WhileLoop.prototype.gen = function() {
 ForLoop.prototype.gen = function() {
   setScore(this);
   /*TODO*/
-  return;
+  return `for(${this.dec.gen()} ;${this.exp.gen()} ;${this.assignment.gen()}) ${this.block.gen()}`;
 };
 FunctionCall.prototype.gen = function() {
   setScore(this);
   /*TODO*/
+  /*
+  const args = this.args.map(a => a.gen());
+  if (this.callee.builtin) {
+    return builtin[this.callee.id](args);
+  }
+  return `${javaScriptId(this.callee)}(${this.args
+    .map(a => a.gen())
+    .join(",")})`;
+    */
   return;
 };
 Assignment.prototype.gen = function() {
   setScore(this);
   /*TODO*/
-  return;
+  return `${this.variable.gen()} = ${this.exp.gen()}`;
 };
 ClassDeclaration.prototype.gen = function() {
   setScore(this);
@@ -245,14 +259,14 @@ Constructor.prototype.gen = function() {
 };
 FunctionDeclaration.prototype.gen = function() {
   setScore(this);
-  return `function ${this.id}(${this.params
+  return `function ${javaScriptId(this)}(${this.params
     .map(p => p.gen())
     .join(",")}) ${this.block.gen()}`;
 };
 Parameter.prototype.gen = function() {
   setScore(this);
   /*TODO*/
-  return;
+  return javaScriptId(this);
 };
 Block.prototype.gen = function() {
   setScore(this);
@@ -279,11 +293,11 @@ BinaryExp.prototype.gen = function() {
 };
 UnaryPrefix.prototype.gen = function() {
   /*TODO*/
-  return;
+  return `${makeOp(this.operator)} ${this.right.gen()}`;
 };
 UnaryPostfix.prototype.gen = function() {
   /*TODO*/
-  return;
+  return `${this.left.gen()} ${makeOp(this.operator)}`;
 };
 SubscriptExp.prototype.gen = function() {
   /*TODO*/
@@ -303,6 +317,7 @@ DictEntry.prototype.gen = function() {
   return `${this.key.gen()} : ${this.value.gen()}`;
 };
 NumberLiteral.prototype.gen = function() {
+  //Check what respecc level
   return this.value;
 };
 StringLiteral.prototype.gen = function() {
