@@ -13,7 +13,8 @@ const {
   NullType,
   BooleanType,
   AnyType,
-  standardFunctions
+  standardFunctions,
+  lengthFunction
 } = require("./builtins");
 require("./analyzer");
 
@@ -102,10 +103,17 @@ class Context {
   // context and searching "outward" through enclosing contexts if necessary.
   lookup(id) {
     if (id != null && id.constructor === ArrayType) {
-      return new ArrayType(this.lookup(id.type));
+      return new ArrayType(
+        this.lookup(id.type),
+        id.locals.set("length", lengthFunction)
+      );
     }
     if (id != null && id.constructor === DictionaryType) {
-      return new DictionaryType(this.lookup(id.type1), this.lookup(id.type2));
+      return new DictionaryType(
+        this.lookup(id.type1),
+        this.lookup(id.type2),
+        id.locals.set("length", lengthFunction)
+      );
     }
     for (let context = this; context !== null; context = context.parent) {
       if (context.locals.has(id)) {

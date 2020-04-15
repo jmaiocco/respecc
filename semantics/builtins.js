@@ -20,14 +20,19 @@ class ObjectType {
 
 const NumberType = new PrimitiveType("Number");
 const StringType = new PrimitiveType("String");
-StringType.locals.set(
-  "length",
-  new FunctionDeclaration("length", [], NumberType, null, null)
-);
 const NullType = new PrimitiveType("Null");
 const BooleanType = new PrimitiveType("Boolean");
 const AnyType = new PrimitiveType(null);
 
+let lengthFunction = new FunctionDeclaration(
+  "length",
+  [],
+  NumberType,
+  null,
+  null
+);
+
+StringType.locals.set("length", lengthFunction);
 const standardFunctions = [
   new FunctionDeclaration("print", [new Parameter("s", AnyType, null)]),
   new FunctionDeclaration(
@@ -50,5 +55,6 @@ module.exports = {
   BooleanType,
   AnyType,
   ObjectType,
-  standardFunctions
+  standardFunctions,
+  lengthFunction
 };
