@@ -187,80 +187,90 @@ Program.prototype.gen = function() {
   setScore(this);
   return this.statements.map(e => e.gen()).join(";");
 };
-
 VariableDeclaration.prototype.gen = function() {
   setScore(this);
-  return `let ${javaScriptId(this)} = ${this.expression.gen()}`;
+  return `let ${javaScriptId(this)} ${
+    this.expression ? `= ${this.expression.gen()}` : ""
+  }`;
 };
-
 Return.prototype.gen = function() {
   setScore(this);
-  return;
+  return `return ${this.returnValue ? this.returnValue.gen() : ""}`;
 };
 Break.prototype.gen = function() {
   setScore(this);
-  return;
+  return "break";
 };
 Conditional.prototype.gen = function() {
   setScore(this);
-  return;
+  return `if(${this.exp.gen()}) ${this.ifBlock.gen()} ${this.exps
+    .map((exp, i) => {
+      `else if(${exp.gen()}) ${this.blocks[i].gen()}`;
+    })
+    .join("")} ${this.elseBlock ? `else ${this.elseBlock}` : ""}`;
 };
 WhileLoop.prototype.gen = function() {
   setScore(this);
-  return;
+  return `while(${this.exp.gen()}) ${this.block.gen()}`;
 };
 ForLoop.prototype.gen = function() {
   setScore(this);
+  /*TODO*/
   return;
 };
 FunctionCall.prototype.gen = function() {
   setScore(this);
+  /*TODO*/
   return;
 };
 Assignment.prototype.gen = function() {
   setScore(this);
-  return;
-};
-ArrayType.prototype.gen = function() {
-  return;
-};
-DictionaryType.prototype.gen = function() {
+  /*TODO*/
   return;
 };
 ClassDeclaration.prototype.gen = function() {
   setScore(this);
+  /*TODO*/
   return;
 };
 ClassBlock.prototype.gen = function() {
   setScore(this);
+  /*TODO*/
   return;
 };
 Constructor.prototype.gen = function() {
   setScore(this);
+  /*TODO*/
   return;
 };
 FunctionDeclaration.prototype.gen = function() {
   setScore(this);
-  return;
+  return `function ${this.id}(${this.params
+    .map(p => p.gen())
+    .join(",")}) ${this.block.gen()}`;
 };
 Parameter.prototype.gen = function() {
   setScore(this);
+  /*TODO*/
   return;
 };
 Block.prototype.gen = function() {
   setScore(this);
-  return;
+  return `{${this.statements.map(e => e.gen()).join(";")}}`;
 };
 TernaryExp.prototype.gen = function() {
   setScore(this);
+  /*TODO*/
   return;
 };
 LambdaBlock.prototype.gen = function() {
   setScore(this);
+  /*TODO*/
   return;
 };
 LambdaExp.prototype.gen = function() {
   setScore(this);
+  /*TODO*/
   return;
 };
 BinaryExp.prototype.gen = function() {
@@ -268,41 +278,44 @@ BinaryExp.prototype.gen = function() {
   return `(${this.left.gen()} ${makeOp(this.operator)} ${this.right.gen()})`;
 };
 UnaryPrefix.prototype.gen = function() {
+  /*TODO*/
   return;
 };
 UnaryPostfix.prototype.gen = function() {
+  /*TODO*/
   return;
 };
 SubscriptExp.prototype.gen = function() {
+  /*TODO*/
   return;
 };
 MemberExp.prototype.gen = function() {
+  /*TODO*/
   return;
 };
 ArrayLiteral.prototype.gen = function() {
-  return;
+  return `[${[...this.exps].map(e => e.gen())}]`;
 };
 DictionaryLiteral.prototype.gen = function() {
-  return;
+  return `{${this.keyValuePairs.map(e => e.gen()).join(",")}}`; //Allows multiple of same named prop?
 };
 DictEntry.prototype.gen = function() {
-  return;
+  return `${this.key.gen()} : ${this.value.gen()}`;
 };
 NumberLiteral.prototype.gen = function() {
   return this.value;
 };
-
 StringLiteral.prototype.gen = function() {
-  return;
+  return `"${this.value}"`;
 };
 BooleanLiteral.prototype.gen = function() {
-  return;
+  return this.value;
 };
 NullLiteral.prototype.gen = function() {
-  return;
+  return "null";
 };
 IdExp.prototype.gen = function() {
-  return;
+  return javaScriptId(this.ref);
 };
 
 /*
@@ -314,17 +327,6 @@ Assignment.prototype.gen = function () {
   return `${this.target.gen()} = ${this.source.gen()}`;
 };
 
-BinaryExp.prototype.gen = function () {
-  return `(${this.left.gen()} ${makeOp(this.op)} ${this.right.gen()})`;
-};
-
-Binding.prototype.gen = function () {
-  return `${this.id} : ${this.value.gen()}`;
-};
-
-Break.prototype.gen = function () {
-  return 'break';
-};
 
 Call.prototype.gen = function () {
   const args = this.args.map(a => a.gen());
@@ -356,10 +358,6 @@ Func.prototype.gen = function () {
   return `function ${name} (${params.join(',')}) {${body}}`;
 };
 
-IdExp.prototype.gen = function () {
-  return javaScriptId(this.ref);
-};
-
 IfExp.prototype.gen = function () {
   const thenPart = this.consequent.gen();
   const elsePart = this.alternate ? this.alternate.gen() : 'null';
@@ -374,8 +372,7 @@ LetExp.prototype.gen = function () {
   const filteredDecs = this.decs.filter(d => d.constructor !== TypeDec);
   return [...filteredDecs, ...this.body].map(e => e.gen()).join(';');
 };
-*/
-/*
+
 MemberExp.prototype.gen = function () {
   return `${this.record.gen()}.${this.id}`;
 };
@@ -388,15 +385,6 @@ NegationExp.prototype.gen = function () {
   return `(- (${this.operand.gen()}))`;
 };
 
-Nil.prototype.gen = function () {
-  return 'null';
-};
-
-RecordExp.prototype.gen = function () {
-  return `{${this.bindings.map(b => b.gen()).join(',')}}`;
-};
-*/
-/*
 WhileExp.prototype.gen = function () {
   return `while (${this.test.gen()}) { ${this.body.gen()} }`;
 };
