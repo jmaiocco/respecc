@@ -20,13 +20,6 @@ respecc {
                | "for"  "(" (VarDec)? ";" Exp?
                  ";" Assignment? ")" Block                       -- for_impolite
                | "Excuse me, while " Exp "," Block               -- while_polite
-/*
-  CalleeVar    =   CalleeVar id "[" Exp "]" "."               -- subscript
-    		       |   CalleeVar  id Args "."                     -- func
-               |   CalleeVar  id "."					                -- select
-               |   id "." 								                    -- id
-  FuncCallee = CalleeVar? id
-*/
   FuncCallStmt = Var Args                                         -- call_impolite
                | "Do me a favor and run " Var
                  ("with" Args)? "."                              -- call_polite

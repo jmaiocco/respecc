@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/jmaiocco/respecc#readme",
   "dependencies": {
+    "js-beautify": "^1.11.0",
     "ohm": "^0.10.4",
     "ohm-js": "^0.14.0",
     "yargs": "^15.1.0"

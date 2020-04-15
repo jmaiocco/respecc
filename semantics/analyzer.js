@@ -77,7 +77,6 @@ module.exports = function(exp) {
 };
 
 Program.prototype.analyze = function(context) {
-  //So classes and functions seen everywhere within their block()?)
   this.statements
     .filter(d => d.constructor === ClassDeclaration)
     .forEach(d => context.add(new ObjectType(d.id)));
@@ -91,7 +90,6 @@ Program.prototype.analyze = function(context) {
     .filter(d => d.constructor === FunctionDeclaration)
     .forEach(d => context.add(d));
   this.statements.forEach(d => d.analyze(context));
-  //check.noRecursiveTypeCyclesWithoutRecordTypes(this.decs);
 };
 
 VariableDeclaration.prototype.analyze = function(context) {
@@ -112,7 +110,6 @@ Assignment.prototype.analyze = function(context) {
   this.exp.analyze(context);
   this.variable.analyze(context);
   check.isAssignableTo(this.exp, this.variable.type);
-  //check.isNotReadOnly(this.variable);
 };
 
 Conditional.prototype.analyze = function(context) {
@@ -153,16 +150,13 @@ ForLoop.prototype.analyze = function(context) {
 };
 
 FunctionCall.prototype.analyze = function(context) {
-  /*Should callee be a member of function call (for decorated tree)?*/
   if (this.id.constructor === IdExp) {
     this.id.analyze(context);
     this.callee = this.id.ref;
   } else if (this.id.constructor === MemberExp) {
     this.id.analyze(context);
     let objectType = this.id.v.type;
-    this.callee = objectType.locals.get(this.id.field); /*TODO*/
-  } else {
-    //this.callee = context.lookup(this.id);
+    this.callee = objectType.locals.get(this.id.field);
   }
 
   check.isCallable(this.callee, "Attempt to call a non-function");
@@ -220,7 +214,6 @@ BinaryExp.prototype.analyze = function(context) {
     multOperators.has(this.operator) ||
     expoOperators.has(this.operator)
   ) {
-    //Should this guarentee that the return type is the type of the first operand?
     this.type = this.left.type;
   } else {
     this.type = BooleanType;
@@ -238,7 +231,6 @@ UnaryPrefix.prototype.analyze = function(context) {
 };
 
 UnaryPostfix.prototype.analyze = function(context) {
-  //Only Allows Integer Incrementation
   this.left.analyze(context);
   check.isNumber(this.left);
   this.type = this.left.type;
@@ -249,8 +241,6 @@ Break.prototype.analyze = function(context) {
 };
 
 Return.prototype.analyze = function(context) {
-  //
-  //Assign this AST a type? (Connection with function node(?))
   check.inFunction(context, "return");
   check.functionConstructorHasNoReturnValue(
     context.currentFunction,
@@ -265,7 +255,6 @@ Return.prototype.analyze = function(context) {
         context.currentFunction.type,
         "Type mismatch in function return"
       );
-      //Must do control flow analysis to ensure this return occurs
       context.currentFunction.typeResolved = true;
     }
   }
@@ -286,15 +275,13 @@ FunctionDeclaration.prototype.analyze = function() {
   this.block.analyze(this.bodyContext);
   //Control Flow Analysis
   check.functiontypeResolved(this);
-  //If signature typed, make sure there is a return?
   delete this.bodyContext; // This was only temporary, delete to keep output clean.
 };
 
 Block.prototype.analyze = function(context) {
-  //Disallow Class Declarations and Function Declartions in BLocks
   this.statements.forEach(d => {
     check.isNotClassDeclaration(d);
-    check.isNotFunctionDeclaration(d); //Do we want function declaration in functions?
+    check.isNotFunctionDeclaration(d);
     d.analyze(context);
   });
 };
@@ -342,7 +329,7 @@ ClassBlock.prototype.analyze = function(context) {
 };
 
 Constructor.prototype.analyzeSignature = function(context) {
-  check.inClass(context, this.id); //Constructor exists in the scope outside the class
+  check.inClass(context, this.id);
   check.constructorMatchesClass(this, context.currentClass);
 
   let objectType = context.lookup(this.id);
@@ -351,8 +338,6 @@ Constructor.prototype.analyzeSignature = function(context) {
   this.params.forEach(p => p.analyze(this.bodyContext));
 
   objectType.callingParams = [...objectType.callingParams, this.params];
-
-  //this.this.type = objectType;
 };
 
 Constructor.prototype.analyze = function(context) {
@@ -362,7 +347,6 @@ Constructor.prototype.analyze = function(context) {
 
 MemberExp.prototype.analyze = function(context) {
   this.v.analyze(context);
-  //check.isClass(this.v.type);
   check.memberExists(this.v, this.field);
   this.member = this.v.type.locals.get(this.field);
   this.type = this.member.type;
@@ -401,7 +385,6 @@ BooleanLiteral.prototype.analyze = function(context) {
   this.type = BooleanType;
 };
 
-///* Types only need to be same is static typing demands in (isAssignable)
 ArrayLiteral.prototype.analyze = function(context) {
   this.exps.map(e => e.analyze(context));
   this.type = new ArrayType(check.propertyOfAll(this.exps, "type"));

@@ -21,7 +21,7 @@ Please declare cc as Dog("cece")
 print(cc.getName())
 
 gimme s : String = "Hi"
-gimme n : Number = s.length
+gimme n : Number = s.length()
 
 Bye Bye!
 

@@ -4,7 +4,12 @@ const {
   ArrayType,
   DictionaryType,
   FunctionDeclaration,
-  ClassDeclaration
+  VariableDeclaration,
+  IdExp,
+  FunctionCall,
+  ClassDeclaration,
+  LambdaBlock,
+  LambdaExp
 } = require("../ast");
 const {
   ObjectType,
@@ -36,7 +41,6 @@ module.exports = {
     );
   },
 
-  // Can we assign expression to a variable/param/field of type type?
   isAssignableTo(expression, type, message, returnBool) {
     if (type === AnyType || expression.type === AnyType) {
       return true;
@@ -60,7 +64,7 @@ module.exports = {
       doCheck(expression.type === type, errorMessage);
     }
   },
-  // Is the type of this expression an array or dictionary type? (For subscript)
+
   isArrayOrDictionary(expression) {
     doCheck(
       expression.type.constructor === ArrayType ||
@@ -104,20 +108,6 @@ module.exports = {
     );
   },
 
-  isClass(value) {
-    doCheck(value.constructor === ObjectType, "Not an object");
-  },
-
-  // Is the type of this expression a number or string type? (For relational operators)
-  isNumberOrString(expression) {
-    doCheck(
-      expression.type === NumberType ||
-        expression.type === StringType ||
-        expression.type === AnyType,
-      "Not an number or string"
-    );
-  }, //TODO: Not used in analyzer
-
   inLoop(context, keyword) {
     doCheck(context.inLoop, `${keyword} can only be used in a loop`);
   },
@@ -150,7 +140,6 @@ module.exports = {
     );
   },
 
-  // Same number of args and params; all types compatible
   legalArguments(args, params) {
     doCheck(
       args.length === params.length,
@@ -184,16 +173,16 @@ module.exports = {
   },
 
   objectNoMatchingConstructors(objectType) {
-    let params = objectType.callingParams;
-    for (let i = 0; i < params.length; i++) {
-      for (let j = i + 1; j < params.length; j++) {
-        if (params[i].length === params[j].length) {
+    let paramsList = objectType.callingParams;
+    for (let i = 0; i < paramsList.length; i++) {
+      for (let j = i + 1; j < paramsList.length; j++) {
+        if (paramsList[i].length === paramsList[j].length) {
           let paramsMatch = true;
-          params[i].forEach((param, k) => {
+          paramsList[i].forEach((param, k) => {
             if (
-              param.type !== params[j][k].type &&
+              param.type !== paramsList[j][k].type &&
               param.type !== AnyType &&
-              params[j][k].type !== AnyType
+              paramsList[j][k].type !== AnyType
             ) {
               paramsMatch = false;
             }

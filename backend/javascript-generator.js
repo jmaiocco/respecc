@@ -13,18 +13,74 @@
  *   generate(tigerExpression);
  */
 
-/*
-
-const beautify = require('js-beautify');
+const beautify = require("js-beautify");
 const {
-  ArrayExp, Assignment, BinaryExp, Binding, Break, Call, ExpSeq, ForExp, Func,
-  IdExp, IfExp, LetExp, Literal, MemberExp, NegationExp, Nil, RecordExp,
-  SubscriptedExp, TypeDec, Variable, WhileExp,
-} = require('../ast');
-const { StringType } = require('../semantics/builtins');
+  Program,
+  Return,
+  Break,
+  Conditional,
+  WhileLoop,
+  ForLoop,
+  FunctionCall,
+  Assignment,
+  ArrayType,
+  DictionaryType,
+  ClassDeclaration,
+  ClassBlock,
+  Constructor,
+  FunctionDeclaration,
+  VariableDeclaration,
+  Parameter,
+  Block,
+  TernaryExp,
+  LambdaBlock,
+  LambdaExp,
+  BinaryExp,
+  UnaryPrefix,
+  UnaryPostfix,
+  SubscriptExp,
+  MemberExp,
+  ArrayLiteral,
+  DictionaryLiteral,
+  DictEntry,
+  NumberLiteral,
+  StringLiteral,
+  BooleanLiteral,
+  NullLiteral,
+  IdExp
+} = require("../ast");
+const {
+  NumberType,
+  StringType,
+  NullType,
+  BooleanType,
+  AnyType,
+  ObjectType,
+  standardFunctions
+} = require("../semantics/builtins");
+
+let respecc_score = 50;
+
+function setScore(object) {
+  if (object.constructor === Program) {
+    return;
+  } else if (object.constructor === BinaryExp) {
+    return;
+  } else if (
+    object.constructor === TernaryExp ||
+    object.constructor === LambdaBlock ||
+    object.constructor === LambdaExp
+  ) {
+    return;
+  } else if (object.constructor.politeFactor && object.constructor.rudeFactor) {
+    respecc_score += object.politeFlag
+      ? object.constructor.politeFactor
+      : object.constructor.rudeFactor;
+  }
+}
 
 function makeOp(op) {
-  return { '=': '===', '<>': '!==', '&': '&&', '|': '||' }[op] || op;
+  return { "=": "===", "<>": "!==", "&": "&&", "|": "||" }[op] || op;
 }
 
 // javaScriptId(e) takes any Tiger object with an id property, such as a Variable,
@@ -34,8 +90,8 @@ function makeOp(op) {
 const javaScriptId = (() => {
   let lastId = 0;
   const map = new Map();
-  return (v) => {
-    if (!(map.has(v))) {
+  return v => {
+    if (!map.has(v)) {
       map.set(v, ++lastId); // eslint-disable-line no-plusplus
     }
     return `${v.id}_${map.get(v)}`;
@@ -43,18 +99,40 @@ const javaScriptId = (() => {
 })();
 
 // Let's inline the built-in functions, because we can!
+
 const builtin = {
-  print([s]) { return `console.log(${s})`; },
-  ord([s]) { return `(${s}).charCodeAt(0)`; },
-  chr([i]) { return `String.fromCharCode(${i})`; },
-  size([s]) { return `${s}.length`; },
-  substring([s, i, n]) { return `${s}.substr(${i}, ${n})`; },
-  concat([s, t]) { return `${s}.concat(${t})`; },
-  not(i) { return `(!(${i}))`; },
-  exit(code) { return `process.exit(${code})`; },
+  respecc() {
+    return `${respecc_score}`;
+  },
+  print([s]) {
+    return `console.log(${s})`;
+  }
+  /*
+  ord([s]) {
+    return `(${s}).charCodeAt(0)`;
+  },
+  chr([i]) {
+    return `String.fromCharCode(${i})`;
+  },
+  size([s]) {
+    return `${s}.length`;
+  },
+  substring([s, i, n]) {
+    return `${s}.substr(${i}, ${n})`;
+  },
+  concat([s, t]) {
+    return `${s}.concat(${t})`;
+  },
+  not(i) {
+    return `(!(${i}))`;
+  },
+  exit(code) {
+    return `process.exit(${code})`;
+  }
+  */
 };
 
-module.exports = function (exp) {
+module.exports = function(exp) {
   return beautify(exp.gen(), { indent_size: 2 });
 };
 
@@ -64,6 +142,7 @@ module.exports = function (exp) {
 // as to be recursive, because the last expression of a sequence could actually
 // be a sequence....
 function makeReturn(exp) {
+  /*
   if (!exp) {
     return undefined;
   }
@@ -71,16 +150,23 @@ function makeReturn(exp) {
     const filteredDecs = exp.decs.filter(d => d.constructor !== TypeDec);
     const all = [...filteredDecs, ...exp.body.slice(0, -1)].map(e => e.gen());
     all.push(makeReturn(exp.body[exp.body.length - 1]));
-    return all.join(';');
+    return all.join(";");
   }
   if (exp.constructor === ExpSeq) {
     const generated = exp.exps.slice(0, -1).map(e => e.gen());
     generated.push(makeReturn(exp.exps[exp.exps.length - 1]));
-    return generated.join(';');
+    return generated.join(";");
   }
   return `return ${exp.gen()}`;
+  */
 }
 
+Program.prototype.gen = function() {
+  //return this.statements.map(e => e.gen()).join(";");
+  //return `${this}`;
+};
+
+/*
 ArrayExp.prototype.gen = function () {
   return `Array(${this.size.gen()}).fill(${this.fill.gen()})`;
 };
@@ -149,11 +235,11 @@ LetExp.prototype.gen = function () {
   const filteredDecs = this.decs.filter(d => d.constructor !== TypeDec);
   return [...filteredDecs, ...this.body].map(e => e.gen()).join(';');
 };
-
-Literal.prototype.gen = function () {
-  return this.type === StringType ? `"${this.value}"` : this.value;
+*/
+NumberLiteral.prototype.gen = function() {
+  return this.value;
 };
-
+/*
 MemberExp.prototype.gen = function () {
   return `${this.record.gen()}.${this.id}`;
 };
@@ -173,11 +259,11 @@ Nil.prototype.gen = function () {
 RecordExp.prototype.gen = function () {
   return `{${this.bindings.map(b => b.gen()).join(',')}}`;
 };
-
-Variable.prototype.gen = function () {
-  return `let ${javaScriptId(this)} = ${this.init.gen()}`;
+*/
+VariableDeclaration.prototype.gen = function() {
+  return `let ${javaScriptId(this)} = ${this.expression.gen()}`;
 };
-
+/*
 WhileExp.prototype.gen = function () {
   return `while (${this.test.gen()}) { ${this.body.gen()} }`;
 };

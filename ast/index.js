@@ -48,13 +48,27 @@ class Assignment {
 
 class ArrayType {
   constructor(type) {
-    Object.assign(this, { type });
+    /*
+    let locals = new Map();
+    locals.set(
+      "length",
+      new FunctionDeclaration("length", [], NumberType, null, null)
+    );
+    */
+    Object.assign(this, { type /*locals*/ });
   }
 }
 
 class DictionaryType {
   constructor(type1, type2) {
-    Object.assign(this, { type1, type2 });
+    /*
+    let locals = new Map();
+    locals.set(
+      "length",
+      new FunctionDeclaration("length", [], NumberType, null, null)
+    );
+    */
+    Object.assign(this, { type1, type2 /*locals*/ });
   }
 }
 
@@ -197,6 +211,47 @@ class BooleanLiteral {
 
 class NullLiteral {}
 
+function addAllScoreProps() {
+  addScoreProps(Program, [5, 5], [-5, -5]); //Four isGreeting and isFarewell
+  addScoreProps(Return, 5, -5);
+  addScoreProps(Break, 5, -5);
+  addScoreProps(Conditional, 5, -5);
+  addScoreProps(WhileLoop, 5, -5);
+  addScoreProps(ForLoop, 5, -5);
+  addScoreProps(FunctionCall, 5, -5);
+  addScoreProps(Assignment, 5, 5);
+  //addScoreProps(ArrayType, ); //No Politness
+  //addScoreProps(DictionaryType, ); //No Politness
+  addScoreProps(ClassDeclaration, 5, -5);
+  addScoreProps(ClassBlock, 5, -5);
+  addScoreProps(Constructor, 5, -5);
+  addScoreProps(FunctionDeclaration, 5, -5);
+  addScoreProps(VariableDeclaration, 5, -5);
+  addScoreProps(Parameter, 5, -5);
+  addScoreProps(Block, 5, -5);
+  addScoreProps(TernaryExp, 0, -5); //Only 1 (Use Based)
+  addScoreProps(LambdaBlock, 0, -5); //Only 1 (Use Based)
+  addScoreProps(LambdaExp, 0, -5); //Only 1 (Use Based)
+  addScoreProps(BinaryExp, 2, -2); //Based on Operator
+  //addScoreProps(UnaryPrefix, ); //No Politness
+  //addScoreProps(UnaryPostfix, ); //No Politness
+  //addScoreProps(SubscriptExp, ); //No Politness
+  //addScoreProps(MemberExp, ); //No Politness
+  //addScoreProps(ArrayLiteral, ); //No Politness
+  //addScoreProps(DictionaryLiteral, ); //No Politness
+  //addScoreProps(DictEntry, ); //No Politness
+  //addScoreProps(NumberLiteral, ); //No Politness
+  //addScoreProps(StringLiteral, ); //No Politness
+  //addScoreProps(BooleanLiteral, ); //No Politness
+  //addScoreProps(NullLiteral, ); //No Politness
+  //addScoreProps(IdExp, ); //No Politness
+}
+
+function addScoreProps(object, politeFactor, rudeFactor) {
+  object.politeFactor = politeFactor;
+  object.rudeFactor = rudeFactor;
+}
+
 module.exports = {
   Program,
   Return,
@@ -230,5 +285,6 @@ module.exports = {
   StringLiteral,
   BooleanLiteral,
   NullLiteral,
-  IdExp
+  IdExp,
+  addAllScoreProps
 };
