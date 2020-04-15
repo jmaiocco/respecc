@@ -47,28 +47,14 @@ class Assignment {
 }
 
 class ArrayType {
-  constructor(type) {
-    /*
-    let locals = new Map();
-    locals.set(
-      "length",
-      new FunctionDeclaration("length", [], NumberType, null, null)
-    );
-    */
-    Object.assign(this, { type /*locals*/ });
+  constructor(type, locals = new Map()) {
+    Object.assign(this, { type, locals });
   }
 }
 
 class DictionaryType {
-  constructor(type1, type2) {
-    /*
-    let locals = new Map();
-    locals.set(
-      "length",
-      new FunctionDeclaration("length", [], NumberType, null, null)
-    );
-    */
-    Object.assign(this, { type1, type2 /*locals*/ });
+  constructor(type1, type2, locals = new Map()) {
+    Object.assign(this, { type1, type2, locals });
   }
 }
 

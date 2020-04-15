@@ -23,6 +23,9 @@ print(cc.getName())
 gimme s : String = "Hi"
 gimme n : Number = s.length()
 
+gimme arr : Array<Number> = [6]
+gimme n2 : Number = arr.length()
+
 Bye Bye!
 
 
