@@ -176,28 +176,17 @@ module.exports = {
     let paramsList = objectType.callingParams;
     for (let i = 0; i < paramsList.length; i++) {
       for (let j = i + 1; j < paramsList.length; j++) {
-        if (paramsList[i].length === paramsList[j].length) {
-          let paramsMatch = true;
-          paramsList[i].forEach((param, k) => {
-            if (
-              param.type !== paramsList[j][k].type &&
-              param.type !== AnyType &&
-              paramsList[j][k].type !== AnyType
-            ) {
-              paramsMatch = false;
-            }
-          });
-          doCheck(
-            !paramsMatch,
-            `Object ${objectType.id} cannot have multiple
+        doCheck(
+          paramsList[i].length !== paramsList[j].length,
+          `Object ${objectType.id} cannot have multiple
             Constructors of the same number and type`
-          );
-        }
+        );
       }
     }
   },
 
   memberExists(instance, memberID) {
+    console.log(instance);
     doCheck(
       instance.type === AnyType || instance.type.locals.has(memberID),
       `Identifier ${memberID}
