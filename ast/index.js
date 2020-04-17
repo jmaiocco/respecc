@@ -95,11 +95,6 @@ class VariableDeclaration {
   }
 }
 
-/**The parameter politeness is based on whether or not the the parameter
- is statically typed. If it isnt, that flag is null.
-  If its ":", flag is flase.
-  If it's "as a", flag is true.
- */
 class Parameter {
   constructor(id, type, politeFlag, typePoliteness) {
     Object.assign(this, { id, type, politeFlag, typePoliteness });

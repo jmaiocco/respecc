@@ -62,6 +62,7 @@ const {
 let respecc_score = 50;
 let respecc_modes = ["RudeAF", "Rude", "Impolite", "Polite", "Angelic"];
 let respecc_level = 4;
+let toggleRandom = null;
 
 let politeOps = {
   or: "||",
@@ -130,7 +131,7 @@ function setScore(object) {
   );
 }
 
-// javaScriptId(e) takes any Tiger object with an id property, such as a Variable,
+// javaScriptId(e) takes any object with an id property, such as a Variable,
 // Param, or Func, and produces a JavaScript name by appending a unique identifying
 // suffix, such as '_1' or '_503'. It uses a cache so it can return the same exact
 // string each time it is called with a particular entity.
@@ -153,6 +154,9 @@ const builtin = {
   },
   print([s]) {
     return `console.log(${s})`;
+  },
+  length() {
+    return `length()`;
   }
   /*
   ord([s]) {
@@ -183,15 +187,27 @@ module.exports = function(exp) {
   return beautify(exp.gen(), { indent_size: 2 });
 };
 
-Program.prototype.gen = function() {
+Program.prototype.gen = function(randomize = null) {
+  toggleRandom = randomize;
   setScore(this);
   return this.statements.map(e => e.gen()).join(";");
 };
 VariableDeclaration.prototype.gen = function() {
   setScore(this);
-  return `let ${javaScriptId(this)} ${
-    this.expression ? `= ${this.expression.gen()}` : ""
-  }`;
+  console.log(this);
+  let exp = "";
+  if (this.expression === null && this.type.constructor === ArrayType) {
+    exp = "[]";
+  } else if (
+    this.expression === null &&
+    this.type.constructor === DictionaryType
+  ) {
+    exp = "{}";
+  } else {
+    exp = `${this.expression.gen()}`;
+  }
+
+  return `let ${javaScriptId(this)} ${exp ? `= ${exp}` : ""}`;
 };
 Return.prototype.gen = function() {
   setScore(this);
@@ -215,44 +231,48 @@ WhileLoop.prototype.gen = function() {
 };
 ForLoop.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `for(${this.dec.gen()} ;${this.exp.gen()} ;${this.assignment.gen()}) ${this.block.gen()}`;
 };
 FunctionCall.prototype.gen = function() {
   setScore(this);
   /*TODO*/
-  return;
+  if (this.id.constructor === MemberExp) {
+    return this.id.gen();
+  }
+  const args = this.args.map(a => a.gen());
+  if (this.callee.builtin) {
+    return builtin[this.callee.id](args);
+  }
+  return `${javaScriptId(this.callee)}(${this.args
+    .map(a => a.gen())
+    .join(",")})`;
 };
 Assignment.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `${this.variable.gen()} = ${this.exp.gen()}`;
 };
 ClassDeclaration.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `class ${javaScriptId(this)} ${this.block.gen()}`;
 };
 ClassBlock.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `{${this.members.map(e => e.gen()).join(";")}}`;
 };
 Constructor.prototype.gen = function() {
   setScore(this);
   /*TODO*/
-  return;
+  return `constructor() ${this.block}`;
 };
 FunctionDeclaration.prototype.gen = function() {
   setScore(this);
-  return `function ${this.id}(${this.params
+  return `function ${javaScriptId(this)}(${this.params
     .map(p => p.gen())
     .join(",")}) ${this.block.gen()}`;
 };
 Parameter.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return javaScriptId(this);
 };
 Block.prototype.gen = function() {
   setScore(this);
@@ -260,38 +280,36 @@ Block.prototype.gen = function() {
 };
 TernaryExp.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `(${this.exp1}?${this.exp2}:${this.exp3})`;
 };
 LambdaBlock.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `((${this.params.map(p => p.gen()).join(",")}) => ${this.block})`;
 };
 LambdaExp.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `((${this.params.map(p => p.gen()).join(",")}) => ${this.exp})`;
 };
 BinaryExp.prototype.gen = function() {
   setScore(this);
   return `(${this.left.gen()} ${makeOp(this.operator)} ${this.right.gen()})`;
 };
 UnaryPrefix.prototype.gen = function() {
-  /*TODO*/
-  return;
+  return `${makeOp(this.operator)} ${this.right.gen()}`;
 };
 UnaryPostfix.prototype.gen = function() {
-  /*TODO*/
-  return;
+  return `${this.left.gen()} ${makeOp(this.operator)}`;
 };
 SubscriptExp.prototype.gen = function() {
-  /*TODO*/
-  return;
+  return `${this.composite.gen()}[${this.subscript.gen()}]`;
 };
 MemberExp.prototype.gen = function() {
   /*TODO*/
-  return;
+  console.log(this);
+  if (this.field.constructor === FunctionCall) {
+    return `${this.v.gen()} . ${this.field.gen()}`;
+  }
+  return `${this.v.gen()} . ${javaScriptId({ id: this.field })}`;
 };
 ArrayLiteral.prototype.gen = function() {
   return `[${[...this.exps].map(e => e.gen())}]`;
