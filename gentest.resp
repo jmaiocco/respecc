@@ -1,4 +1,21 @@
 //gimme x = 3
+
+
+class Country{
+  gimme statePopulations : Dict<String, Number>
+  gimme states  : Array<String>
+
+  Country(states:Array<String>, pops:Dict<String,Number>){
+    this.states = states
+    this.statePopulations = pops
+  }
+}
+gimme calexit = Country(["The Bay", "NorCal", "SoCal"], {"Wales":200,"London":500,"Stratford-Upon-Avon":2})
+
+//gimme x = [1,2,3]
+//gimme y = x.length()
+
+/*
 Hello!
 Please declare x as 3 plus 3.
 Please declare y as "ssss".
@@ -12,3 +29,4 @@ if(Yes) {
 }
 
 Godspeed!
+*/
