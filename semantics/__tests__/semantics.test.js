@@ -132,15 +132,12 @@ class Country{
   gimme statePopulations : Dict<String, Number>
   gimme states  : Array<String>
 
-  Country(states:Array<String>){
+  Country(states:Array<String>, pops:Dict<String,Number>){
     this.states = states
-  }
-  Country(pops:Dict<String,Number>){
     this.statePopulations = pops
   }
 }
-gimme calexit = Country(["The Bay", "NorCal", "SoCal"])
-gimme Brexit = Country({"Wales":200,"London":500,"Stratford-Upon-Avon":2})
+gimme calexit = Country(["The Bay", "NorCal", "SoCal"], {"Wales":200,"London":500,"Stratford-Upon-Avon":2})
 `,
   String.raw`gimme five = 5>4? 5: 4`,
   String.raw`gimme fiveish = 5>4?6>5:3>4? 2 : 1`,

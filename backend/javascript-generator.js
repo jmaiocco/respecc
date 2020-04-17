@@ -139,10 +139,19 @@ const javaScriptId = (() => {
   let lastId = 0;
   const map = new Map();
   return v => {
-    if (!map.has(v)) {
-      map.set(v, ++lastId); // eslint-disable-line no-plusplus
+    if (v.id === "this") {
+      return "this";
     }
-    return `${v.id}_${map.get(v)}`;
+    if (!map.has(v)) {
+      if (v.constructor === ClassDeclaration) {
+        map.set(v.type, ++lastId);
+      } else {
+        map.set(v, ++lastId); // eslint-disable-line no-plusplus
+      }
+    }
+    return `${v.id}_${map.get(
+      v.constructor === ClassDeclaration ? v.type : v
+    )}`;
   };
 })();
 
@@ -156,7 +165,7 @@ const builtin = {
     return `console.log(${s})`;
   },
   length() {
-    return `length()`;
+    return `length`;
   },
   roundUp([n]) {
     return `Math.ceil(${n})`;
@@ -202,17 +211,23 @@ Program.prototype.gen = function(randomize = null) {
   setScore(this);
   return this.statements.map(e => e.gen()).join(";");
 };
+
+let initializers = {
+  ArrayType: "[]",
+  DictionaryType: "{}",
+  ObjectType: "{}",
+  StringType: "",
+  NumberType: "0",
+  NullType: "null",
+  BooleanType: "false",
+  null: "null"
+};
+
 VariableDeclaration.prototype.gen = function() {
   setScore(this);
-  console.log(this);
   let exp = "";
-  if (this.expression === null && this.type.constructor === ArrayType) {
-    exp = "[]";
-  } else if (
-    this.expression === null &&
-    this.type.constructor === DictionaryType
-  ) {
-    exp = "{}";
+  if (this.expression === null) {
+    exp = initializers[this.type.constructor];
   } else {
     exp = `${this.expression.gen()}`;
   }
@@ -245,15 +260,13 @@ ForLoop.prototype.gen = function() {
 };
 FunctionCall.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  if (this.id.constructor === MemberExp) {
-    return this.id.gen();
-  }
+  let prefix = this.id.constructor === MemberExp ? `${this.id.v.gen()} .` : "";
+
   const args = this.args.map(a => a.gen());
   if (this.callee.builtin) {
-    return builtin[this.callee.id](args);
+    return `${prefix} ${builtin[this.callee.id](args)}`;
   }
-  return `${javaScriptId(this.callee)}(${this.args
+  return `${prefix} ${javaScriptId(this.callee)}(${this.args
     .map(a => a.gen())
     .join(",")})`;
 };
@@ -267,12 +280,26 @@ ClassDeclaration.prototype.gen = function() {
 };
 ClassBlock.prototype.gen = function() {
   setScore(this);
-  return `{${this.members.map(e => e.gen()).join(";")}}`;
+
+  let constructorsList = this.members.filter(
+    e => e.constructor === Constructor
+  );
+
+  return `{${this.members
+    .map(e => e.gen())
+    .join(";")} ${generateAllConstructors(constructorsList)} }`;
 };
+
+function generateAllConstructors(constructorList) {
+  return `constructor(..._) {
+    ${constructorList.map(
+      c => `if(_.length === ${c.params.length}) ${c.block.gen()}`
+    )}
+  }`;
+}
+
 Constructor.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return `constructor() ${this.block}`;
 };
 FunctionDeclaration.prototype.gen = function() {
   setScore(this);
