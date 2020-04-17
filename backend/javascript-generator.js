@@ -163,6 +163,12 @@ const builtin = {
   },
   roundDown([n]) {
     return `Math.floor(${n})`;
+  },
+  concatenate([s1, s2]) {
+    return `${s1}.concat(${s2})`;
+  },
+  absoluteVal([n]) {
+    return `Math.abs(${n})`;
   }
   /*
   ord([s]) {
