@@ -157,6 +157,12 @@ const builtin = {
   },
   length() {
     return `length()`;
+  },
+  roundUp([n]) {
+    return `Math.ceil(${n})`;
+  },
+  roundDown([n]) {
+    return `Math.floor(${n})`;
   }
   /*
   ord([s]) {
@@ -171,8 +177,6 @@ const builtin = {
   substring([s, i, n]) {
     return `${s}.substr(${i}, ${n})`;
   },
-  concat([s, t]) {
-    return `${s}.concat(${t})`;
   },
   not(i) {
     return `(!(${i}))`;
