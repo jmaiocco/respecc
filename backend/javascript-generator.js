@@ -224,10 +224,11 @@ let initializers = {
 };
 
 VariableDeclaration.prototype.gen = function() {
+  console.log();
   setScore(this);
   let exp = "";
   if (this.expression === null) {
-    exp = initializers[this.type.constructor];
+    exp = initializers[this.type.constructor.name];
   } else {
     exp = `${this.expression.gen()}`;
   }
