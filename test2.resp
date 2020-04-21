@@ -1,4 +1,20 @@
+Hello!
+  Have you ever heard of a Dog? Let's get classy...
+  Please declare name as a String.
+  To construct a Dog by using (name as a String), could you...
+    Please populate this.name with name.
+  Thank You.
+  Favor getName() as a String could you...
+    Kindly return this.name
+  Thank You.
 
+Thank You.
+Please declare cc as Dog("cece")
+print(cc.getName())
+Bye Bye!
+
+
+/*
 Hello!
 Have you ever heard of a Dog? Let's get classy...
     Have you ever heard of a Ball? Let's get classy...
@@ -15,7 +31,6 @@ Have you ever heard of a Dog? Let's get classy...
     Favor getName() as a String could you...
       Kindly return this.name
     Thank You.
-
 Thank You.
 Please declare cc as Dog("cece")
 print(cc.getName())
@@ -25,13 +40,14 @@ gimme n : Number = s.length()
 
 gimme arr : Array<Number> = [6]
 gimme n2 : Number = arr.length()
-
+*/
+/*
 
 function f() : Void {
 }
 
 Bye Bye!
-
+*/
 
 /*
 class Block {

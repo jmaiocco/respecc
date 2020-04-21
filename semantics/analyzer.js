@@ -312,12 +312,14 @@ ClassDeclaration.prototype.analyze = function() {
 };
 
 ClassBlock.prototype.analyzeNames = function(context) {
+  /*
   this.members
     .filter(d => d.constructor === ClassDeclaration)
     .forEach(d => context.add(new ObjectType(d.id)));
   this.members
     .filter(d => d.constructor === ClassDeclaration)
     .forEach(d => d.analyzeNames(context));
+    */
   this.members
     .filter(d => d.constructor === Constructor)
     .forEach(d => d.analyzeSignature(context));
@@ -330,7 +332,10 @@ ClassBlock.prototype.analyzeNames = function(context) {
 };
 
 ClassBlock.prototype.analyze = function(context) {
-  this.members.forEach(d => d.analyze(context));
+  this.members.forEach(d => {
+    check.isNotClassDeclaration(d);
+    d.analyze(context);
+  });
 };
 
 Constructor.prototype.analyzeSignature = function(context) {

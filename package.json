@@ -8,9 +8,7 @@
     "lint": "eslint ."
   },
   "jest": {
-    "testPathIgnorePatterns": [
-      "/backend/"
-    ]
+    "testPathIgnorePatterns": []
   },
   "repository": "git+https://github.com/jmaiocco/respecc.git",
   "author": "Luis Garcia, Timothy Herrmann, Joseph Maiocco, Kevin McInerney, Bennett Shingledecker, Kevin Solis",
