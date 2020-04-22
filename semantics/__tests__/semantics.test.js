@@ -77,7 +77,7 @@ Bye Bye!
       gimme series = [0, 1]
       return series
     } else {
-      series = Fibonacci(n - 1, length - 1)
+      gimme series = Fibonacci(n - 1, length - 1)
       series[length] = series[length minus 1] plus series[length minus 2]
       return series
     }

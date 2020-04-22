@@ -36,7 +36,7 @@ respecc {
                  (br+ ClassMember)* br* "}"                      -- impolite
                | br* "Let's get classy..." br* ClassMember?
                  (br+ ClassMember)* br* "Thank You."             -- polite
-  ClassMember  = Constructor | Declaration | FuncDec
+  ClassMember  = Constructor | VarDec | FuncDec
   Constructor  =  id  Params  Block                              -- impolite
                |  "To construct a" id "by using" Params
                   "," Block                                      -- polite
