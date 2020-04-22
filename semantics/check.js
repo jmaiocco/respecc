@@ -186,7 +186,6 @@ module.exports = {
   },
 
   memberExists(instance, memberID) {
-    console.log(instance);
     doCheck(
       instance.type === AnyType || instance.type.locals.has(memberID),
       `Identifier ${memberID}
