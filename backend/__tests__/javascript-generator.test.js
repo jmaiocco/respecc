@@ -271,11 +271,12 @@ const fixture = {
 */
 };
 describe("The JavaScript generator", () => {
+  console.log(generate);
   Object.entries(fixture).forEach(([name, [source, expected]]) => {
     test(`produces the correct output for ${name}`, done => {
       const ast = parse(source);
       analyze(ast);
-      const actual = generate(ast);
+      const actual = generate(ast, false);
       expect(stripped(actual)).toEqual(stripped(expected));
       done();
     });
