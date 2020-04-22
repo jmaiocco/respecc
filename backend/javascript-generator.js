@@ -62,7 +62,9 @@ const {
 let respecc_score = 50;
 let respecc_modes = ["RudeAF", "Rude", "Impolite", "Polite", "Angelic"];
 let respecc_level = 4;
-let toggleRandom = null;
+
+//If not null, penalties either always occur, or never occur (for testing purposes)
+let togglePenalties = null;
 
 let politeOps = {
   or: "||",
@@ -130,6 +132,15 @@ function setScore(object) {
   console.log(
     `${object.constructor.name}: ${respecc_score} is ${respecc_modes[respecc_level]}`
   );
+  console.log(enactPenalty(4, 0.5));
+}
+
+function enactPenalty(severity, chanceOfPenalty = 0.1) {
+  if (togglePenalties !== null) {
+    return togglePenalties;
+  } else {
+    return respecc_level > severity ? false : Math.random() <= chanceOfPenalty;
+  }
 }
 
 // javaScriptId(e) takes any object with an id property, such as a Variable,
@@ -203,12 +214,12 @@ const builtin = {
   */
 };
 
-module.exports = function(exp) {
+module.exports = function(exp, penaltyFactor = null) {
+  togglePenalties = penaltyFactor;
   return beautify(exp.gen(), { indent_size: 2 });
 };
 
-Program.prototype.gen = function(randomize = null) {
-  toggleRandom = randomize;
+Program.prototype.gen = function() {
   setScore(this);
   return this.statements.map(e => e.gen()).join(";");
 };
@@ -284,7 +295,6 @@ ClassDeclaration.prototype.gen = function() {
 };
 ClassBlock.prototype.gen = function() {
   setScore(this);
-
   let constructorsList = this.members.filter(
     e => e.constructor === Constructor
   );
