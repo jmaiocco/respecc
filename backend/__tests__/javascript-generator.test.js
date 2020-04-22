@@ -5,12 +5,12 @@
  * JavaScript that we expect.
  */
 
-const parse = require('../../ast/parser');
-const analyze = require('../../semantics/analyzer');
-const generate = require('../javascript-generator');
+const parse = require("../../ast/parser");
+const analyze = require("../../semantics/analyzer");
+const generate = require("../javascript-generator");
 
 function stripped(s) {
-  return s.replace(/\s+/g, '').replace(/_\d+/g, '');
+  return s.replace(/\s+/g, "").replace(/_\d+/g, "");
 }
 
 const fixture = {
@@ -109,7 +109,7 @@ const fixture = {
           return result_4
         };
         let exampleAmount_7 = 105;
-        MakeChange_2(exampleAmount_7)`,
+        MakeChange_2(exampleAmount_7)`
   ],
 
   dogClass: [
@@ -128,7 +128,7 @@ const fixture = {
       print(cc.getName())
       Bye Bye!`,
     String.raw`class Dog_1 {
-    name_2;;
+    name_2;
     getName_3() {
       return this.name_2
     }
@@ -140,7 +140,7 @@ const fixture = {
     }
   };
   let cc_5 = new Dog_1("cece");
-  console.log(cc_5.getName_3())`,
+  console.log(cc_5.getName_3())`
   ],
 
   countryClass: [
@@ -157,7 +157,7 @@ const fixture = {
   `,
     String.raw`class Country_13 {
         statePopulations_14 = {};
-        states_15 = [];
+        states_15 = []
         constructor(..._) {
           if (_.length === 2) {
             let states_16 = _[0];
@@ -270,7 +270,7 @@ const fixture = {
   ]
 */
 };
-describe('The JavaScript generator', () => {
+describe("The JavaScript generator", () => {
   Object.entries(fixture).forEach(([name, [source, expected]]) => {
     test(`produces the correct output for ${name}`, done => {
       const ast = parse(source);

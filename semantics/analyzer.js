@@ -115,16 +115,14 @@ Assignment.prototype.analyze = function(context) {
 
 Conditional.prototype.analyze = function(context) {
   this.exp.analyze(context);
-  this.bodyContext = context.createChildContextForBlock();
-  this.ifBlock.analyze(this.bodyContext);
+  this.ifBlock.analyze(context.createChildContextForBlock());
   if (this.exps && this.blocks) {
     this.exps.forEach(e => e.analyze(context));
-    this.blocks.forEach(b => b.analyze(this.bodyContext));
+    this.blocks.forEach(b => b.analyze(context.createChildContextForBlock()));
   }
   if (this.elseBlock) {
-    this.elseBlock.analyze(this.bodyContext);
+    this.elseBlock.analyze(context.createChildContextForBlock());
   }
-  delete this.bodyContext;
 };
 
 WhileLoop.prototype.analyze = function(context) {
@@ -273,12 +271,10 @@ FunctionDeclaration.prototype.analyzeSignature = function(context) {
   } else {
     this.type = context.lookup(this.type);
   }
-  //Control Flow Analysis
   this.typeResolved = this.type === AnyType ? true : false;
 };
 FunctionDeclaration.prototype.analyze = function() {
   this.block.analyze(this.bodyContext);
-  //Control Flow Analysis
   check.functiontypeResolved(this);
   delete this.bodyContext; // This was only temporary, delete to keep output clean.
 };
@@ -312,14 +308,6 @@ ClassDeclaration.prototype.analyze = function() {
 };
 
 ClassBlock.prototype.analyzeNames = function(context) {
-  /*
-  this.members
-    .filter(d => d.constructor === ClassDeclaration)
-    .forEach(d => context.add(new ObjectType(d.id)));
-  this.members
-    .filter(d => d.constructor === ClassDeclaration)
-    .forEach(d => d.analyzeNames(context));
-    */
   this.members
     .filter(d => d.constructor === Constructor)
     .forEach(d => d.analyzeSignature(context));
@@ -332,10 +320,7 @@ ClassBlock.prototype.analyzeNames = function(context) {
 };
 
 ClassBlock.prototype.analyze = function(context) {
-  this.members.forEach(d => {
-    check.isNotClassDeclaration(d);
-    d.analyze(context);
-  });
+  this.members.forEach(d => d.analyze(context));
 };
 
 Constructor.prototype.analyzeSignature = function(context) {
@@ -376,6 +361,8 @@ SubscriptExp.prototype.analyze = function(context) {
       `Dict subscript must match key type`
     );
     this.type = this.composite.type.type2;
+  } else {
+    this.type = AnyType;
   }
 };
 

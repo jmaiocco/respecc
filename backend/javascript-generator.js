@@ -72,6 +72,7 @@ let politeOps = {
   "is less than": "<",
   "is greater than": ">",
   "is equal to": "===",
+  "==": "===",
   "is not equal to": "!==",
   plus: "+",
   minus: "-",
@@ -149,9 +150,6 @@ const javaScriptId = (() => {
         map.set(v, ++lastId); // eslint-disable-line no-plusplus
       }
     }
-
-    //console.log(map);
-
     return `${v.id}_${map.get(
       v.constructor === ClassDeclaration ? v.type : v
     )}`;
@@ -235,7 +233,6 @@ VariableDeclaration.prototype.gen = function(inClass) {
   } else {
     exp = `${this.expression.gen()}`;
   }
-
   return `${declarator} ${javaScriptId(this)} ${exp ? `= ${exp}` : ""}`;
 };
 Return.prototype.gen = function() {
@@ -291,13 +288,14 @@ ClassBlock.prototype.gen = function() {
   let constructorsList = this.members.filter(
     e => e.constructor === Constructor
   );
-
   return `{${this.members
+    .filter(e => e.constructor !== Constructor)
     .map(e => e.gen(true))
     .join(";")} ${generateAllConstructors(constructorsList)} }`;
 };
 
 function generateAllConstructors(constructorList) {
+  constructorList.forEach(c => c.gen());
   return `constructor(..._) {
     ${constructorList.map(
       c => `if(_.length === ${c.params.length}) ${c.block.gen(c.params)}`
@@ -386,76 +384,3 @@ NullLiteral.prototype.gen = function() {
 IdExp.prototype.gen = function() {
   return javaScriptId(this.ref);
 };
-
-/*
-ArrayExp.prototype.gen = function () {
-  return `Array(${this.size.gen()}).fill(${this.fill.gen()})`;
-};
-
-Assignment.prototype.gen = function () {
-  return `${this.target.gen()} = ${this.source.gen()}`;
-};
-
-
-Call.prototype.gen = function () {
-  const args = this.args.map(a => a.gen());
-  if (this.callee.builtin) {
-    return builtin[this.callee.id](args);
-  }
-  return `${javaScriptId(this.callee)}(${args.join(',')})`;
-};
-
-ExpSeq.prototype.gen = function () {
-  return this.exps.map(e => e.gen()).join(';');
-};
-
-ForExp.prototype.gen = function () {
-  const i = javaScriptId(this.index);
-  const low = this.low.gen();
-  const hi = javaScriptId(new Variable('hi'));
-  const preAssign = `let ${hi} = ${this.high.gen()};`;
-  const loopControl = `for (let ${i} = ${low}; ${i} <= ${hi}; ${i}++)`;
-  const body = this.body.gen();
-  return `${preAssign} ${loopControl} {${body}}`;
-};
-
-Func.prototype.gen = function () {
-  const name = javaScriptId(this);
-  const params = this.params.map(javaScriptId);
-  // "Void" functions do not have a JS return, others do
-  const body = this.body.type ? makeReturn(this.body) : this.body.gen();
-  return `function ${name} (${params.join(',')}) {${body}}`;
-};
-
-IfExp.prototype.gen = function () {
-  const thenPart = this.consequent.gen();
-  const elsePart = this.alternate ? this.alternate.gen() : 'null';
-  return `((${this.test.gen()}) ? (${thenPart}) : (${elsePart}))`;
-};
-
-LetExp.prototype.gen = function () {
-  if (this.type) {
-    // This looks insane, but let-expressions really are closures!
-    return `(() => {${makeReturn(this)} ; })()`;
-  }
-  const filteredDecs = this.decs.filter(d => d.constructor !== TypeDec);
-  return [...filteredDecs, ...this.body].map(e => e.gen()).join(';');
-};
-
-MemberExp.prototype.gen = function () {
-  return `${this.record.gen()}.${this.id}`;
-};
-
-SubscriptedExp.prototype.gen = function () {
-  return `${this.array.gen()}[${this.subscript.gen()}]`;
-};
-
-NegationExp.prototype.gen = function () {
-  return `(- (${this.operand.gen()}))`;
-};
-
-WhileExp.prototype.gen = function () {
-  return `while (${this.test.gen()}) { ${this.body.gen()} }`;
-};
-
-*/
