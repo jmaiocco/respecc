@@ -248,11 +248,11 @@ Break.prototype.gen = function() {
 };
 Conditional.prototype.gen = function() {
   setScore(this);
-  return `if(${this.exp.gen()}) ${this.ifBlock.gen()} ${this.exps
-    .map((exp, i) => {
+  return `if(${this.exp.gen()}) ${this.ifBlock.gen()} 
+    ${this.exps.map((exp, i) => {
       `else if(${exp.gen()}) ${this.blocks[i].gen()}`;
-    })
-    .join("")} ${this.elseBlock ? `else ${this.elseBlock}` : ""}`;
+      })
+    .join("")} ${this.elseBlock ? `else ${this.elseBlock.gen()}` : ""}`;
 };
 WhileLoop.prototype.gen = function() {
   setScore(this);
@@ -332,7 +332,7 @@ Block.prototype.gen = function(params) {
 };
 TernaryExp.prototype.gen = function() {
   setScore(this);
-  return `(${this.exp1}?${this.exp2}:${this.exp3})`;
+  return `(${this.exp1.gen()}?${this.exp2.gen()}:${this.exp3.gen()})`;
 };
 LambdaBlock.prototype.gen = function() {
   setScore(this);

@@ -15,7 +15,62 @@ function stripped(s) {
 
 const fixture = {
   hello: [String.raw`print("Hello")`, 'console.log   ("Hello")'],
-  onevar: [String.raw`gimme x = 1`, 'let x_1 = 1'],
+  oneVar: [String.raw`gimme x = 1`, 'let x_1 = 1'],
+  forLoopWithBreak: [
+    String.raw`for (gimme i = 0; i < 10; i++) { break }`,
+    String.raw`for (let i = 0; (i < 10); i++) { break }`
+  ],
+  ternaryExp: [
+    String.raw`gimme trn = Yes ? 1 : 2`, 
+    String.raw`let trn = (true ? 1 : 2)`
+  ],
+  null: [
+    String.raw`gimme nl = Null`,
+    String.raw`let nl = null`
+  ],
+  /*basicConditionalRude: [
+    String.raw`
+      gimme z:Number = 3
+      if(z == 0) {
+        z = z + 1
+      } else if(z == 1) {
+        z = z + 2
+      } else if(z == 2) {
+        z = z + 3
+      } else {
+        z = z * z
+      }
+    `,
+    String.raw`
+      let z = 3;
+      if((z === 0)) {
+        z = (z + 1);
+      } else if((z === 1)) {
+        z = (z + 2)
+      } else if((z === 2)) {
+        z = (z + 3)
+      } else {
+        z = (z * z)
+      }
+    `
+  ],
+  basicConditionalPolite: [
+    String.raw``,
+    String.raw`
+      Please declare x as a Number as 3.
+      if() {
+
+      } else if () {
+
+      } else {
+        
+      }
+    `
+  ],
+  basicForLoop: [
+
+  ],
+  */
   changeMaker: [
     String.raw`Hello!
       Please declare US_Denominations as a Array<Number> as [25, 10, 5, 1].
@@ -118,6 +173,38 @@ const fixture = {
         "Stratford-Upon-Avon": 2
       })`,
   ],
+  builtins: [
+    String.raw`
+      Hello!
+
+      Please declare word as a String as "lengthtest".
+      print(word.length())
+      Please declare rdup as a Number as 22.55.
+      Please declare rddn as a Number as 22.55. 
+      rdup = roundUp(rdup)
+      rddn = roundDown(rddn)
+      Please declare abs as a Number as -999.
+      abs = absoluteVal(abs)
+      Please declare dog as a String as "dog".
+      Please declare house as a String as "house".
+      Please declare doghouse as a String as concatenate(dog, house).
+
+      Bye Bye!
+    `,
+    String.raw`
+      let word = "lengthtest";
+      console.log(word.length);
+      let rdup = 22.55;
+      let rddn = 22.55;
+      rdup = Math.ceil(rdup);
+      rddn = Math.floor(rddn);
+      let abs = -999;
+      abs = Math.abs(abs);
+      let dog = "dog";
+      let house = "house";
+      let doghouse = dog.concat(house)
+    `
+  ]
   /*
   hello: [
     String.raw`print("Hello, world\n")`,
