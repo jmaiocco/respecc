@@ -72,6 +72,7 @@ let politeOps = {
   "is less than": "<",
   "is greater than": ">",
   "is equal to": "===",
+  "==": "===",
   "is not equal to": "!==",
   plus: "+",
   minus: "-",
@@ -149,9 +150,6 @@ const javaScriptId = (() => {
         map.set(v, ++lastId); // eslint-disable-line no-plusplus
       }
     }
-
-    //console.log(map);
-
     return `${v.id}_${map.get(
       v.constructor === ClassDeclaration ? v.type : v
     )}`;
@@ -235,7 +233,6 @@ VariableDeclaration.prototype.gen = function(inClass) {
   } else {
     exp = `${this.expression.gen()}`;
   }
-
   return `${declarator} ${javaScriptId(this)} ${exp ? `= ${exp}` : ""}`;
 };
 Return.prototype.gen = function() {
@@ -291,13 +288,14 @@ ClassBlock.prototype.gen = function() {
   let constructorsList = this.members.filter(
     e => e.constructor === Constructor
   );
-
   return `{${this.members
+    .filter(e => e.constructor !== Constructor)
     .map(e => e.gen(true))
     .join(";")} ${generateAllConstructors(constructorsList)} }`;
 };
 
 function generateAllConstructors(constructorList) {
+  constructorList.forEach(c => c.gen());
   return `constructor(..._) {
     ${constructorList.map(
       c => `if(_.length === ${c.params.length}) ${c.block.gen(c.params)}`

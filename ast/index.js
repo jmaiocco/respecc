@@ -219,20 +219,6 @@ function addAllScoreProps() {
   addScoreProps(LambdaBlock, 0, -5);
   addScoreProps(LambdaExp, 0, -5);
   addScoreProps(BinaryExp, 2, -2);
-  //addScoreProps(UnaryPrefix, ); //No Politness
-  //addScoreProps(UnaryPostfix, ); //No Politness
-  //addScoreProps(SubscriptExp, ); //No Politness
-  //addScoreProps(MemberExp, ); //No Politness
-  //addScoreProps(ArrayLiteral, ); //No Politness
-  //addScoreProps(DictionaryLiteral, ); //No Politness
-  //addScoreProps(ArrayType, ); //No Politness
-  //addScoreProps(DictionaryType, ); //No Politness
-  //addScoreProps(DictEntry, ); //No Politness
-  //addScoreProps(NumberLiteral, ); //No Politness
-  //addScoreProps(StringLiteral, ); //No Politness
-  //addScoreProps(BooleanLiteral, ); //No Politness
-  //addScoreProps(NullLiteral, ); //No Politness
-  //addScoreProps(IdExp, ); //No Politness
 }
 
 function addScoreProps(object, politeFactor, rudeFactor, typeFactor) {
