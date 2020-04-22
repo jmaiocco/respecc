@@ -1,3 +1,15 @@
+gimme s : String = "Hi"
+gimme n : Number = s.length()
+gimme arr : Array<Number> = [6]
+gimme n2 : Number = arr.length()
+gimme a = 1
+gimme b = 1
+gimme c = 1
+gimme d = 1
+gimme e = 1
+gimme f = 1
+gimme g = 1
+/*
 Hello!
   Have you ever heard of a Dog? Let's get classy...
   Please declare name as a String.
@@ -14,7 +26,7 @@ print(cc.getName())
 Bye Bye!
 
 
-/*
+
 Hello!
 Have you ever heard of a Dog? Let's get classy...
     Have you ever heard of a Ball? Let's get classy...
