@@ -40,7 +40,8 @@ const {
   StringType,
   NullType,
   BooleanType,
-  AnyType
+  AnyType,
+  lengthFunction
 } = require("./builtins");
 const check = require("./check");
 const Context = require("./context");
@@ -306,17 +307,19 @@ ClassDeclaration.prototype.analyze = function() {
   this.bodyContext.add(typeClone);
   this.block.analyze(this.bodyContext);
   this.bodyContext.locals.delete("this");
-
+  this.type = objType;
   delete this.bodyContext;
 };
 
 ClassBlock.prototype.analyzeNames = function(context) {
+  /*
   this.members
     .filter(d => d.constructor === ClassDeclaration)
     .forEach(d => context.add(new ObjectType(d.id)));
   this.members
     .filter(d => d.constructor === ClassDeclaration)
     .forEach(d => d.analyzeNames(context));
+    */
   this.members
     .filter(d => d.constructor === Constructor)
     .forEach(d => d.analyzeSignature(context));
@@ -329,7 +332,10 @@ ClassBlock.prototype.analyzeNames = function(context) {
 };
 
 ClassBlock.prototype.analyze = function(context) {
-  this.members.forEach(d => d.analyze(context));
+  this.members.forEach(d => {
+    check.isNotClassDeclaration(d);
+    d.analyze(context);
+  });
 };
 
 Constructor.prototype.analyzeSignature = function(context) {
@@ -392,6 +398,7 @@ BooleanLiteral.prototype.analyze = function(context) {
 ArrayLiteral.prototype.analyze = function(context) {
   this.exps.map(e => e.analyze(context));
   this.type = new ArrayType(check.propertyOfAll(this.exps, "type"));
+  this.type.locals.set("length", lengthFunction);
 };
 
 DictionaryLiteral.prototype.analyze = function(context) {
@@ -401,6 +408,7 @@ DictionaryLiteral.prototype.analyze = function(context) {
     check.propertyOfAll(this.keyValuePairs, "valueType")
   ];
   this.type = new DictionaryType(keyType, valueType);
+  this.type.locals.set("length", lengthFunction);
 };
 
 DictEntry.prototype.analyze = function(context) {

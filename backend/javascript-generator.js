@@ -62,6 +62,7 @@ const {
 let respecc_score = 50;
 let respecc_modes = ["RudeAF", "Rude", "Impolite", "Polite", "Angelic"];
 let respecc_level = 4;
+let toggleRandom = null;
 
 let politeOps = {
   or: "||",
@@ -130,7 +131,7 @@ function setScore(object) {
   );
 }
 
-// javaScriptId(e) takes any Tiger object with an id property, such as a Variable,
+// javaScriptId(e) takes any object with an id property, such as a Variable,
 // Param, or Func, and produces a JavaScript name by appending a unique identifying
 // suffix, such as '_1' or '_503'. It uses a cache so it can return the same exact
 // string each time it is called with a particular entity.
@@ -138,10 +139,22 @@ const javaScriptId = (() => {
   let lastId = 0;
   const map = new Map();
   return v => {
-    if (!map.has(v)) {
-      map.set(v, ++lastId); // eslint-disable-line no-plusplus
+    if (v.id === "this") {
+      return "this";
     }
-    return `${v.id}_${map.get(v)}`;
+    if (!map.has(v)) {
+      if (v.constructor === ClassDeclaration) {
+        map.set(v.type, ++lastId);
+      } else {
+        map.set(v, ++lastId); // eslint-disable-line no-plusplus
+      }
+    }
+
+    //console.log(map);
+
+    return `${v.id}_${map.get(
+      v.constructor === ClassDeclaration ? v.type : v
+    )}`;
   };
 })();
 
@@ -153,6 +166,21 @@ const builtin = {
   },
   print([s]) {
     return `console.log(${s})`;
+  },
+  length() {
+    return `length`;
+  },
+  roundUp([n]) {
+    return `Math.ceil(${n})`;
+  },
+  roundDown([n]) {
+    return `Math.floor(${n})`;
+  },
+  concatenate([s1, s2]) {
+    return `${s1}.concat(${s2})`;
+  },
+  absoluteVal([n]) {
+    return `Math.abs(${n})`;
   }
   /*
   ord([s]) {
@@ -167,8 +195,6 @@ const builtin = {
   substring([s, i, n]) {
     return `${s}.substr(${i}, ${n})`;
   },
-  concat([s, t]) {
-    return `${s}.concat(${t})`;
   },
   not(i) {
     return `(!(${i}))`;
@@ -183,15 +209,34 @@ module.exports = function(exp) {
   return beautify(exp.gen(), { indent_size: 2 });
 };
 
-Program.prototype.gen = function() {
+Program.prototype.gen = function(randomize = null) {
+  toggleRandom = randomize;
   setScore(this);
   return this.statements.map(e => e.gen()).join(";");
 };
-VariableDeclaration.prototype.gen = function() {
+
+let initializers = {
+  ArrayType: "[]",
+  DictionaryType: "{}",
+  ObjectType: "{}",
+  StringType: "",
+  NumberType: "0",
+  NullType: "null",
+  BooleanType: "false",
+  null: "null"
+};
+
+VariableDeclaration.prototype.gen = function(inClass) {
   setScore(this);
-  return `let ${javaScriptId(this)} ${
-    this.expression ? `= ${this.expression.gen()}` : ""
-  }`;
+  let declarator = inClass ? "" : "let";
+  let exp = "";
+  if (this.expression === null) {
+    exp = initializers[this.type.constructor.name];
+  } else {
+    exp = `${this.expression.gen()}`;
+  }
+
+  return `${declarator} ${javaScriptId(this)} ${exp ? `= ${exp}` : ""}`;
 };
 Return.prototype.gen = function() {
   setScore(this);
@@ -215,83 +260,107 @@ WhileLoop.prototype.gen = function() {
 };
 ForLoop.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `for(${this.dec.gen()} ;${this.exp.gen()} ;${this.assignment.gen()}) ${this.block.gen()}`;
 };
 FunctionCall.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  let prefix = this.id.constructor === MemberExp ? `${this.id.v.gen()} .` : "";
+
+  const args = this.args.map(a => a.gen());
+  if (this.callee.builtin) {
+    return `${prefix} ${builtin[this.callee.id](args)}`;
+  }
+
+  let newTag = this.callee.constructor === ObjectType ? "new" : "";
+
+  return `${prefix} ${newTag} ${javaScriptId(this.callee)}(${this.args
+    .map(a => a.gen())
+    .join(",")})`;
 };
 Assignment.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `${this.variable.gen()} = ${this.exp.gen()}`;
 };
 ClassDeclaration.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `class ${javaScriptId(this)} ${this.block.gen()}`;
 };
 ClassBlock.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+
+  let constructorsList = this.members.filter(
+    e => e.constructor === Constructor
+  );
+
+  return `{${this.members
+    .map(e => e.gen(true))
+    .join(";")} ${generateAllConstructors(constructorsList)} }`;
 };
+
+function generateAllConstructors(constructorList) {
+  return `constructor(..._) {
+    ${constructorList.map(
+      c => `if(_.length === ${c.params.length}) ${c.block.gen(c.params)}`
+    )}
+  }`;
+}
+
 Constructor.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
 };
-FunctionDeclaration.prototype.gen = function() {
+FunctionDeclaration.prototype.gen = function(inClass) {
+  let declarator = inClass ? "" : "function";
   setScore(this);
-  return `function ${this.id}(${this.params
+  return `${declarator} ${javaScriptId(this)}(${this.params
     .map(p => p.gen())
     .join(",")}) ${this.block.gen()}`;
 };
 Parameter.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return javaScriptId(this);
 };
-Block.prototype.gen = function() {
+Block.prototype.gen = function(params) {
   setScore(this);
-  return `{${this.statements.map(e => e.gen()).join(";")}}`;
+  let paramsDec = "";
+  if (params) {
+    paramsDec = `${params
+      .map((p, i) => `let ${javaScriptId(p)} = _[${i}]`)
+      .join(";")} ;\n`;
+  }
+
+  return `{${paramsDec} ${this.statements.map(e => e.gen()).join(";")}}`;
 };
 TernaryExp.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `(${this.exp1}?${this.exp2}:${this.exp3})`;
 };
 LambdaBlock.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `((${this.params.map(p => p.gen()).join(",")}) => ${this.block})`;
 };
 LambdaExp.prototype.gen = function() {
   setScore(this);
-  /*TODO*/
-  return;
+  return `((${this.params.map(p => p.gen()).join(",")}) => ${this.exp})`;
 };
 BinaryExp.prototype.gen = function() {
   setScore(this);
   return `(${this.left.gen()} ${makeOp(this.operator)} ${this.right.gen()})`;
 };
 UnaryPrefix.prototype.gen = function() {
-  /*TODO*/
-  return;
+  return `${makeOp(this.operator)} ${this.right.gen()}`;
 };
 UnaryPostfix.prototype.gen = function() {
-  /*TODO*/
-  return;
+  return `${this.left.gen()} ${makeOp(this.operator)}`;
 };
 SubscriptExp.prototype.gen = function() {
-  /*TODO*/
-  return;
+  return `${this.composite.gen()}[${this.subscript.gen()}]`;
 };
 MemberExp.prototype.gen = function() {
-  /*TODO*/
-  return;
+  if (this.field.constructor === FunctionCall) {
+    return `${this.v.gen()} . ${this.field.gen()}`;
+  }
+
+  return `${this.v.gen()} . ${javaScriptId(this.member)}`;
 };
 ArrayLiteral.prototype.gen = function() {
   return `[${[...this.exps].map(e => e.gen())}]`;

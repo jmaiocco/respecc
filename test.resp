@@ -11,8 +11,8 @@ Favor MakeChange(amount) could you...
   Please declare remaining as a Number as amount.
   Please declare i as a Number as 0.
   Excuse me, while i is less than 4, could you...
-    Please populate result[ i ] with remaining / US_Denominations[ i ].
-    Please populate remaining with remaining modded with US_Denominations[ i ].
+    Please populate result[ i ] with roundDown(remaining / US_Denominations[ i ]).
+    Please populate remaining with roundDown(remaining modded with US_Denominations[ i ]).
     i++
   Thank You.
   Kindly return result

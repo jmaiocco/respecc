@@ -10,6 +10,108 @@ const analyze = require("../../semantics/analyzer");
 const generate = require("../javascript-generator");
 
 const fixture = {
+  changeMaker: [
+    String.raw`Hello!
+    Please declare US_Denominations as a Array<Number> as [25, 10, 5, 1].
+    Favor MakeChange(amount) could you...
+      Excuse me, if (amount is less than 0), could you...
+        Do me a favor and run print with ("Error").
+        Kindly return -1
+      Thank You.
+      Please declare result as a Array<Number>.
+      Please declare remaining as a Number as amount.
+      Please declare i as a Number as 0.
+      Excuse me, while i is less than 4, could you...
+        Please populate result[ i ] with roundDown(remaining / US_Denominations[ i ]).
+        Please populate remaining with roundDown(remaining modded with US_Denominations[ i ]).
+        i++
+      Thank You.
+      Kindly return result
+    Thank You.
+    Please declare exampleAmount as a Number as 105.
+    Do me a favor and run MakeChange with (exampleAmount).
+    Bye Bye!`,
+    String.raw`let US_Denominations_1 = [25, 10, 5, 1];
+      function MakeChange_2(amount_3) {
+        if ((amount_3 < 0)) {
+          console.log("Error");
+          return -1
+        };
+        let result_4 = [];
+        let remaining_5 = amount_3;
+        let i_6 = 0;
+        while ((i_6 < 4)) {
+          result_4[i_6] = Math.floor((remaining_5 / US_Denominations_1[i_6]));
+          remaining_5 = Math.floor((remaining_5 % US_Denominations_1[i_6]));
+          i_6++
+        };
+        return result_4
+      };
+      let exampleAmount_7 = 105;
+      MakeChange_2(exampleAmount_7)`
+  ],
+
+  dogClass: [
+    String.raw`Hello!
+      Have you ever heard of a Dog? Let's get classy...
+      Please declare name as a String.
+      To construct a Dog by using (name as a String), could you...
+        Please populate this.name with name.
+      Thank You.
+      Favor getName() as a String could you...
+        Kindly return this.name
+      Thank You.
+
+    Thank You.
+    Please declare cc as Dog("cece")
+    print(cc.getName())
+    Bye Bye!`,
+    String.raw`class Dog_1 {
+  name_2;;
+  getName_3() {
+    return this.name_2
+  }
+  constructor(..._) {
+    if (_.length === 1) {
+      let name_4 = _[0];
+      this.name_2 = name_4
+    }
+  }
+};
+let cc_5 = new Dog_1("cece");
+console.log(cc_5.getName_3())`
+  ],
+
+  countryClass: [
+    String.raw`class Country{
+    gimme statePopulations : Dict<String, Number>
+    gimme states  : Array<String>
+
+    Country(states:Array<String>, pops:Dict<String,Number>){
+      this.states = states
+      this.statePopulations = pops
+    }
+  }
+  gimme calexit = Country(["The Bay", "NorCal", "SoCal"], {"Wales":200,"London":500,"Stratford-Upon-Avon":2})
+`,
+    String.raw`class Country_13 {
+      statePopulations_14 = {};
+      states_15 = [];
+      constructor(..._) {
+        if (_.length === 2) {
+          let states_16 = _[0];
+          let pops_17 = _[1];
+          this.states_15 = states_16;
+          this.statePopulations_14 = pops_17
+        }
+      }
+    };
+    let calexit_18 = new Country_13(["The Bay", "NorCal", "SoCal"], {
+      "Wales": 200,
+      "London": 500,
+      "Stratford-Upon-Avon": 2
+    })`
+  ]
   /*
   hello: [
     String.raw`print("Hello, world\n")`,

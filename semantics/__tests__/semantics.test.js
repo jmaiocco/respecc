@@ -105,17 +105,11 @@ function isPrime (num) {
   return Yes
 }
 `,
+
   String.raw`
-Hello!
-Have you ever heard of a Dog? Let's get classy...
-    Have you ever heard of a Ball? Let's get classy...
-      Please declare color as a String.
-      To construct a Ball by using (color as a String), could you...
-        Please populate this.color with color.
-      Thank You.
-    Thank You.
+  Hello!
+    Have you ever heard of a Dog? Let's get classy...
     Please declare name as a String.
-    Please declare ball as a Ball.
     To construct a Dog by using (name as a String), could you...
       Please populate this.name with name.
     Thank You.
@@ -127,20 +121,18 @@ Thank You.
 Please declare cc as Dog("cece")
 print(cc.getName())
 Bye Bye!`,
+
   String.raw`
 class Country{
   gimme statePopulations : Dict<String, Number>
   gimme states  : Array<String>
 
-  Country(states:Array<String>){
+  Country(states:Array<String>, pops:Dict<String,Number>){
     this.states = states
-  }
-  Country(pops:Dict<String,Number>){
     this.statePopulations = pops
   }
 }
-gimme calexit = Country(["The Bay", "NorCal", "SoCal"])
-gimme Brexit = Country({"Wales":200,"London":500,"Stratford-Upon-Avon":2})
+gimme calexit = Country(["The Bay", "NorCal", "SoCal"], {"Wales":200,"London":500,"Stratford-Upon-Avon":2})
 `,
   String.raw`gimme five = 5>4? 5: 4`,
   String.raw`gimme fiveish = 5>4?6>5:3>4? 2 : 1`,

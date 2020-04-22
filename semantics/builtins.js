@@ -32,14 +32,29 @@ let lengthFunction = new FunctionDeclaration(
   null
 );
 
+
 StringType.locals.set("length", lengthFunction);
 const standardFunctions = [
-  new FunctionDeclaration("print", [new Parameter("s", AnyType, null)]),
+  new FunctionDeclaration("absoluteVal", [new Parameter("n", NumberType, null)], NumberType),
   new FunctionDeclaration(
+    "concatenate",
+    [
+     new Parameter("s1", StringType, null), 
+     new Parameter("s2", StringType, null)
+    ],
+    StringType
+  ),
+    new FunctionDeclaration(
     "getRespecc",
     [new Parameter("s", null, null)],
     NumberType
-  )
+  ),
+  //new FunctionDeclaration("maximum", [], NumberType),
+  //new FunctionDeclaration("minimum", [], NumberType),
+  new FunctionDeclaration("print", [new Parameter("s", AnyType, null)]),
+  //new FunctionDeclaration("root", [new Parameter("")], NumberType),
+  new FunctionDeclaration("roundDown", [new Parameter("n", NumberType, null)], NumberType),
+  new FunctionDeclaration("roundUp", [new Parameter("n", NumberType, null)], NumberType,)
 ];
 
 //eslint-disable no-param-reassign
