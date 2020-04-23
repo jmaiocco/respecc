@@ -13,7 +13,7 @@ function stripped(s) {
   return s.replace(/\s+/g, "").replace(/_\d+/g, "");
 }
 
-const fixture = {
+const noPenFixture = {
   hello: [String.raw`print("Hello")`, 'console.log   ("Hello")'],
   oneVar: [String.raw`gimme x = 1`, "let x_1 = 1"],
   forLoopWithBreak: [
@@ -203,9 +203,74 @@ const fixture = {
     `
   ]
 };
-describe("The JavaScript generator (Penalties Disabled)", () => {
-  console.log(generate);
-  Object.entries(fixture).forEach(([name, [source, expected]]) => {
+
+const penFixture = { 
+  allPenaltiesActive: [
+    String.raw`
+      gimme pn1: Number = 1234
+      gimme pn2: String = "Is this gonna reverse? Probably"
+    `,
+    String`
+      let pn1 = "1234";
+      let pn2 = "ylbaborP ?esrever annog siht sI"
+    `
+  ]
+};
+
+const regFixture = {
+  angelic1: [
+    String.raw`
+      Salutations!  
+
+      Favor MakeDonation(amount:Number) could you...
+        Please declare charityFunds as a Number as 0.
+        Please populate charityFunds with amount.
+        Kindly return charityFunds.
+      Thank You.
+
+      Please declare personalMoney as a Number as 100000.00.
+      Do me a favor and run print with ("You had $" plus personalMoney).
+      Please declare donation as a Number as 0.
+      Please populate donation with personalMoney.
+      Please populate personalMoney with personalMoney minus donation.
+      Please declare newCharityFunds as a Number as the result of running MakeDonation with (donation).
+      Do me a favor and run print with ("The charity now has $" plus newCharityFunds).
+      Do me a favor and run print with ("You now have $" plus personalMoney).
+      Do me a favor and run print with ("Wow, that was pretty generous of you!").
+
+      Farewell!
+    `,
+    String.raw`
+      function MakeDonation_1(amount_2) {
+        let charityFunds_3 = 0;
+        charityFunds_3 = amount_2;
+        return charityFunds_3
+      };
+      let personalMoney_4 = 100000;
+      console.log(("You had $" + personalMoney_4));
+      let donation_5 = 0;
+      donation_5 = personalMoney_4;
+      personalMoney_4 = (personalMoney_4 - donation_5);
+      let newCharityFunds_6 = MakeDonation_1(donation_5);
+      console.log(("The charity now has $" + newCharityFunds_6));
+      console.log(("You now have $" + personalMoney_4));
+      console.log("Wow, that was pretty generous of you!")
+      `
+  ]/*,
+  polite1: [],
+  impolite1: [],
+  rude1: [],
+  rudeAF1: []
+*/
+};
+
+/* This is horrible code right now because it's basically
+   copy and paste for each group of tests, but it's a 
+   temporary solution
+*/
+describe("The JavaScript generator", () => {
+  //console.log(generate);
+   Object.entries(noPenFixture).forEach(([name, [source, expected]]) => {
     test(`produces the correct output for ${name}`, done => {
       const ast = parse(source);
       analyze(ast);
@@ -215,3 +280,52 @@ describe("The JavaScript generator (Penalties Disabled)", () => {
     });
   });
 });
+describe("The JavaScript generator", () => {
+  //console.log(generate);
+   Object.entries(penFixture).forEach(([name, [source, expected]]) => {
+    test(`produces the correct output for ${name}`, done => {
+      const ast = parse(source);
+      analyze(ast);
+      const actual = generate(ast, true);
+      expect(stripped(actual)).toEqual(stripped(expected));
+      done();
+    });
+  });
+});
+describe("The JavaScript generator", () => {
+  //console.log(generate);
+   Object.entries(regFixture).forEach(([name, [source, expected]]) => {
+    test(`produces the correct output for ${name}`, done => {
+      const ast = parse(source);
+      analyze(ast);
+      const actual = generate(ast, null);
+      expect(stripped(actual)).toEqual(stripped(expected));
+      done();
+    });
+  });
+});
+
+/*describe("The JavaScript generator", () => {
+  //console.log(generate);
+  let penaltyFlag;
+  [noPenFixture, penFixture/*, regFixture].forEach((fixture) => {
+     Object.entries(fixture).forEach((fixture, [name, [source, expected]]) => {
+      test(`produces the correct output for ${name}`, done => {
+        ///Works for now, but garbage code
+        if(Object.keys({fixture}[1]) === "hello") {
+          penaltyFlag = true;
+        } else if(Object.keys({fixture}[1]) === "allPenaltiesActive") {
+          penaltyFlag = false;
+        } else {
+          penaltyFlag = null;
+        }
+        const ast = parse(source);
+        analyze(ast);
+        const actual = generate(ast, penaltyFlag);
+        expect(stripped(actual)).toEqual(stripped(expected));
+        done();
+      });
+    });
+  });
+});
+*/
