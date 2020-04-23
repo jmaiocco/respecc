@@ -27,8 +27,52 @@ const fixture = {
   null: [
     String.raw`gimme nl = Null`,
     String.raw`let nl = null`
+  ], 
+  lambdaBlock: [
+    String.raw`
+      gimme doggos = () -> {return "doggos"}
+    `,
+    String.raw`
+      let doggos = (() => {return "doggos"})
+    `
   ],
-  /*basicConditionalRude: [
+  lambdaExp: [
+    String.raw`
+      gimme moreDoggos = () -> "MORE DOGGOS"
+    `,
+    String.raw`
+      let moreDoggos = (() => "MORE DOGGOS")
+    `
+  ],/*
+  memberExp: [
+    String.raw`
+    class MeaningOfExistence{
+      Favor gimmeDaAnswer() could you...
+        Kindly return 42. 
+      Thank You.
+
+      MeaningOfExistence(){
+      }
+    }
+    gimme lateNightThoughts = MeaningOfExistence()
+    print(lateNightThoughts.gimmeDaAnswer)
+  `,
+    String.raw`
+    class MeaningOfExistence {
+        gimmeDaAnswer() {
+          return 42
+        }
+        constructor(..._) {
+          if (_.length === 0) {
+            ;
+          }
+        }
+      };
+      let lateNightThoughts = new MeaningOfExistence();
+      console.log(lateNightThoughts.gimmeDaAnswer)
+      `
+  ],*/
+  conditional: [
     String.raw`
       gimme z:Number = 3
       if(z == 0) {
@@ -44,7 +88,7 @@ const fixture = {
     String.raw`
       let z = 3;
       if((z === 0)) {
-        z = (z + 1);
+        z = (z + 1)
       } else if((z === 1)) {
         z = (z + 2)
       } else if((z === 2)) {
@@ -54,23 +98,6 @@ const fixture = {
       }
     `
   ],
-  basicConditionalPolite: [
-    String.raw``,
-    String.raw`
-      Please declare x as a Number as 3.
-      if() {
-
-      } else if () {
-
-      } else {
-        
-      }
-    `
-  ],
-  basicForLoop: [
-
-  ],
-  */
   changeMaker: [
     String.raw`Hello!
       Please declare US_Denominations as a Array<Number> as [25, 10, 5, 1].
@@ -177,6 +204,7 @@ const fixture = {
     String.raw`
       Hello!
 
+      respecc()
       Please declare word as a String as "lengthtest".
       print(word.length())
       Please declare rdup as a Number as 22.55.
@@ -192,6 +220,7 @@ const fixture = {
       Bye Bye!
     `,
     String.raw`
+      48;
       let word = "lengthtest";
       console.log(word.length);
       let rdup = 22.55;
