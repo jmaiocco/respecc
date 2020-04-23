@@ -15,19 +15,16 @@ function stripped(s) {
 
 const noPenFixture = {
   hello: [String.raw`print("Hello")`, 'console.log   ("Hello")'],
-  oneVar: [String.raw`gimme x = 1`, 'let x_1 = 1'],
+  oneVar: [String.raw`gimme x = 1`, "let x_1 = 1"],
   forLoopWithBreak: [
     String.raw`for (gimme i = 0; i < 10; i++) { break }`,
     String.raw`for (let i = 0; (i < 10); i++) { break }`
   ],
   ternaryExp: [
-    String.raw`gimme trn = Yes ? 1 : 2`, 
+    String.raw`gimme trn = Yes ? 1 : 2`,
     String.raw`let trn = (true ? 1 : 2)`
   ],
-  null: [
-    String.raw`gimme nl = Null`,
-    String.raw`let nl = null`
-  ], 
+  null: [String.raw`gimme nl = Null`, String.raw`let nl = null`],
   lambdaBlock: [
     String.raw`
       gimme doggos = () -> {return "doggos"}
@@ -170,17 +167,16 @@ const noPenFixture = {
         "Wales": 200,
         "London": 500,
         "Stratford-Upon-Avon": 2
-      })`,
+      })`
   ],
   builtins: [
     String.raw`
       Hello!
-
       respecc()
       Please declare word as a String as "lengthtest".
       print(word.length())
       Please declare rdup as a Number as 22.55.
-      Please declare rddn as a Number as 22.55. 
+      Please declare rddn as a Number as 22.55.
       rdup = roundUp(rdup)
       rddn = roundDown(rddn)
       Please declare abs as a Number as -999.
@@ -192,7 +188,7 @@ const noPenFixture = {
       Bye Bye!
     `,
     String.raw`
-      30;
+      (() => 30)();
       let word = "lengthtest";
       console.log(word.length);
       let rdup = 22.55;
@@ -206,7 +202,6 @@ const noPenFixture = {
       let doghouse = dog.concat(house)
     `
   ]
-
 };
 
 const penFixture = { 
