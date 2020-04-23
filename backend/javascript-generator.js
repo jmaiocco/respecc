@@ -132,14 +132,23 @@ function setScore(object) {
   console.log(
     `${object.constructor.name}: ${respecc_score} is ${respecc_modes[respecc_level]}`
   );
-  console.log(enactPenalty(4, 0.5));
 }
 
-function enactPenalty(severity, chanceOfPenalty = 0.1) {
+class Penalty {
+  constructor(chance, generatePenalty) {
+    Object.assign(this, { chance, generatePenalty });
+  }
+}
+
+const NumbersAreStrings = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+  return `"${obj.value}"`;
+});
+
+function enactPenalty(penalty) {
   if (togglePenalties !== null) {
     return togglePenalties;
   } else {
-    return respecc_level > severity ? false : Math.random() <= chanceOfPenalty;
+    return Math.random() <= penalty.chance[respecc_level];
   }
 }
 
@@ -364,10 +373,6 @@ SubscriptExp.prototype.gen = function() {
   return `${this.composite.gen()}[${this.subscript.gen()}]`;
 };
 MemberExp.prototype.gen = function() {
-  if (this.field.constructor === FunctionCall) {
-    return `${this.v.gen()} . ${this.field.gen()}`;
-  }
-
   return `${this.v.gen()} . ${javaScriptId(this.member)}`;
 };
 ArrayLiteral.prototype.gen = function() {
@@ -380,6 +385,9 @@ DictEntry.prototype.gen = function() {
   return `${this.key.gen()} : ${this.value.gen()}`;
 };
 NumberLiteral.prototype.gen = function() {
+  if (enactPenalty(NumbersAreStrings)) {
+    return NumbersAreStrings.generatePenalty(this);
+  }
   return this.value;
 };
 StringLiteral.prototype.gen = function() {
