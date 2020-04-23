@@ -13,7 +13,7 @@ function stripped(s) {
   return s.replace(/\s+/g, "").replace(/_\d+/g, "");
 }
 
-const npFixture = {
+const noPenFixture = {
   hello: [String.raw`print("Hello")`, 'console.log   ("Hello")'],
   oneVar: [String.raw`gimme x = 1`, 'let x_1 = 1'],
   forLoopWithBreak: [
@@ -206,9 +206,23 @@ const npFixture = {
       let doghouse = dog.concat(house)
     `
   ]
+
 };
 
-const pFixture = {
+const penFixture = { 
+  allPenaltiesActive: [
+    String.raw`
+      gimme pn1: Number = 1234
+      gimme pn2: String = "Is this gonna reverse? Probably"
+    `,
+    String`
+      let pn1 = "1234";
+      let pn2 = "ylbaborP ?esrever annog siht sI"
+    `
+  ]
+};
+
+const regFixture = {
   angelic1: [
     String.raw`
       Salutations!  
@@ -251,13 +265,18 @@ const pFixture = {
   polite1: [],
   impolite1: [],
   rude1: [],
-  rudeAF1: []*/
+  rudeAF1: []
+*/
 };
 
+/* This is horrible code right now because it's basically
+   copy and paste for each group of tests, but it's a 
+   temporary solution
+*/
 describe("The JavaScript generator", () => {
   //console.log(generate);
-  Object.entries(npFixture).forEach(([name, [source, expected]]) => {
-    test(`produces the correct non-penalty output for ${name}`, done => {
+   Object.entries(noPenFixture).forEach(([name, [source, expected]]) => {
+    test(`produces the correct output for ${name}`, done => {
       const ast = parse(source);
       analyze(ast);
       const actual = generate(ast, false);
@@ -265,8 +284,11 @@ describe("The JavaScript generator", () => {
       done();
     });
   });
-  Object.entries(pFixture).forEach(([name, [source, expected]]) => {
-    test(`produces the correct penalty output for ${name}`, done => {
+});
+describe("The JavaScript generator", () => {
+  //console.log(generate);
+   Object.entries(penFixture).forEach(([name, [source, expected]]) => {
+    test(`produces the correct output for ${name}`, done => {
       const ast = parse(source);
       analyze(ast);
       const actual = generate(ast, true);
@@ -275,3 +297,40 @@ describe("The JavaScript generator", () => {
     });
   });
 });
+describe("The JavaScript generator", () => {
+  //console.log(generate);
+   Object.entries(regFixture).forEach(([name, [source, expected]]) => {
+    test(`produces the correct output for ${name}`, done => {
+      const ast = parse(source);
+      analyze(ast);
+      const actual = generate(ast, null);
+      expect(stripped(actual)).toEqual(stripped(expected));
+      done();
+    });
+  });
+});
+
+/*describe("The JavaScript generator", () => {
+  //console.log(generate);
+  let penaltyFlag;
+  [noPenFixture, penFixture/*, regFixture].forEach((fixture) => {
+     Object.entries(fixture).forEach((fixture, [name, [source, expected]]) => {
+      test(`produces the correct output for ${name}`, done => {
+        ///Works for now, but garbage code
+        if(Object.keys({fixture}[1]) === "hello") {
+          penaltyFlag = true;
+        } else if(Object.keys({fixture}[1]) === "allPenaltiesActive") {
+          penaltyFlag = false;
+        } else {
+          penaltyFlag = null;
+        }
+        const ast = parse(source);
+        analyze(ast);
+        const actual = generate(ast, penaltyFlag);
+        expect(stripped(actual)).toEqual(stripped(expected));
+        done();
+      });
+    });
+  });
+});
+*/
