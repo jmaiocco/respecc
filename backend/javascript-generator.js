@@ -1,17 +1,5 @@
-/*
- * Translation to JavaScript
- *
- * Requiring this module adds a gen() method to each of the AST classes, except
- * for types, and fields, which don’t figure into code generation. It exports a
- * function that generates a complete, pretty-printed JavaScript program for a
- * Tiger expression, bundling the translation of the Tiger standard library with
- * the expression's translation.
- *
- * Each gen() method returns a fragment of JavaScript.
- *
- *   const generate = require('./backend/javascript-generator');
- *   generate(tigerExpression);
- */
+
+
 
 const beautify = require("js-beautify");
 const {
@@ -211,27 +199,6 @@ const builtin = {
   absoluteVal([n]) {
     return `Math.abs(${n})`;
   }
-  /*
-  ord([s]) {
-    return `(${s}).charCodeAt(0)`;
-  },
-  chr([i]) {
-    return `String.fromCharCode(${i})`;
-  },
-  size([s]) {
-    return `${s}.length`;
-  },
-  substring([s, i, n]) {
-    return `${s}.substr(${i}, ${n})`;
-  },
-  },
-  not(i) {
-    return `(!(${i}))`;
-  },
-  exit(code) {
-    return `process.exit(${code})`;
-  }
-  */
 };
 
 module.exports = function(exp, penaltyFactor = null) {
@@ -276,11 +243,10 @@ Break.prototype.gen = function() {
 };
 Conditional.prototype.gen = function() {
   setScore(this);
-  return `if(${this.exp.gen()}) ${this.ifBlock.gen()} ${this.exps
-    .map((exp, i) => {
-      `else if(${exp.gen()}) ${this.blocks[i].gen()}`;
-    })
-    .join("")} ${this.elseBlock ? `else ${this.elseBlock.gen()}` : ""}`;
+  return `if(${this.exp.gen()}) ${this.ifBlock.gen()} 
+    ${this.exps ? this.exps.map((exp, i) => 
+      {return `else if(${exp.gen()}) ${this.blocks[i].gen()}`}).join("") : ""} 
+    ${this.elseBlock ? `else ${this.elseBlock.gen()}` : ""}`;
 };
 WhileLoop.prototype.gen = function() {
   setScore(this);
@@ -364,9 +330,7 @@ TernaryExp.prototype.gen = function() {
 };
 LambdaBlock.prototype.gen = function() {
   setScore(this);
-  return `((${this.params
-    .map(p => p.gen())
-    .join(",")}) => ${this.block.gen()})`;
+  return `((${this.params.map(p => p.gen()).join(",")}) => ${this.block.gen()})`;
 };
 LambdaExp.prototype.gen = function() {
   setScore(this);
