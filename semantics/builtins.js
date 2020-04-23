@@ -45,8 +45,8 @@ const standardFunctions = [
     StringType
   ),
     new FunctionDeclaration(
-    "getRespecc",
-    [new Parameter("s", null, null)],
+    "respecc",
+    [],
     NumberType
   ),
   //new FunctionDeclaration("maximum", [], NumberType),

@@ -15,7 +15,61 @@ function stripped(s) {
 
 const fixture = {
   hello: [String.raw`print("Hello")`, 'console.log   ("Hello")'],
-  onevar: [String.raw`gimme x = 1`, "let x_1 = 1"],
+  oneVar: [String.raw`gimme x = 1`, 'let x_1 = 1'],
+  forLoopWithBreak: [
+    String.raw`for (gimme i = 0; i < 10; i++) { break }`,
+    String.raw`for (let i = 0; (i < 10); i++) { break }`
+  ],
+  ternaryExp: [
+    String.raw`gimme trn = Yes ? 1 : 2`, 
+    String.raw`let trn = (true ? 1 : 2)`
+  ],
+  null: [
+    String.raw`gimme nl = Null`,
+    String.raw`let nl = null`
+  ], 
+  lambdaBlock: [
+    String.raw`
+      gimme doggos = () -> {return "doggos"}
+    `,
+    String.raw`
+      let doggos = (() => {return "doggos"})
+    `
+  ],
+  lambdaExp: [
+    String.raw`
+      gimme moreDoggos = () -> "MORE DOGGOS"
+    `,
+    String.raw`
+      let moreDoggos = (() => "MORE DOGGOS")
+    `
+  ],
+  conditional: [
+    String.raw`
+      gimme z:Number = 3
+      if(z == 0) {
+        z = z + 1
+      } else if(z == 1) {
+        z = z + 2
+      } else if(z == 2) {
+        z = z + 3
+      } else {
+        z = z * z
+      }
+    `,
+    String.raw`
+      let z = 3;
+      if((z === 0)) {
+        z = (z + 1)
+      } else if((z === 1)) {
+        z = (z + 2)
+      } else if((z === 2)) {
+        z = (z + 3)
+      } else {
+        z = (z * z)
+      }
+    `
+  ],
   changeMaker: [
     String.raw`Hello!
       Please declare US_Denominations as a Array<Number> as [25, 10, 5, 1].
@@ -116,72 +170,43 @@ const fixture = {
         "Wales": 200,
         "London": 500,
         "Stratford-Upon-Avon": 2
-      })`
+      })`,
+  ],
+  builtins: [
+    String.raw`
+      Hello!
+
+      respecc()
+      Please declare word as a String as "lengthtest".
+      print(word.length())
+      Please declare rdup as a Number as 22.55.
+      Please declare rddn as a Number as 22.55. 
+      rdup = roundUp(rdup)
+      rddn = roundDown(rddn)
+      Please declare abs as a Number as -999.
+      abs = absoluteVal(abs)
+      Please declare dog as a String as "dog".
+      Please declare house as a String as "house".
+      Please declare doghouse as a String as concatenate(dog, house).
+
+      Bye Bye!
+    `,
+    String.raw`
+      30;
+      let word = "lengthtest";
+      console.log(word.length);
+      let rdup = 22.55;
+      let rddn = 22.55;
+      rdup = Math.ceil(rdup);
+      rddn = Math.floor(rddn);
+      let abs = -999;
+      abs = Math.abs(abs);
+      let dog = "dog";
+      let house = "house";
+      let doghouse = dog.concat(house)
+    `
   ]
-  /*
-  hello: [
-    String.raw`print("Hello, world\n")`,
-    String.raw`console.log("Hello, world\n")`
-  ],
-
-  arithmetic: [String.raw`5 * -2 + 8`, String.raw`((5 * (-(2))) + 8)`],
-
-  letAndAssign: [
-    String.raw`let var x := 3 in x := 2 end`,
-    /let x_(\d+) = 3;\s+x_\1 = 2/
-  ],
-
-  call: [
-    String.raw`let function f(x: int, y: string) = () in f(1, "") end`,
-    /function f_(\d+)\(x_\d+, y_\d+\) \{\s*};\s*f_\1\(1, ""\)/
-  ],
-
-  whileLoop: [String.raw`while 7 do break`, /while \(7\) \{\s*break\s*\}/],
-
-  forLoop: [
-    String.raw`for i := 0 to 10 do ()`,
-    /let hi_(\d+) = 10;\s*for \(let i_(\d+) = 0; i_\2 <= hi_\1; i_\2\+\+\) \{\s*\}/
-  ],
-
-  ifThen: [String.raw`if 3 then 5`, "((3) ? (5) : (null))"],
-
-  ifThenElse: [String.raw`if 3 then 5 else 8`, "((3) ? (5) : (8))"],
-
-  member: [
-    String.raw`let type r = {x:string} var p := r{x="@"} in print(p.x) end`,
-    /let p_(\d+) = \{\s*x: "@"\s*\};\s*console.log\(p_\1\.x\)/
-  ],
-
-  subscript: [
-    String.raw`let type r = array of string var a := r[3] of "" in print(a[0]) end`,
-    /let a_(\d+) = Array\(3\).fill\(""\);\s*console.log\(a_\1\[0\]\)/
-  ],
-
-  letInFunction: [
-    String.raw`let function f():int = let var x:= 1 in x end in () end`,
-    /function f_(\d+)\(\) \{\s*let x_(\d+) = 1;\s*return x_\2\s*\};/
-  ],
-
-  letAsValue: [
-    String.raw`print(let var x := "dog" in concat(x, "s") end)`,
-    /console.log\(\(\(\) => \{\s*let x_(\d+) = "dog";\s*return x_\1.concat\("s"\);\s*\}\)\(\)\)/
-  ],
-
-  returnExpressionSequence: [
-    String.raw`let function f():int = let var x:= 1 in (1;nil;3) end in () end`,
-    /function f_(\d+)\(\) {\s*let x_(\d+) = 1;\s*1;\s*null;\s*return 3\s*\};/
-  ],
-
-  moreBuiltIns: [
-    String.raw`(ord("x"); chr(30); substring("abc", 0, 1))`,
-    /\("x"\).charCodeAt\(0\);\s*String.fromCharCode\(30\);\s*"abc".substr\(0, 1\)/
-  ],
-
-  evenMoreBuiltIns: [
-    String.raw`(not(1) ; size(""); exit(3))`,
-    /\(!\(1\)\);\s*"".length;\s*process\.exit\(3\)/
-  ]
-*/
+  
 };
 describe("The JavaScript generator", () => {
   console.log(generate);
