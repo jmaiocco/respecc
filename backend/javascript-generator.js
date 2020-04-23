@@ -132,6 +132,17 @@ const NumbersAreStrings = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
   return `"${obj.value}"`;
 });
 
+const NumbersAreAdjusted = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+  return `${obj.value + Math.floor(Math.random() * 10)}`;
+});
+
+const StringsAreReversed = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+  return `"${obj.value
+    .split("")
+    .reverse()
+    .join("")}"`;
+});
+
 function enactPenalty(penalty) {
   if (togglePenalties !== null) {
     return togglePenalties;
@@ -354,9 +365,15 @@ NumberLiteral.prototype.gen = function() {
   if (enactPenalty(NumbersAreStrings)) {
     return NumbersAreStrings.generatePenalty(this);
   }
+  if (enactPenalty(NumbersAreAdjusted)) {
+    return NumbersAreAdjusted.generatePenalty(this);
+  }
   return this.value;
 };
 StringLiteral.prototype.gen = function() {
+  if (enactPenalty(StringsAreReversed)) {
+    return StringsAreReversed.generatePenalty(this);
+  }
   return `"${this.value}"`;
 };
 BooleanLiteral.prototype.gen = function() {
