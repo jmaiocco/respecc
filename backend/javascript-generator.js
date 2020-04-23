@@ -1,6 +1,3 @@
-
-
-
 const beautify = require("js-beautify");
 const {
   Program,
@@ -179,7 +176,7 @@ const javaScriptId = (() => {
 
 const builtin = {
   respecc() {
-    return `${respecc_score}`;
+    return `(() => ${respecc_score})()`;
   },
   print([s]) {
     return `console.log(${s})`;
@@ -243,9 +240,16 @@ Break.prototype.gen = function() {
 };
 Conditional.prototype.gen = function() {
   setScore(this);
-  return `if(${this.exp.gen()}) ${this.ifBlock.gen()} 
-    ${this.exps ? this.exps.map((exp, i) => 
-      {return `else if(${exp.gen()}) ${this.blocks[i].gen()}`}).join("") : ""} 
+  return `if(${this.exp.gen()}) ${this.ifBlock.gen()}
+    ${
+      this.exps
+        ? this.exps
+            .map((exp, i) => {
+              return `else if(${exp.gen()}) ${this.blocks[i].gen()}`;
+            })
+            .join("")
+        : ""
+    }
     ${this.elseBlock ? `else ${this.elseBlock.gen()}` : ""}`;
 };
 WhileLoop.prototype.gen = function() {
@@ -330,7 +334,9 @@ TernaryExp.prototype.gen = function() {
 };
 LambdaBlock.prototype.gen = function() {
   setScore(this);
-  return `((${this.params.map(p => p.gen()).join(",")}) => ${this.block.gen()})`;
+  return `((${this.params
+    .map(p => p.gen())
+    .join(",")}) => ${this.block.gen()})`;
 };
 LambdaExp.prototype.gen = function() {
   setScore(this);
@@ -362,11 +368,11 @@ DictEntry.prototype.gen = function() {
   return `${this.key.gen()} : ${this.value.gen()}`;
 };
 NumberLiteral.prototype.gen = function() {
-  if (enactPenalty(NumbersAreStrings)) {
-    return NumbersAreStrings.generatePenalty(this);
-  }
   if (enactPenalty(NumbersAreAdjusted)) {
-    return NumbersAreAdjusted.generatePenalty(this);
+    this.value = NumbersAreAdjusted.generatePenalty(this);
+  }
+  if (enactPenalty(NumbersAreStrings)) {
+    this.value = NumbersAreStrings.generatePenalty(this);
   }
   return this.value;
 };
