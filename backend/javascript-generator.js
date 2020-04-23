@@ -373,10 +373,6 @@ SubscriptExp.prototype.gen = function() {
   return `${this.composite.gen()}[${this.subscript.gen()}]`;
 };
 MemberExp.prototype.gen = function() {
-  if (this.field.constructor === FunctionCall) {
-    return `${this.v.gen()} . ${this.field.gen()}`;
-  }
-
   return `${this.v.gen()} . ${javaScriptId(this.member)}`;
 };
 ArrayLiteral.prototype.gen = function() {

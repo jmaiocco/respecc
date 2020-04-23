@@ -4,11 +4,10 @@ gimme arr : Array<Number> = [6]
 gimme n2 : Number = arr.length()
 gimme a = 1
 gimme b = 1
-gimme c = 1
-gimme d = 1
-gimme e = 1
-gimme f = 1
-gimme g = 1
+Please declare d as a Number as 1.
+Please declare c as a Number as 1.
+Please declare f as a Number as 1.
+Please declare g as a Number as 1.
 /*
 Hello!
   Have you ever heard of a Dog? Let's get classy...
