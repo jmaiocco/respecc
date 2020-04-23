@@ -128,15 +128,15 @@ class Penalty {
   }
 }
 
-const NumbersAreStrings = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+const NumbersAreStrings = new Penalty([0.5, 0.25, 0.1, 0, 0], obj => {
   return `"${obj.value}"`;
 });
 
-const NumbersAreAdjusted = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+const NumbersAreAdjusted = new Penalty([0.5, 0.25, 0.1, 0, 0], obj => {
   return `${obj.value + Math.floor(Math.random() * 10)}`;
 });
 
-const StringsAreReversed = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+const StringsAreReversed = new Penalty([0.5, 0.25, 0.1, 0, 0], obj => {
   return `"${obj.value
     .split("")
     .reverse()
