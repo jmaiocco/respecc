@@ -144,6 +144,17 @@ const NumbersAreStrings = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
   return `"${obj.value}"`;
 });
 
+const NumbersAreAdjusted = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+  return `${obj.value + Math.floor(Math.random() * 10)}`;
+});
+
+const StringsAreReversed = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+  return `"${obj.value
+    .split("")
+    .reverse()
+    .join("")}"`;
+});
+
 function enactPenalty(penalty) {
   if (togglePenalties !== null) {
     return togglePenalties;
@@ -269,7 +280,7 @@ Conditional.prototype.gen = function() {
     .map((exp, i) => {
       `else if(${exp.gen()}) ${this.blocks[i].gen()}`;
     })
-    .join("")} ${this.elseBlock ? `else ${this.elseBlock}` : ""}`;
+    .join("")} ${this.elseBlock ? `else ${this.elseBlock.gen()}` : ""}`;
 };
 WhileLoop.prototype.gen = function() {
   setScore(this);
@@ -349,15 +360,17 @@ Block.prototype.gen = function(params) {
 };
 TernaryExp.prototype.gen = function() {
   setScore(this);
-  return `(${this.exp1}?${this.exp2}:${this.exp3})`;
+  return `(${this.exp1.gen()}?${this.exp2.gen()}:${this.exp3.gen()})`;
 };
 LambdaBlock.prototype.gen = function() {
   setScore(this);
-  return `((${this.params.map(p => p.gen()).join(",")}) => ${this.block})`;
+  return `((${this.params
+    .map(p => p.gen())
+    .join(",")}) => ${this.block.gen()})`;
 };
 LambdaExp.prototype.gen = function() {
   setScore(this);
-  return `((${this.params.map(p => p.gen()).join(",")}) => ${this.exp})`;
+  return `((${this.params.map(p => p.gen()).join(",")}) => ${this.exp.gen()})`;
 };
 BinaryExp.prototype.gen = function() {
   setScore(this);
@@ -388,9 +401,15 @@ NumberLiteral.prototype.gen = function() {
   if (enactPenalty(NumbersAreStrings)) {
     return NumbersAreStrings.generatePenalty(this);
   }
+  if (enactPenalty(NumbersAreAdjusted)) {
+    return NumbersAreAdjusted.generatePenalty(this);
+  }
   return this.value;
 };
 StringLiteral.prototype.gen = function() {
+  if (enactPenalty(StringsAreReversed)) {
+    return StringsAreReversed.generatePenalty(this);
+  }
   return `"${this.value}"`;
 };
 BooleanLiteral.prototype.gen = function() {
