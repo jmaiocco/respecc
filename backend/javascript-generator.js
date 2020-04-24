@@ -266,16 +266,17 @@ FunctionCall.prototype.gen = function() {
   setScore(this);
   let prefix = this.id.constructor === MemberExp ? `${this.id.v.gen()} .` : "";
 
-  const args = this.args.map(a => a.gen());
+  const args = this.args ? this.args.map(a => a.gen()) : "";
+  console.log(args);
   if (this.callee.builtin) {
     return `${prefix} ${builtin[this.callee.id](args)}`;
   }
 
   let newTag = this.callee.constructor === ObjectType ? "new" : "";
 
-  return `${prefix} ${newTag} ${javaScriptId(this.callee)}(${this.args
-    .map(a => a.gen())
-    .join(",")})`;
+  return `${prefix} ${newTag} ${javaScriptId(this.callee)}(${
+    args.constructor === Array ? args.join(",") : ""
+  })`;
 };
 Assignment.prototype.gen = function() {
   setScore(this);

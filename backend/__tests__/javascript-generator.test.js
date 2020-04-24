@@ -95,6 +95,21 @@ const noPenaltyFixture = {
       }
     `
   ],
+  funcNoParams: [
+    String.raw`Hey!
+
+    Favor returnFour() as a Number {
+      return 4
+    }
+
+    Do me a favor and run returnFour.
+
+    Bye Bye!`,
+    String.raw`function returnFour_1() {
+  return 4
+};
+returnFour_1()`
+  ],
   changeMaker: [
     String.raw`Hello!
       Please declare US_Denominations as a Array<Number> as [25, 10, 5, 1].
