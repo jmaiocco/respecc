@@ -285,7 +285,52 @@ const regularFixture = {
       console.log(("You now have $" + personalMoney_4));
       console.log("Wow, that was pretty generous of you!")
       `
-  ]
+  ],
+  polite1: [
+    String.raw`
+      Hey!
+
+      gimme helpNeeded: Boolean = Yes
+      Excuse me, if (helpNeeded), could you...
+        Do me a favor and run print with ("I can help out!").
+      Thank You.
+      Otherwise, could you...
+        Do me a favor and run print with ("Ok, let me know if you need anything!").
+      Thank You.
+
+      Bye Bye!
+    `,
+    String.raw`
+     let helpNeeded = true;
+     if (helpNeeded) {
+       console.log("I can help out!")
+     } else {
+       console.log("Ok, let me know if you need anything!")
+     }
+    `
+  ],
+  impolite1: [
+    String.raw`
+      Hey!
+
+      gimme timeOff:Number = 150
+      Excuse me, while ( timeOff > 0 ), could you...
+        print("Ah...I bet everyone is struggling at work right now")
+        timeOff--
+      Thank You.
+
+      Farewell!
+    `,
+    /lettimeOff=(?:1\d\d|\"150\");while\(\(timeOff>(?:-?\d\d?)\)\){console\.log\(\"(?:Ah\.\.\.Ibeteveryoneisstrugglingatworkrightnow|wonthgirkrowtagnilggurtssienoyrevetebI\.\.\.hA)\"\);timeOff--}/,
+  ]/*,
+  rude1: [
+    String.raw``,
+    /a/
+  ],
+  rudeAF1:[
+    String.raw``,
+    /a/
+  ]*/
 };
 
 function testGivenFixture(fixture, penaltyFlag) {
