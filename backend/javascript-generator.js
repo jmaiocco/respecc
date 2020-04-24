@@ -131,7 +131,7 @@ const NumbersAreStrings = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
 });
 
 const NumbersAreAdjusted = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
-  return `${obj.value + Math.floor(Math.random() * 10)}`;
+  return `${obj.value + 1 + Math.floor(Math.random() * 10)}`;
 });
 
 const BooleansAreFlipped = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
@@ -247,15 +247,11 @@ Break.prototype.gen = function() {
 Conditional.prototype.gen = function() {
   setScore(this);
   return `if(${this.exp.gen()}) ${this.ifBlock.gen()}
-    ${
-      this.exps
-        ? this.exps
-            .map((exp, i) => {
-              return `else if(${exp.gen()}) ${this.blocks[i].gen()}`;
-            })
-            .join("")
-        : ""
-    }
+    ${this.exps
+      .map((exp, i) => {
+        return `else if(${exp.gen()}) ${this.blocks[i].gen()}`;
+      })
+      .join("")}
     ${this.elseBlock ? `else ${this.elseBlock.gen()}` : ""}`;
 };
 WhileLoop.prototype.gen = function() {
