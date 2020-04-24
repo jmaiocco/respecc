@@ -197,8 +197,8 @@ LambdaBlock.prototype.analyze = function(context) {
 };
 
 LambdaExp.prototype.analyze = function(context) {
-  this.params.forEach(param => param.analyze(this.context));
-  this.exp.analyze(this.context);
+  this.params.forEach(param => param.analyze(context));
+  this.exp.analyze(context);
   this.type = this.exp.type;
 };
 

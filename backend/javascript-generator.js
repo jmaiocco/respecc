@@ -44,7 +44,8 @@ const {
   standardFunctions
 } = require("../semantics/builtins");
 
-let respecc_score = 50;
+const INITIAL_SCORE = 50;
+let respecc_score = INITIAL_SCORE;
 let respecc_modes = ["RudeAF", "Rude", "Impolite", "Polite", "Angelic"];
 let respecc_level = 4;
 
@@ -106,7 +107,7 @@ function setScore(object) {
     object.constructor === LambdaExp
   ) {
     respecc_score += object.constructor.rudeFactor;
-  } else if (object.constructor.politeFactor && object.constructor.rudeFactor) {
+  } else {
     respecc_score +=
       object.politeFlag === true
         ? object.constructor.politeFactor
@@ -130,11 +131,11 @@ const NumbersAreStrings = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
 });
 
 const NumbersAreAdjusted = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
-  return `${obj.value + Math.floor(Math.random() * 10)}`;
+  return `${obj.value + 1 + Math.floor(Math.random() * 10)}`;
 });
 
 const BooleansAreFlipped = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
-  return `${obj.value === "Yes" ? "No" : "Yes"}`;
+  return `${obj.value === true ? false : true}`;
 });
 
 const StringsAreReversed = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
@@ -204,6 +205,7 @@ const builtin = {
 
 module.exports = function(exp, penaltyFactor = null) {
   togglePenalties = penaltyFactor;
+  respecc_score = INITIAL_SCORE;
   return beautify(exp.gen(), { indent_size: 2 });
 };
 
@@ -245,15 +247,11 @@ Break.prototype.gen = function() {
 Conditional.prototype.gen = function() {
   setScore(this);
   return `if(${this.exp.gen()}) ${this.ifBlock.gen()}
-    ${
-      this.exps
-        ? this.exps
-            .map((exp, i) => {
-              return `else if(${exp.gen()}) ${this.blocks[i].gen()}`;
-            })
-            .join("")
-        : ""
-    }
+    ${this.exps
+      .map((exp, i) => {
+        return `else if(${exp.gen()}) ${this.blocks[i].gen()}`;
+      })
+      .join("")}
     ${this.elseBlock ? `else ${this.elseBlock.gen()}` : ""}`;
 };
 WhileLoop.prototype.gen = function() {
