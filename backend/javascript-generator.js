@@ -44,7 +44,8 @@ const {
   standardFunctions
 } = require("../semantics/builtins");
 
-let respecc_score = 50;
+const INITIAL_SCORE = 50;
+let respecc_score = INITIAL_SCORE;
 let respecc_modes = ["RudeAF", "Rude", "Impolite", "Polite", "Angelic"];
 let respecc_level = 4;
 
@@ -106,7 +107,7 @@ function setScore(object) {
     object.constructor === LambdaExp
   ) {
     respecc_score += object.constructor.rudeFactor;
-  } else if (object.constructor.politeFactor && object.constructor.rudeFactor) {
+  } else {
     respecc_score +=
       object.politeFlag === true
         ? object.constructor.politeFactor
@@ -202,9 +203,9 @@ const builtin = {
   }
 };
 
-module.exports = function(exp, penaltyFactor = null, initScore = 50) {
+module.exports = function(exp, penaltyFactor = null) {
   togglePenalties = penaltyFactor;
-  respecc_score = initScore;
+  respecc_score = INITIAL_SCORE;
   return beautify(exp.gen(), { indent_size: 2 });
 };
 

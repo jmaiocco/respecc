@@ -299,5 +299,5 @@ describe("The JavaScript generator with penalties", () => {
   testGivenFixture(penaltyFixture, true);
 });
 describe("The JavaScript generator that may have penalties", () => {
-  testGivenFixture(regularFixture, null);
+  testGivenFixture(regularFixture);
 });
