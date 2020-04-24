@@ -37,12 +37,20 @@ const noPenaltyFixture = {
       let doggos = (() => {return "doggos"})
     `
   ],
-  lambdaExp: [
+  lambdaBlockParams: [
     String.raw`
-      gimme moreDoggos = () -> "MORE DOGGOS"
+      gimme moreDoggos = (doggos) -> {return doggos}
     `,
     String.raw`
-      let moreDoggos = (() => "MORE DOGGOS")
+      let moreDoggos = ((doggos) => {return doggos})
+    `
+  ],
+  lambdaExp: [
+    String.raw`
+      gimme evenMoreDoggos = () -> "MORE DOGGOS"
+    `,
+    String.raw`
+      let evenMoreDoggos = (() => "MORE DOGGOS")
     `
   ],
   conditional: [
@@ -213,9 +221,10 @@ const penaltyFixture = {
   allPenaltiesActive: [
     String.raw`
       gimme pn1: Number = 1234
-      gimme pn2: String = "Is this gonna reverse? Probably"
+      gimme pn2: Boolean = Yes
+      gimme pn3: String = "Is this gonna reverse? Probably"
     `,
-    /letpn1=\"(?!1234)(\d)+\";letpn2=\"ylbaborP\?esreverannogsihtsI\"/
+    /letpn1=\"(?!1234)(\d)+\";letpn2=false;letpn3=\"ylbaborP\?esreverannogsihtsI\"/
   ]
 };
 

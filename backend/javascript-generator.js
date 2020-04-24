@@ -134,7 +134,7 @@ const NumbersAreAdjusted = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
 });
 
 const BooleansAreFlipped = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
-  return `${obj.value === "Yes" ? "No" : "Yes"}`;
+  return `${obj.value === true ? false : true}`;
 });
 
 const StringsAreReversed = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
