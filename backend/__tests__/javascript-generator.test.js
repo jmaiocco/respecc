@@ -10,7 +10,7 @@ const analyze = require("../../semantics/analyzer");
 const generate = require("../javascript-generator");
 
 function stripped(s) {
-  if(typeof s === 'string') {
+  if (typeof s === "string") {
     return s.replace(/\s+/g, "").replace(/_\d+/g, "");
   }
   return s;
@@ -207,20 +207,20 @@ const noPenFixture = {
   ]
 };
 
-const penFixture = { 
+const penFixture = {
   allPenaltiesActive: [
     String.raw`
       gimme pn1: Number = 1234
       gimme pn2: String = "Is this gonna reverse? Probably"
     `,
-    /letpn1=\"12\d\d\";letpn2=\"ylbaborP?esreverannogsihtsI\"/,
+    /letpn1=\"(?!1234)(\d)+\";letpn2=\"ylbaborP\?esreverannogsihtsI\"/
   ]
 };
 
 const regFixture = {
   angelic1: [
     String.raw`
-      Salutations!  
+      Salutations!
 
       Favor MakeDonation(amount:Number) could you...
         Please declare charityFunds as a Number as 0.
@@ -256,7 +256,7 @@ const regFixture = {
       console.log(("You now have $" + personalMoney_4));
       console.log("Wow, that was pretty generous of you!")
       `
-  ]/*,
+  ] /*,
   polite1: [],
   impolite1: [],
   rude1: [],
@@ -270,7 +270,11 @@ function testGivenFixture(fixture, penaltyFlag) {
       const ast = parse(source);
       analyze(ast);
       const actual = generate(ast, penaltyFlag);
-      expect(stripped(actual)).toMatch(stripped(expected));
+      if (expected instanceof RegExp) {
+        expect(stripped(actual)).toMatch(expected);
+      } else {
+        expect(stripped(actual)).toMatch(stripped(expected));
+      }
       done();
     });
   });

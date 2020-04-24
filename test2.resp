@@ -11,7 +11,8 @@ Please declare f as a Number as 1.
 Please declare g as a Number as 1.
 
 
-
+gimme pn1: Number = 1234
+gimme pn2: String = "Is this gonna reverse? Probably"
 /*
 Hello!
 
