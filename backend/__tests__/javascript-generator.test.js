@@ -166,7 +166,6 @@ const noPenaltyFixture = {
   let cc_5 = new Dog_1("cece");
   console.log(cc_5.getName_3())`
   ],
-
   countryClass: [
     String.raw`class Country{
       gimme statePopulations : Dict<String, Number>
@@ -196,6 +195,90 @@ const noPenaltyFixture = {
         "London": 500,
         "Stratford-Upon-Avon": 2
       })`
+  ],
+  fibonacci: [
+    String.raw`
+      Salutations!
+
+      Favor Fibonacci(n: Number, length: Number) could you... 
+        Excuse me, if (n is equal to 1), could you...
+          Please declare series as a Array<Number> as [0, 1].
+          Kindly return series.
+        Thank You.
+        Otherwise, could you...
+          Please declare series as a Array<Number> as the result of running Fibonacci with (n minus 1, length minus 1).
+          Please populate series[length] with (series[length minus 1] plus series[length minus 2]).
+          Kindly return series.
+        Thank You.
+      Thank You.
+    `,
+    String.raw`
+      function Fibonacci(n, length) {
+        if ((n === 1)) {
+          let series = [0, 1];
+          return series
+        } else {
+          let series = Fibonacci((n - 1), (length - 1));
+          series[length] = (series[(length - 1)] + series[(length - 2)]);
+          return series
+        }
+      }
+    `
+  ],
+  gcd: [
+    String.raw`
+      function GCD(firstValue, secondValue) {
+        if (firstValue < 0) {
+          firstValue = -firstValue
+        }
+        if (secondValue < 0) {
+          secondValue = -secondValue
+        }
+        gimme temporaryValue = 0
+        while (secondValue > 0) {
+          temporaryValue = secondValue
+          secondValue = firstValue % secondValue
+          firstValue = temporaryValue
+        }
+        return firstValue
+      }
+    `,
+    String.raw`
+      function GCD(firstValue, secondValue) {
+        if ((firstValue < 0)) {
+          firstValue = -firstValue
+        };
+        if ((secondValue < 0)) {
+          secondValue = -secondValue
+        };
+        let temporaryValue = 0;
+        while ((secondValue > 0)) {
+          temporaryValue = secondValue;
+          secondValue = (firstValue % secondValue);
+          firstValue = temporaryValue
+        };
+        return firstValue
+      }
+    `
+  ],
+  isEvenOrOdd: [
+    String.raw`
+      Hey!
+
+      Favor IsEvenOrOdd(numericValue: Number) could you...
+        Kindly return numericValue modded with 2 is equal to 0 ? "Even" : "Odd"
+      Thank You.
+
+      Do me a favor and run IsEvenOrOdd with (43).
+
+      Farewell!
+    `,
+    String.raw`
+      function IsEvenOrOdd(numericValue) {
+        return (((numericValue % 2) === 0) ? "Even" : "Odd")
+      };
+      IsEvenOrOdd(43)
+    `
   ],
   builtins: [
     String.raw`
@@ -247,7 +330,7 @@ const penaltyFixture = {
 
 //Penalties RANDOMLY Occur
 const regularFixture = {
-  angelic1: [
+  angelic: [
     String.raw`
       Salutations!
 
@@ -286,7 +369,7 @@ const regularFixture = {
       console.log("Wow, that was pretty generous of you!")
       `
   ],
-  polite1: [
+  polite: [
     String.raw`
       Hey!
 
@@ -309,7 +392,7 @@ const regularFixture = {
      }
     `
   ],
-  impolite1: [
+  impolite: [
     String.raw`
       Hey!
 
@@ -323,7 +406,7 @@ const regularFixture = {
     `,
     /lettimeOff=(?:1\d\d|\"1\d\d\");while\(\(timeOff>(?:-?\d\d?|\"-?\d\d?\")\)\){console\.log\(\"(?:Ah\.\.\.Ibeteveryoneisstrugglingatworkrightnow|wonthgirkrowtagnilggurtssienoyrevetebI\.\.\.hA)\"\);timeOff\-\-}/,
   ],
-  rude1: [
+  rude: [
     String.raw`
       Hey!
 
@@ -334,9 +417,9 @@ const regularFixture = {
 
       Bye Bye!
     `,
-    /letdebt=(\-\d\d|\"\-\d\d\");debt=Math\.abs\(debt\);console\.log\(debt\);console\.log\(\"(?:LookslikeIdon\'toweyouanything\.\*smug\*|\*gums\*\.gnihtynauoyewot\'nodIekilskooL)\"\)/
+    /letdebt=-(\d\d|\"\d\d\");debt=Math\.abs\(debt\);console\.log\(debt\);console\.log\(\"(?:LookslikeIdon\'toweyouanything\.\*smug\*|\*gums\*\.gnihtynauoyewot\'nodIekilskooL)\"\)/
   ],
-  rudeAF1: [
+  rudeAF: [
     String.raw`
       gimme areGroupMembersWorking: Boolean = Yes
       for(gimme week = 0; week < 15; week++) {
