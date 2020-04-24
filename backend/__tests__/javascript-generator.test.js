@@ -321,21 +321,42 @@ const regularFixture = {
 
       Farewell!
     `,
-    /lettimeOff=(?:1\d\d|\"150\");while\(\(timeOff>(?:-?\d\d?)\)\){console\.log\(\"(?:Ah\.\.\.Ibeteveryoneisstrugglingatworkrightnow|wonthgirkrowtagnilggurtssienoyrevetebI\.\.\.hA)\"\);timeOff--}/,
-  ]/*,
-  rude1: [
-    String.raw``,
-    /a/
+    /lettimeOff=(?:1\d\d|\"1\d\d\");while\(\(timeOff>(?:-?\d\d?|\"-?\d\d?\")\)\){console\.log\(\"(?:Ah\.\.\.Ibeteveryoneisstrugglingatworkrightnow|wonthgirkrowtagnilggurtssienoyrevetebI\.\.\.hA)\"\);timeOff\-\-}/,
   ],
-  rudeAF1:[
-    String.raw``,
-    /a/
-  ]*/
+  rude1: [
+    String.raw`
+      Hey!
+
+      gimme debt: Number = -80
+      debt = absoluteVal(debt)
+      print(debt)
+      print("Looks like I don't owe you anything. *smug*")
+
+      Bye Bye!
+    `,
+    /letdebt=(\-\d\d|\"\-\d\d\");debt=Math\.abs\(debt\);console\.log\(debt\);console\.log\(\"(?:LookslikeIdon\'toweyouanything\.\*smug\*|\*gums\*\.gnihtynauoyewot\'nodIekilskooL)\"\)/
+  ],
+  rudeAF1: [
+    String.raw`
+      gimme areGroupMembersWorking: Boolean = Yes
+      for(gimme week = 0; week < 15; week++) {
+        if(areGroupMembersWorking) {
+          break
+        } else {
+          break
+        }
+      }
+    `,
+    /letareGroupMembersWorking=(?:true|false);for\(letweek=(?:\d\d?|\"\d\d?\");\(week<(?:\d\d|\"\d\d\")\);week\+\+\)\{if\(areGroupMembersWorking\)\{break\}else\{break\}\}/,
+  ]
 };
 
 function testGivenFixture(fixture, penaltyFlag) {
   Object.entries(fixture).forEach(([name, [source, expected]]) => {
     test(`produces the correct output for ${name}`, done => {
+        
+      console.log(`\n\n\n${name}\n\n\n`);
+
       const ast = parse(source);
       analyze(ast);
       const actual = generate(ast, penaltyFlag);
