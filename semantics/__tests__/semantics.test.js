@@ -159,6 +159,56 @@ gimme calexit = Country(["The Bay", "NorCal", "SoCal"], {"Wales":200,"London":50
   for(gimme i = 0; i < 4; i++) {
     break
   }`,
+  String.raw`
+  for(gimme ii = 0; ii < 4; ) {
+    ii++
+    break
+  }`,
+  String.raw`
+  for(gimme iii = 0; ; iii++) {
+    break
+  }`,
+  String.raw`
+  gimme iiii = 0
+  for(; iiii < 4; iiii++) {
+    break
+  }`,
+  String.raw`
+  gimme iiiii = 0
+  for(; ; iiiii++) {
+    break
+  }`,
+  String.raw`
+  gimme iiiiii = 0
+  for(; iiiiii<4; ) {
+    break
+  }`,
+  String.raw`
+  for(; ; ) {
+    break
+  }`,
+  String.raw`
+  if(Yes){
+  }`,
+  String.raw`
+  if(Yes){
+  }
+  if(Yes){
+  }
+  else {
+  }
+  if(Yes){
+  }
+  else if(Yes || No){
+  }
+  if(Yes){
+  }
+  else if(Yes){
+  }
+  else if(Yes){
+  }
+  else {
+  }`,
   String.raw`print("Hello World")`,
   String.raw`
   function speak(message){print(message)}
