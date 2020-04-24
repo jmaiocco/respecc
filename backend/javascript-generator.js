@@ -202,8 +202,9 @@ const builtin = {
   }
 };
 
-module.exports = function(exp, penaltyFactor = null) {
+module.exports = function(exp, penaltyFactor = null, initScore = 50) {
   togglePenalties = penaltyFactor;
+  respecc_score = initScore;
   return beautify(exp.gen(), { indent_size: 2 });
 };
 

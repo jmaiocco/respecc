@@ -16,7 +16,8 @@ function stripped(s) {
   return s;
 }
 
-const noPenFixture = {
+//Penalties NEVER Occur
+const noPenaltyFixture = {
   hello: [String.raw`print("Hello")`, 'console.log   ("Hello")'],
   oneVar: [String.raw`gimme x = 1`, "let x_1 = 1"],
   forLoopWithBreak: [
@@ -191,7 +192,7 @@ const noPenFixture = {
       Bye Bye!
     `,
     String.raw`
-      (() => 30)();
+      (() => 56)();
       let word = "lengthtest";
       console.log(word.length);
       let rdup = 22.55;
@@ -207,7 +208,8 @@ const noPenFixture = {
   ]
 };
 
-const penFixture = {
+//Penalties ALWAYS Occur
+const penaltyFixture = {
   allPenaltiesActive: [
     String.raw`
       gimme pn1: Number = 1234
@@ -217,7 +219,8 @@ const penFixture = {
   ]
 };
 
-const regFixture = {
+//Penalties RANDOMLY Occur
+const regularFixture = {
   angelic1: [
     String.raw`
       Salutations!
@@ -281,12 +284,11 @@ function testGivenFixture(fixture, penaltyFlag) {
 }
 
 describe("The JavaScript generator without penalties", () => {
-  testGivenFixture(noPenFixture, false);
+  testGivenFixture(noPenaltyFixture, false);
 });
 describe("The JavaScript generator with penalties", () => {
-  testGivenFixture(penFixture, true);
+  testGivenFixture(penaltyFixture, true);
 });
-/*
 describe("The JavaScript generator that may have penalties", () => {
-   testGivenFixture(regFixture, null);
-});*/
+  testGivenFixture(regularFixture, null);
+});
