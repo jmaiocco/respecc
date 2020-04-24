@@ -116,10 +116,8 @@ Assignment.prototype.analyze = function(context) {
 Conditional.prototype.analyze = function(context) {
   this.exp.analyze(context);
   this.ifBlock.analyze(context.createChildContextForBlock());
-  if (this.exps && this.blocks) {
-    this.exps.forEach(e => e.analyze(context));
-    this.blocks.forEach(b => b.analyze(context.createChildContextForBlock()));
-  }
+  this.exps.forEach(e => e.analyze(context));
+  this.blocks.forEach(b => b.analyze(context.createChildContextForBlock()));
   if (this.elseBlock) {
     this.elseBlock.analyze(context.createChildContextForBlock());
   }
@@ -149,30 +147,29 @@ ForLoop.prototype.analyze = function(context) {
 };
 
 FunctionCall.prototype.analyze = function(context) {
-  if (this.id.constructor === IdExp) {
-    this.id.analyze(context);
-    this.callee = this.id.ref;
-  } else if (this.id.constructor === MemberExp) {
+  if (this.id.constructor === MemberExp) {
     this.id.analyze(context);
     let objectType = this.id.v.type;
     this.callee = objectType.locals.get(this.id.field);
+  } else {
+    //IdExp
+    this.id.analyze(context);
+    this.callee = this.id.ref;
   }
 
   check.isCallable(this.callee, "Attempt to call a non-function");
+
   if (this.args) {
     this.args.forEach(arg => arg.analyze(context));
-    if (
-      this.callee.constructor === FunctionDeclaration ||
-      (this.callee.expression &&
-        this.callee.expression.constructor === LambdaExp)
-    ) {
-      check.legalArguments(this.args, this.callee.params);
-      this.type = this.callee.type;
-    } else {
+    if (this.callee.constructor === ObjectType) {
       check.anyLegalArguments(this.args, this.callee.callingParams);
       this.type = this.callee;
+      return;
+    } else {
+      check.legalArguments(this.args, this.callee.params);
     }
   }
+  this.type = this.callee.type;
 };
 
 Parameter.prototype.analyze = function(context) {

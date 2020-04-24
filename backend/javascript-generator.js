@@ -44,7 +44,8 @@ const {
   standardFunctions
 } = require("../semantics/builtins");
 
-let respecc_score = 50;
+const INITIAL_SCORE = 50;
+let respecc_score = INITIAL_SCORE;
 let respecc_modes = ["RudeAF", "Rude", "Impolite", "Polite", "Angelic"];
 let respecc_level = 4;
 
@@ -106,7 +107,7 @@ function setScore(object) {
     object.constructor === LambdaExp
   ) {
     respecc_score += object.constructor.rudeFactor;
-  } else if (object.constructor.politeFactor && object.constructor.rudeFactor) {
+  } else {
     respecc_score +=
       object.politeFlag === true
         ? object.constructor.politeFactor
@@ -133,11 +134,15 @@ const NumbersAreAdjusted = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
   return `${obj.value + Math.floor(Math.random() * 10)}`;
 });
 
+const BooleansAreFlipped = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+  return `${obj.value === true ? false : true}`;
+});
+
 const StringsAreReversed = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
-  return `"${obj.value
+  return obj.value
     .split("")
     .reverse()
-    .join("")}"`;
+    .join("");
 });
 
 function enactPenalty(penalty) {
@@ -200,6 +205,7 @@ const builtin = {
 
 module.exports = function(exp, penaltyFactor = null) {
   togglePenalties = penaltyFactor;
+  respecc_score = INITIAL_SCORE;
   return beautify(exp.gen(), { indent_size: 2 });
 };
 
@@ -378,11 +384,14 @@ NumberLiteral.prototype.gen = function() {
 };
 StringLiteral.prototype.gen = function() {
   if (enactPenalty(StringsAreReversed)) {
-    return StringsAreReversed.generatePenalty(this);
+    this.value = StringsAreReversed.generatePenalty(this);
   }
   return `"${this.value}"`;
 };
 BooleanLiteral.prototype.gen = function() {
+  if (enactPenalty(BooleansAreFlipped)) {
+    this.value = BooleansAreFlipped.generatePenalty(this);
+  }
   return this.value;
 };
 NullLiteral.prototype.gen = function() {

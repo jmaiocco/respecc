@@ -10,13 +10,14 @@ const analyze = require("../../semantics/analyzer");
 const generate = require("../javascript-generator");
 
 function stripped(s) {
-  if(typeof s === 'string') {
+  if (typeof s === "string") {
     return s.replace(/\s+/g, "").replace(/_\d+/g, "");
   }
   return s;
 }
 
-const noPenFixture = {
+//Penalties NEVER Occur
+const noPenaltyFixture = {
   hello: [String.raw`print("Hello")`, 'console.log   ("Hello")'],
   oneVar: [String.raw`gimme x = 1`, "let x_1 = 1"],
   forLoopWithBreak: [
@@ -36,12 +37,20 @@ const noPenFixture = {
       let doggos = (() => {return "doggos"})
     `
   ],
-  lambdaExp: [
+  lambdaBlockParams: [
     String.raw`
-      gimme moreDoggos = () -> "MORE DOGGOS"
+      gimme moreDoggos = (doggos) -> {return doggos}
     `,
     String.raw`
-      let moreDoggos = (() => "MORE DOGGOS")
+      let moreDoggos = ((doggos) => {return doggos})
+    `
+  ],
+  lambdaExp: [
+    String.raw`
+      gimme evenMoreDoggos = () -> "MORE DOGGOS"
+    `,
+    String.raw`
+      let evenMoreDoggos = (() => "MORE DOGGOS")
     `
   ],
   conditional: [
@@ -191,7 +200,7 @@ const noPenFixture = {
       Bye Bye!
     `,
     String.raw`
-      (() => 30)();
+      (() => 56)();
       let word = "lengthtest";
       console.log(word.length);
       let rdup = 22.55;
@@ -207,20 +216,23 @@ const noPenFixture = {
   ]
 };
 
-const penFixture = { 
+//Penalties ALWAYS Occur
+const penaltyFixture = {
   allPenaltiesActive: [
     String.raw`
       gimme pn1: Number = 1234
-      gimme pn2: String = "Is this gonna reverse? Probably"
+      gimme pn2: Boolean = Yes
+      gimme pn3: String = "Is this gonna reverse? Probably"
     `,
-    /letpn1=\"12\d\d\";letpn2=\"ylbaborP?esreverannogsihtsI\"/,
+    /letpn1=\"(?!1234)(\d)+\";letpn2=false;letpn3=\"ylbaborP\?esreverannogsihtsI\"/
   ]
 };
 
-const regFixture = {
+//Penalties RANDOMLY Occur
+const regularFixture = {
   angelic1: [
     String.raw`
-      Salutations!  
+      Salutations!
 
       Favor MakeDonation(amount:Number) could you...
         Please declare charityFunds as a Number as 0.
@@ -256,7 +268,7 @@ const regFixture = {
       console.log(("You now have $" + personalMoney_4));
       console.log("Wow, that was pretty generous of you!")
       `
-  ]/*,
+  ] /*,
   polite1: [],
   impolite1: [],
   rude1: [],
@@ -270,19 +282,22 @@ function testGivenFixture(fixture, penaltyFlag) {
       const ast = parse(source);
       analyze(ast);
       const actual = generate(ast, penaltyFlag);
-      expect(stripped(actual)).toMatch(stripped(expected));
+      if (expected instanceof RegExp) {
+        expect(stripped(actual)).toMatch(expected);
+      } else {
+        expect(stripped(actual)).toMatch(stripped(expected));
+      }
       done();
     });
   });
 }
 
 describe("The JavaScript generator without penalties", () => {
-  testGivenFixture(noPenFixture, false);
+  testGivenFixture(noPenaltyFixture, false);
 });
 describe("The JavaScript generator with penalties", () => {
-  testGivenFixture(penFixture, true);
+  testGivenFixture(penaltyFixture, true);
 });
-/*
 describe("The JavaScript generator that may have penalties", () => {
-   testGivenFixture(regFixture, null);
-});*/
+  testGivenFixture(regularFixture);
+});

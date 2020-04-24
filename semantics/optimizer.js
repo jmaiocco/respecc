@@ -1,24 +1,92 @@
-//const {  } = require("../ast");
+const {
+  Program,
+  Return,
+  Break,
+  Conditional,
+  WhileLoop,
+  ForLoop,
+  FunctionCall,
+  Assignment,
+  ArrayType,
+  DictionaryType,
+  ClassDeclaration,
+  ClassBlock,
+  Constructor,
+  FunctionDeclaration,
+  VariableDeclaration,
+  Parameter,
+  Block,
+  TernaryExp,
+  LambdaBlock,
+  LambdaExp,
+  BinaryExp,
+  UnaryPrefix,
+  UnaryPostfix,
+  SubscriptExp,
+  MemberExp,
+  ArrayLiteral,
+  DictionaryLiteral,
+  DictEntry,
+  NumberLiteral,
+  StringLiteral,
+  BooleanLiteral,
+  NullLiteral,
+  IdExp
+} = require("../ast");
 
 module.exports = program => program.optimize();
-/*
+
+let politeOps = {
+  or: "||",
+  and: "&&",
+  "is less than or equal to": "<=",
+  "is greater than or equal to": ">=",
+  "is less than": "<",
+  "is greater than": ">",
+  "is equal to": "===",
+  "==": "===",
+  "is not equal to": "!==",
+  plus: "+",
+  minus: "-",
+  times: "*",
+  "divided by": "/",
+  "modded with": "%",
+  "raised to the power of": "**"
+};
+
+function makeOp(op) {
+  return politeOps[op] || op;
+}
+
 function isZero(e) {
-  return e instanceof Literal && e.value === 0;
+  return e instanceof NumberLiteral && e.value === 0;
 }
 
 function isOne(e) {
-  return e instanceof Literal && e.value === 1;
+  return e instanceof NumberLiteral && e.value === 1;
 }
 
-function bothLiterals(b) {
-  return b.left instanceof Literal && b.right instanceof Literal;
+function bothNumberLiterals(b) {
+  return b.left instanceof NumberLiteral && b.right instanceof NumberLiteral;
 }
 
-ArrayExp.prototype.optimize = function() {
-  this.size = this.size.optimize();
-  this.fill = this.fill.optimize();
+function bothStringLiterals(b) {
+  return b.left instanceof StringLiteral && b.right instanceof StringLiteral;
+}
+
+Program.prototype.optimize = function() {
+  this.statements = this.statements.forEach(s => s.optimize());
+};
+
+NullLiteral.prototype.optimize = function() {
   return this;
 };
+
+IdExp.prototype.optimize = function() {
+  return this;
+};
+
+/* TIGER OPTIMIZATIONS, REFERENCE ONLY
 
 Assignment.prototype.optimize = function() {
   this.target = this.target.optimize();
@@ -84,10 +152,6 @@ Func.prototype.optimize = function() {
   return this;
 };
 
-IdExp.prototype.optimize = function() {
-  return this;
-};
-
 IfExp.prototype.optimize = function() {
   this.test = this.test.optimize();
   this.consequent = this.consequent.optimize();
@@ -124,11 +188,6 @@ NegationExp.prototype.optimize = function() {
   if (this.operand instanceof Literal) {
     return new Literal(-this.operand.value);
   }
-  return this;
-};
-
-Nil.prototype.optimize = function() {
-  // Nil is just nil
   return this;
 };
 

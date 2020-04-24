@@ -5,13 +5,15 @@ gimme arr : Array<Number> = [6]
 gimme n2 : Number = arr.length()
 gimme a = 1
 gimme b = 1
+gimme z = Yes
 Please declare d as a Number as 1.
 Please declare c as a Number as 1.
 Please declare f as a Number as 1.
 Please declare g as a Number as 1.
 
 
-
+gimme pn1: Number = 1234
+gimme pn2: String = "Is this gonna reverse? Probably"
 /*
 Hello!
 
