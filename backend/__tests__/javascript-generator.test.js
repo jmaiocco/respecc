@@ -95,6 +95,157 @@ const noPenaltyFixture = {
       }
     `
   ],
+  infiniteLoop: [
+    String.raw`
+      Favor F(string) could you...
+        print(string)
+        G(string)
+      Thank You.
+      Favor G(string) could you...
+        print(string)
+        F(string)
+      Thank You.
+      Do me a favor and run F with ("Oops").
+    `,
+    String.raw`
+      function F(string) {
+        console.log(string);
+        G(string)
+      };
+
+      function G(string) {
+        console.log(string);
+        F(string)
+      };
+      F("Oops")
+    `
+  ], 
+  dictionaryAccess: [
+    String.raw`
+      Please declare subjects as a Dict<String, Boolean> as {"math": Yes, "science": Yes, "english": No}.
+      Favor CheckIfEnglishIsFun(dict) could you...
+        return dict["english"]
+      Thank You.
+      Favor CheckIfMathIsFun(dict) could you...
+        return dict["math"]
+      Thank You. 
+      Do me a favor and run CheckIfEnglishIsFun with (subjects).
+      Do me a favor and run CheckIfMathIsFun with (subjects).
+    `,
+    String.raw`
+      let subjects = {
+        "math": true,
+        "science": true,
+        "english": false
+      };
+      function CheckIfEnglishIsFun(dict) {
+        return dict["english"]
+      };
+      function CheckIfMathIsFun(dict) {
+        return dict["math"]
+      };
+      CheckIfEnglishIsFun(subjects);
+      CheckIfMathIsFun(subjects)
+    `
+  ],
+  arrayAccess: [
+    String.raw`
+      Please declare lyrics as a Array<String> as ["Hey hey", "you you", "I could be your", "lemon quiche?", "...That's a new one"].
+      Favor readArray(array) could you...
+        for(gimme index = 0; index < 5; index++) {
+          print(array[index])
+        }
+        return array
+      Thank You.
+      Do me a favor and run readArray with (lyrics).
+
+    `,
+    String.raw`
+      let lyrics = ["Hey hey", "you you", "I could be your", "lemon quiche?", "...That's a new one"];
+
+      function readArray(array) {
+        for (let index= 0; (index < 5); index++) {
+          console.log(array[index])
+        };
+        return array
+      };
+      readArray(lyrics)
+    `
+  ],
+  bubbleSort: [
+    String.raw`
+      gimme list: Array<Number> = [2,3,4,5,2,4,3,7,5,9,13]
+      function BubbleSort(array) {
+        gimme len = 11
+        for (gimme i = 0; i < len; i++) {
+          for (gimme j = 0; j < len; j++) {
+            if (array[j] > array[j + 1]) {
+              gimme temp = array[j]
+              array[j] = array[j + 1]
+              array[j + 1] = temp
+            }
+          }
+        }
+        return array
+      }
+      BubbleSort(list)
+    `,
+    String.raw`
+      let list = [2, 3, 4, 5, 2, 4, 3, 7, 5, 9, 13];
+      function BubbleSort(array) {
+      let len = 11;
+      for (let i = 0;
+        (i < len); i++) {
+        for (let j = 0;
+          (j < len); j++) {
+          if ((array[j] > array[(j + 1)])) {
+            let temp = array[j];
+            array[j] = array[(j + 1)];
+            array[(j + 1)] = temp
+          }
+         }
+        };
+        return array
+      };
+      BubbleSort(list)
+    `
+  ],
+  insertionSort: [
+    String.raw`
+      gimme secondList: Array<Number> = [2,3,4,5,2,4,3,7,5,9,13]
+      function InsertionSort(array) {
+        gimme length = 11
+        for (gimme i2 = 1; i2 < length; i2++) {
+          gimme key = array[i2]
+          gimme j2 = i2 - 1
+          while (j2 >= 0 && array[j2] > key) {
+            array[j2 + 1] = array[j2]
+            j2 = j2 - 1
+          }
+          array[j2 + 1] = key
+          }
+        return array
+      }
+      InsertionSort(secondList)
+    `,
+    String.raw`
+      let secondList = [2, 3, 4, 5, 2, 4, 3, 7, 5, 9, 13];
+      function InsertionSort(array) {
+        let length = 11;
+        for (let i2 = 1; (i2 < length); i2++) {
+          let key = array[i2];
+          let j2 = (i2 - 1);
+          while (((j2 >= 0) && (array[j2] > key))) {
+            array[(j2 + 1)] = array[j2];
+            j2 = (j2 - 1)
+          };
+          array[(j2 + 1)] = key
+        };
+        return array
+      };
+      InsertionSort(secondList)
+    `
+  ],
   changeMaker: [
     String.raw`Hello!
       Please declare US_Denominations as a Array<Number> as [25, 10, 5, 1].
@@ -211,6 +362,9 @@ const noPenaltyFixture = {
           Kindly return series.
         Thank You.
       Thank You.
+
+      Do me a favor and run Fibonacci with (12, 12).
+      Farewell!
     `,
     String.raw`
       function Fibonacci(n, length) {
@@ -222,7 +376,8 @@ const noPenaltyFixture = {
           series[length] = (series[(length - 1)] + series[(length - 2)]);
           return series
         }
-      }
+      };
+      Fibonacci(12,12)
     `
   ],
   gcd: [
@@ -280,6 +435,46 @@ const noPenaltyFixture = {
       IsEvenOrOdd(43)
     `
   ],
+  isPrime: [
+    String.raw`
+      function isPrime (num) {
+        if (num <= 1) {
+          return Yes
+        } else if (num <= 3) {
+          return Yes
+        } else if (num%2 == 0 || num%3 == 0) {
+          return No
+        }
+        gimme i = 5
+        while (i*i <= num) {
+          if (num%i == 0 || num%(i+2) == 0) {
+            return No
+          }
+          i = i+6
+        }
+        return Yes
+      }
+    `,
+    String.raw`
+      function isPrime(num) {
+        if ((num <= 1)) {
+          return true
+        } else if ((num <= 3)) {
+          return true
+        } else if ((((num % 2) === 0) || ((num % 3) === 0))) {
+          return false
+        };
+        let i = 5;
+        while (((i * i) <= num)) {
+          if ((((num % i) === 0) || ((num % (i + 2)) === 0))) {
+            return false
+          };
+          i = (i + 6)
+        };
+        return true
+      }
+    `
+  ], 
   builtins: [
     String.raw`
       Hello!
