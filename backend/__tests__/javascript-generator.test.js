@@ -95,6 +95,22 @@ const noPenaltyFixture = {
       }
     `
   ],
+  funcNoParams: [
+    String.raw`Hey!
+
+    Favor returnFour() as a Number {
+      return 4
+    }
+
+    Do me a favor and run returnFour.
+
+    Bye Bye!`,
+    String.raw`
+      function returnFour() {
+        return 4
+      };
+      returnFour()`
+  ],
   infiniteLoop: [
     String.raw`
       Favor F(string) could you...
