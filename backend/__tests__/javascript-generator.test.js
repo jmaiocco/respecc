@@ -10,7 +10,10 @@ const analyze = require("../../semantics/analyzer");
 const generate = require("../javascript-generator");
 
 function stripped(s) {
-  return s.replace(/\s+/g, "").replace(/_\d+/g, "");
+  if(typeof s === 'string') {
+    return s.replace(/\s+/g, "").replace(/_\d+/g, "");
+  }
+  return s;
 }
 
 const noPenFixture = {
@@ -210,10 +213,7 @@ const penFixture = {
       gimme pn1: Number = 1234
       gimme pn2: String = "Is this gonna reverse? Probably"
     `,
-    String`
-      let pn1 = "1234";
-      let pn2 = "ylbaborP ?esrever annog siht sI"
-    `
+    /letpn1=\"12\d\d\";letpn2=\"ylbaborP?esreverannogsihtsI\"/,
   ]
 };
 
@@ -264,68 +264,25 @@ const regFixture = {
 */
 };
 
-/* This is horrible code right now because it's basically
-   copy and paste for each group of tests, but it's a 
-   temporary solution
-*/
-describe("The JavaScript generator", () => {
-  //console.log(generate);
-   Object.entries(noPenFixture).forEach(([name, [source, expected]]) => {
+function testGivenFixture(fixture, penaltyFlag) {
+  Object.entries(fixture).forEach(([name, [source, expected]]) => {
     test(`produces the correct output for ${name}`, done => {
       const ast = parse(source);
       analyze(ast);
-      const actual = generate(ast, false);
-      expect(stripped(actual)).toEqual(stripped(expected));
+      const actual = generate(ast, penaltyFlag);
+      expect(stripped(actual)).toMatch(stripped(expected));
       done();
     });
   });
-});
-describe("The JavaScript generator", () => {
-  //console.log(generate);
-   Object.entries(penFixture).forEach(([name, [source, expected]]) => {
-    test(`produces the correct output for ${name}`, done => {
-      const ast = parse(source);
-      analyze(ast);
-      const actual = generate(ast, true);
-      expect(stripped(actual)).toEqual(stripped(expected));
-      done();
-    });
-  });
-});
-describe("The JavaScript generator", () => {
-  //console.log(generate);
-   Object.entries(regFixture).forEach(([name, [source, expected]]) => {
-    test(`produces the correct output for ${name}`, done => {
-      const ast = parse(source);
-      analyze(ast);
-      const actual = generate(ast, null);
-      expect(stripped(actual)).toEqual(stripped(expected));
-      done();
-    });
-  });
-});
+}
 
-/*describe("The JavaScript generator", () => {
-  //console.log(generate);
-  let penaltyFlag;
-  [noPenFixture, penFixture/*, regFixture].forEach((fixture) => {
-     Object.entries(fixture).forEach((fixture, [name, [source, expected]]) => {
-      test(`produces the correct output for ${name}`, done => {
-        ///Works for now, but garbage code
-        if(Object.keys({fixture}[1]) === "hello") {
-          penaltyFlag = true;
-        } else if(Object.keys({fixture}[1]) === "allPenaltiesActive") {
-          penaltyFlag = false;
-        } else {
-          penaltyFlag = null;
-        }
-        const ast = parse(source);
-        analyze(ast);
-        const actual = generate(ast, penaltyFlag);
-        expect(stripped(actual)).toEqual(stripped(expected));
-        done();
-      });
-    });
-  });
+describe("The JavaScript generator without penalties", () => {
+  testGivenFixture(noPenFixture, false);
 });
-*/
+describe("The JavaScript generator with penalties", () => {
+  testGivenFixture(penFixture, true);
+});
+/*
+describe("The JavaScript generator that may have penalties", () => {
+   testGivenFixture(regFixture, null);
+});*/
