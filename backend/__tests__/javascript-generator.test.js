@@ -39,10 +39,18 @@ const noPenaltyFixture = {
   ],
   lambdaBlockParams: [
     String.raw`
-      gimme moreDoggos = (doggos) -> {return doggos}
+      gimme moreDoggos = (doggos2) -> {return doggos2}
     `,
     String.raw`
-      let moreDoggos = ((doggos) => {return doggos})
+      let moreDoggos = ((doggos2) => {return doggos2})
+    `
+  ],
+  lambdaBlockNoReturn: [
+    String.raw`
+      gimme sad = () -> {return}
+    `,
+    String.raw`
+      let sad = (() => {return})
     `
   ],
   lambdaExp: [
@@ -51,6 +59,14 @@ const noPenaltyFixture = {
     `,
     String.raw`
       let evenMoreDoggos = (() => "MORE DOGGOS")
+    `
+  ],
+  lambdaExpParams: [
+    String.raw`
+      gimme tooManyDoggos = (doggos3) -> doggos3
+    `,
+    String.raw`
+      let tooManyDoggos = ((doggos3) => doggos3)
     `
   ],
   conditional: [
@@ -222,9 +238,10 @@ const penaltyFixture = {
     String.raw`
       gimme pn1: Number = 1234
       gimme pn2: Boolean = Yes
-      gimme pn3: String = "Is this gonna reverse? Probably"
+      gimme pn3: Boolean = No
+      gimme pn4: String = "Is this gonna reverse? Probably"
     `,
-    /letpn1=\"(?!1234)(\d)+\";letpn2=false;letpn3=\"ylbaborP\?esreverannogsihtsI\"/
+    /letpn1=\"(?!1234)(\d)+\";letpn2=false;letpn3=true;letpn4=\"ylbaborP\?esreverannogsihtsI\"/
   ]
 };
 
@@ -268,12 +285,7 @@ const regularFixture = {
       console.log(("You now have $" + personalMoney_4));
       console.log("Wow, that was pretty generous of you!")
       `
-  ] /*,
-  polite1: [],
-  impolite1: [],
-  rude1: [],
-  rudeAF1: []
-*/
+  ]
 };
 
 function testGivenFixture(fixture, penaltyFlag) {
