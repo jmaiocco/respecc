@@ -13,6 +13,7 @@ const util = require("util");
 const yargs = require("yargs");
 const parse = require("./ast/parser");
 const analyze = require("./semantics/analyzer");
+const graphView = require("./semantics/viewer");
 //require('./semantics/optimizer');
 const generate = require("./backend/javascript-generator");
 
@@ -27,7 +28,7 @@ function compile(sourceCode, { astOnly, frontEndOnly, shouldOptimize }) {
   //program = program.optimize();
   //}
   if (frontEndOnly) {
-    return util.inspect(program, { depth: null });
+    return graphView(program);
   }
   return generate(program);
 }
