@@ -584,12 +584,12 @@ const regularFixture = {
     String.raw`
       Hey!
 
-      gimme helpNeeded: Boolean = Yes
+      Please declare helpNeeded as a Boolean as Yes.
       Excuse me, if (helpNeeded), could you...
         Do me a favor and run print with ("I can help out!").
       Thank You.
       Otherwise, could you...
-        Do me a favor and run print with ("Ok, let me know if you need anything!").
+        print("Ok, let me know if you need anything!")
       Thank You.
 
       Bye Bye!
