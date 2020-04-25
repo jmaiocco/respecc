@@ -1,13 +1,22 @@
+Salutations!
 
-Hey!
+Favor MakeDonation(amount:Number) could you...
+  Please declare charityFunds as a Number as 0.
+  Please populate charityFunds with amount.
+  Kindly return charityFunds.
+Thank You.
 
-Favor returnFour() as a Number {
-  return 4
-}
+Please declare personalMoney as a Number as 100000.00.
+Do me a favor and run print with ("You had $" plus personalMoney).
+Please declare donation as a Number as 0.
+Please populate donation with personalMoney.
+Please populate personalMoney with personalMoney minus donation.
+Please declare newCharityFunds as a Number as the result of running MakeDonation with (donation).
+Do me a favor and run print with ("The charity now has $" plus newCharityFunds).
+Do me a favor and run print with ("You now have $" plus personalMoney).
+Do me a favor and run print with ("Wow, that was pretty generous of you!").
 
-Do me a favor and run returnFour.
-
-Bye Bye!
+Farewell!
 /*
 Hello!
 

@@ -115,9 +115,8 @@ function setScore(object) {
   }
   respecc_score = Math.max(0, Math.min(respecc_score, 100));
   respecc_level = Math.min(Math.floor(respecc_score / 20), 4);
-  console.log(
-    `${object.constructor.name}: ${respecc_score} is ${respecc_modes[respecc_level]}`
-  );
+  //console.log(`${object.constructor.name}: ${respecc_score} is level
+  //             ${respecc_level} : ${respecc_modes[respecc_level]}`
 }
 
 class Penalty {
@@ -126,7 +125,7 @@ class Penalty {
   }
 }
 
-const NumbersAreStrings = new Penalty([0.5, 0.25, 0.1, -1,-1], obj => {
+const NumbersAreStrings = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
   return `"${obj.value}"`;
 });
 
@@ -177,11 +176,16 @@ const javaScriptId = (() => {
   };
 })();
 
-// Let's inline the built-in functions, because we can!
-
 const builtin = {
   respecc() {
     return `(() => ${respecc_score})()`;
+  },
+  printRespeccInfo() {
+    let score = `Respecc Score: ${respecc_score}`;
+    let level = `Respecc Level: ${respecc_level + 1} (${
+      respecc_modes[respecc_level]
+    })`;
+    return `console.log("${score}\\n${level}")`;
   },
   print([s]) {
     return `console.log(${s})`;
@@ -265,9 +269,7 @@ ForLoop.prototype.gen = function() {
 FunctionCall.prototype.gen = function() {
   setScore(this);
   let prefix = this.id.constructor === MemberExp ? `${this.id.v.gen()} .` : "";
-
   const args = this.args ? this.args.map(a => a.gen()) : "";
-  console.log(args);
   if (this.callee.builtin) {
     return `${prefix} ${builtin[this.callee.id](args)}`;
   }
@@ -365,7 +367,7 @@ ArrayLiteral.prototype.gen = function() {
   return `[${[...this.exps].map(e => e.gen())}]`;
 };
 DictionaryLiteral.prototype.gen = function() {
-  return `{${this.keyValuePairs.map(e => e.gen()).join(",")}}`; //Allows multiple of same named prop?
+  return `{${this.keyValuePairs.map(e => e.gen()).join(",")}}`;
 };
 DictEntry.prototype.gen = function() {
   return `${this.key.gen()} : ${this.value.gen()}`;

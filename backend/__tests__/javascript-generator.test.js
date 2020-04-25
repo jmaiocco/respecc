@@ -20,6 +20,10 @@ function stripped(s) {
 const noPenaltyFixture = {
   hello: [String.raw`print("Hello")`, 'console.log   ("Hello")'],
   oneVar: [String.raw`gimme x = 1`, "let x_1 = 1"],
+  info: [
+    String.raw`printRespeccInfo()`,
+    /console.log\(\"RespeccScore:30\\nRespeccLevel:2\(Rude\)\"\)/
+  ],
   forLoopWithBreak: [
     String.raw`for (gimme i = 0; i < 10; i++) { break }`,
     String.raw`for (let i = 0; (i < 10); i++) { break }`
@@ -135,7 +139,7 @@ const noPenaltyFixture = {
       };
       F("Oops")
     `
-  ], 
+  ],
   dictionaryAccess: [
     String.raw`
       Please declare subjects as a Dict<String, Boolean> as {"math": Yes, "science": Yes, "english": No}.
@@ -144,7 +148,7 @@ const noPenaltyFixture = {
       Thank You.
       Favor CheckIfMathIsFun(dict) could you...
         return dict["math"]
-      Thank You. 
+      Thank You.
       Do me a favor and run CheckIfEnglishIsFun with (subjects).
       Do me a favor and run CheckIfMathIsFun with (subjects).
     `,
@@ -367,7 +371,7 @@ const noPenaltyFixture = {
     String.raw`
       Salutations!
 
-      Favor Fibonacci(n: Number, length: Number) could you... 
+      Favor Fibonacci(n: Number, length: Number) could you...
         Excuse me, if (n is equal to 1), could you...
           Please declare series as a Array<Number> as [0, 1].
           Kindly return series.
@@ -490,7 +494,7 @@ const noPenaltyFixture = {
         return true
       }
     `
-  ], 
+  ],
   builtins: [
     String.raw`
       Hello!
@@ -615,7 +619,7 @@ const regularFixture = {
 
       Farewell!
     `,
-    /lettimeOff=(?:1\d\d|\"1\d\d\");while\(\(timeOff>(?:-?\d\d?|\"-?\d\d?\")\)\){console\.log\(\"(?:Ah\.\.\.Ibeteveryoneisstrugglingatworkrightnow|wonthgirkrowtagnilggurtssienoyrevetebI\.\.\.hA)\"\);timeOff\-\-}/,
+    /lettimeOff=(?:1\d\d|\"1\d\d\");while\(\(timeOff>(?:-?\d\d?|\"-?\d\d?\")\)\){console\.log\(\"(?:Ah\.\.\.Ibeteveryoneisstrugglingatworkrightnow|wonthgirkrowtagnilggurtssienoyrevetebI\.\.\.hA)\"\);timeOff\-\-}/
   ],
   rude: [
     String.raw`
@@ -641,16 +645,13 @@ const regularFixture = {
         }
       }
     `,
-    /letareGroupMembersWorking=(?:true|false);for\(letweek=(?:\d\d?|\"\d\d?\");\(week<(?:\d\d|\"\d\d\")\);week\+\+\)\{if\(areGroupMembersWorking\)\{break\}else\{break\}\}/,
+    /letareGroupMembersWorking=(?:true|false);for\(letweek=(?:\d\d?|\"\d\d?\");\(week<(?:\d\d|\"\d\d\")\);week\+\+\)\{if\(areGroupMembersWorking\)\{break\}else\{break\}\}/
   ]
 };
 
 function testGivenFixture(fixture, penaltyFlag) {
   Object.entries(fixture).forEach(([name, [source, expected]]) => {
     test(`produces the correct output for ${name}`, done => {
-        
-      console.log(`\n\n\n${name}\n\n\n`);
-
       const ast = parse(source);
       analyze(ast);
       const actual = generate(ast, penaltyFlag);
