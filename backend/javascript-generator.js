@@ -126,7 +126,7 @@ class Penalty {
   }
 }
 
-const NumbersAreStrings = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+const NumbersAreStrings = new Penalty([0.5, 0.25, 0.1, -1,-1], obj => {
   return `"${obj.value}"`;
 });
 

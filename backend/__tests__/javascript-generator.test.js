@@ -105,10 +105,162 @@ const noPenaltyFixture = {
     Do me a favor and run returnFour.
 
     Bye Bye!`,
-    String.raw`function returnFour_1() {
-  return 4
-};
-returnFour_1()`
+    String.raw`
+      function returnFour() {
+        return 4
+      };
+      returnFour()`
+  ],
+  infiniteLoop: [
+    String.raw`
+      Favor F(string) could you...
+        print(string)
+        G(string)
+      Thank You.
+      Favor G(string) could you...
+        print(string)
+        F(string)
+      Thank You.
+      Do me a favor and run F with ("Oops").
+    `,
+    String.raw`
+      function F(string) {
+        console.log(string);
+        G(string)
+      };
+
+      function G(string) {
+        console.log(string);
+        F(string)
+      };
+      F("Oops")
+    `
+  ], 
+  dictionaryAccess: [
+    String.raw`
+      Please declare subjects as a Dict<String, Boolean> as {"math": Yes, "science": Yes, "english": No}.
+      Favor CheckIfEnglishIsFun(dict) could you...
+        return dict["english"]
+      Thank You.
+      Favor CheckIfMathIsFun(dict) could you...
+        return dict["math"]
+      Thank You. 
+      Do me a favor and run CheckIfEnglishIsFun with (subjects).
+      Do me a favor and run CheckIfMathIsFun with (subjects).
+    `,
+    String.raw`
+      let subjects = {
+        "math": true,
+        "science": true,
+        "english": false
+      };
+      function CheckIfEnglishIsFun(dict) {
+        return dict["english"]
+      };
+      function CheckIfMathIsFun(dict) {
+        return dict["math"]
+      };
+      CheckIfEnglishIsFun(subjects);
+      CheckIfMathIsFun(subjects)
+    `
+  ],
+  arrayAccess: [
+    String.raw`
+      Please declare lyrics as a Array<String> as ["Hey hey", "you you", "I could be your", "lemon quiche?", "...That's a new one"].
+      Favor readArray(array) could you...
+        for(gimme index = 0; index < 5; index++) {
+          print(array[index])
+        }
+        return array
+      Thank You.
+      Do me a favor and run readArray with (lyrics).
+
+    `,
+    String.raw`
+      let lyrics = ["Hey hey", "you you", "I could be your", "lemon quiche?", "...That's a new one"];
+
+      function readArray(array) {
+        for (let index= 0; (index < 5); index++) {
+          console.log(array[index])
+        };
+        return array
+      };
+      readArray(lyrics)
+    `
+  ],
+  bubbleSort: [
+    String.raw`
+      gimme list: Array<Number> = [2,3,4,5,2,4,3,7,5,9,13]
+      function BubbleSort(array) {
+        gimme len = 11
+        for (gimme i = 0; i < len; i++) {
+          for (gimme j = 0; j < len; j++) {
+            if (array[j] > array[j + 1]) {
+              gimme temp = array[j]
+              array[j] = array[j + 1]
+              array[j + 1] = temp
+            }
+          }
+        }
+        return array
+      }
+      BubbleSort(list)
+    `,
+    String.raw`
+      let list = [2, 3, 4, 5, 2, 4, 3, 7, 5, 9, 13];
+      function BubbleSort(array) {
+      let len = 11;
+      for (let i = 0;
+        (i < len); i++) {
+        for (let j = 0;
+          (j < len); j++) {
+          if ((array[j] > array[(j + 1)])) {
+            let temp = array[j];
+            array[j] = array[(j + 1)];
+            array[(j + 1)] = temp
+          }
+         }
+        };
+        return array
+      };
+      BubbleSort(list)
+    `
+  ],
+  insertionSort: [
+    String.raw`
+      gimme secondList: Array<Number> = [2,3,4,5,2,4,3,7,5,9,13]
+      function InsertionSort(array) {
+        gimme length = 11
+        for (gimme i2 = 1; i2 < length; i2++) {
+          gimme key = array[i2]
+          gimme j2 = i2 - 1
+          while (j2 >= 0 && array[j2] > key) {
+            array[j2 + 1] = array[j2]
+            j2 = j2 - 1
+          }
+          array[j2 + 1] = key
+          }
+        return array
+      }
+      InsertionSort(secondList)
+    `,
+    String.raw`
+      let secondList = [2, 3, 4, 5, 2, 4, 3, 7, 5, 9, 13];
+      function InsertionSort(array) {
+        let length = 11;
+        for (let i2 = 1; (i2 < length); i2++) {
+          let key = array[i2];
+          let j2 = (i2 - 1);
+          while (((j2 >= 0) && (array[j2] > key))) {
+            array[(j2 + 1)] = array[j2];
+            j2 = (j2 - 1)
+          };
+          array[(j2 + 1)] = key
+        };
+        return array
+      };
+      InsertionSort(secondList)
+    `
   ],
   changeMaker: [
     String.raw`Hello!
@@ -181,7 +333,6 @@ returnFour_1()`
   let cc_5 = new Dog_1("cece");
   console.log(cc_5.getName_3())`
   ],
-
   countryClass: [
     String.raw`class Country{
       gimme statePopulations : Dict<String, Number>
@@ -212,6 +363,134 @@ returnFour_1()`
         "Stratford-Upon-Avon": 2
       })`
   ],
+  fibonacci: [
+    String.raw`
+      Salutations!
+
+      Favor Fibonacci(n: Number, length: Number) could you... 
+        Excuse me, if (n is equal to 1), could you...
+          Please declare series as a Array<Number> as [0, 1].
+          Kindly return series.
+        Thank You.
+        Otherwise, could you...
+          Please declare series as a Array<Number> as the result of running Fibonacci with (n minus 1, length minus 1).
+          Please populate series[length] with (series[length minus 1] plus series[length minus 2]).
+          Kindly return series.
+        Thank You.
+      Thank You.
+
+      Do me a favor and run Fibonacci with (12, 12).
+      Farewell!
+    `,
+    String.raw`
+      function Fibonacci(n, length) {
+        if ((n === 1)) {
+          let series = [0, 1];
+          return series
+        } else {
+          let series = Fibonacci((n - 1), (length - 1));
+          series[length] = (series[(length - 1)] + series[(length - 2)]);
+          return series
+        }
+      };
+      Fibonacci(12,12)
+    `
+  ],
+  gcd: [
+    String.raw`
+      function GCD(firstValue, secondValue) {
+        if (firstValue < 0) {
+          firstValue = -firstValue
+        }
+        if (secondValue < 0) {
+          secondValue = -secondValue
+        }
+        gimme temporaryValue = 0
+        while (secondValue > 0) {
+          temporaryValue = secondValue
+          secondValue = firstValue % secondValue
+          firstValue = temporaryValue
+        }
+        return firstValue
+      }
+    `,
+    String.raw`
+      function GCD(firstValue, secondValue) {
+        if ((firstValue < 0)) {
+          firstValue = -firstValue
+        };
+        if ((secondValue < 0)) {
+          secondValue = -secondValue
+        };
+        let temporaryValue = 0;
+        while ((secondValue > 0)) {
+          temporaryValue = secondValue;
+          secondValue = (firstValue % secondValue);
+          firstValue = temporaryValue
+        };
+        return firstValue
+      }
+    `
+  ],
+  isEvenOrOdd: [
+    String.raw`
+      Hey!
+
+      Favor IsEvenOrOdd(numericValue: Number) could you...
+        Kindly return numericValue modded with 2 is equal to 0 ? "Even" : "Odd"
+      Thank You.
+
+      Do me a favor and run IsEvenOrOdd with (43).
+
+      Farewell!
+    `,
+    String.raw`
+      function IsEvenOrOdd(numericValue) {
+        return (((numericValue % 2) === 0) ? "Even" : "Odd")
+      };
+      IsEvenOrOdd(43)
+    `
+  ],
+  isPrime: [
+    String.raw`
+      function isPrime (num) {
+        if (num <= 1) {
+          return Yes
+        } else if (num <= 3) {
+          return Yes
+        } else if (num%2 == 0 || num%3 == 0) {
+          return No
+        }
+        gimme i = 5
+        while (i*i <= num) {
+          if (num%i == 0 || num%(i+2) == 0) {
+            return No
+          }
+          i = i+6
+        }
+        return Yes
+      }
+    `,
+    String.raw`
+      function isPrime(num) {
+        if ((num <= 1)) {
+          return true
+        } else if ((num <= 3)) {
+          return true
+        } else if ((((num % 2) === 0) || ((num % 3) === 0))) {
+          return false
+        };
+        let i = 5;
+        while (((i * i) <= num)) {
+          if ((((num % i) === 0) || ((num % (i + 2)) === 0))) {
+            return false
+          };
+          i = (i + 6)
+        };
+        return true
+      }
+    `
+  ], 
   builtins: [
     String.raw`
       Hello!
@@ -262,7 +541,7 @@ const penaltyFixture = {
 
 //Penalties RANDOMLY Occur
 const regularFixture = {
-  angelic1: [
+  angelic: [
     String.raw`
       Salutations!
 
@@ -300,12 +579,78 @@ const regularFixture = {
       console.log(("You now have $" + personalMoney_4));
       console.log("Wow, that was pretty generous of you!")
       `
+  ],
+  polite: [
+    String.raw`
+      Hey!
+
+      Please declare helpNeeded as a Boolean as Yes.
+      Excuse me, if (helpNeeded), could you...
+        Do me a favor and run print with ("I can help out!").
+      Thank You.
+      Otherwise, could you...
+        print("Ok, let me know if you need anything!")
+      Thank You.
+
+      Bye Bye!
+    `,
+    String.raw`
+     let helpNeeded = true;
+     if (helpNeeded) {
+       console.log("I can help out!")
+     } else {
+       console.log("Ok, let me know if you need anything!")
+     }
+    `
+  ],
+  impolite: [
+    String.raw`
+      Hey!
+
+      gimme timeOff:Number = 150
+      Excuse me, while ( timeOff > 0 ), could you...
+        print("Ah...I bet everyone is struggling at work right now")
+        timeOff--
+      Thank You.
+
+      Farewell!
+    `,
+    /lettimeOff=(?:1\d\d|\"1\d\d\");while\(\(timeOff>(?:-?\d\d?|\"-?\d\d?\")\)\){console\.log\(\"(?:Ah\.\.\.Ibeteveryoneisstrugglingatworkrightnow|wonthgirkrowtagnilggurtssienoyrevetebI\.\.\.hA)\"\);timeOff\-\-}/,
+  ],
+  rude: [
+    String.raw`
+      Hey!
+
+      gimme debt: Number = -80
+      debt = absoluteVal(debt)
+      print(debt)
+      print("Looks like I don't owe you anything. *smug*")
+
+      Bye Bye!
+    `,
+    /letdebt=-(\d\d|\"\d\d\");debt=Math\.abs\(debt\);console\.log\(debt\);console\.log\(\"(?:LookslikeIdon\'toweyouanything\.\*smug\*|\*gums\*\.gnihtynauoyewot\'nodIekilskooL)\"\)/
+  ],
+  rudeAF: [
+    String.raw`
+      gimme areGroupMembersWorking: Boolean = Yes
+      for(gimme week = 0; week < 15; week++) {
+        if(areGroupMembersWorking) {
+          break
+        } else {
+          break
+        }
+      }
+    `,
+    /letareGroupMembersWorking=(?:true|false);for\(letweek=(?:\d\d?|\"\d\d?\");\(week<(?:\d\d|\"\d\d\")\);week\+\+\)\{if\(areGroupMembersWorking\)\{break\}else\{break\}\}/,
   ]
 };
 
 function testGivenFixture(fixture, penaltyFlag) {
   Object.entries(fixture).forEach(([name, [source, expected]]) => {
     test(`produces the correct output for ${name}`, done => {
+        
+      console.log(`\n\n\n${name}\n\n\n`);
+
       const ast = parse(source);
       analyze(ast);
       const actual = generate(ast, penaltyFlag);

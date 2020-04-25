@@ -180,16 +180,17 @@ Fibonacci(12, 12)
 /*****************
 JavaScript 
 *****************/
-let fibonacci = (n) => {
-  if (n === 1) {
-    return [0, 1];
+function Fibonacci(n, length) {
+  if ((n === 1)) {
+    let series = [0, 1];
+    return series
   } else {
-    let series = fibonacci(n - 1);
-    series.push(series[series.length - 1] + series[series.length - 2]);
-    return series;
+    let series = Fibonacci((n - 1), (length - 1));
+    series[length] = (series[(length - 1)] + series[(length - 2)]);
+    return series
   }
-}
-fibonacci(12);
+};
+Fibonacci(12,12)
 ```
 
 
@@ -245,17 +246,21 @@ GCD(90, 180)
 /*****************
 JavaScript 
 *****************/
-function gcd(firstValue, secondValue) {
-  firstValue = Math.abs(firstValue);
-  secondValue = Math.abs(secondValue);
-  while(secondValue > 0) {
-    let temporaryValue = secondValue;
-    secondValue = firstValue % secondValue;
-    firstValue = temporaryValue;
-  }
-  return firstValue;
+function GCD(firstValue, secondValue) {
+  if ((firstValue < 0)) {
+    firstValue = -firstValue
+  };
+  if ((secondValue < 0)) {
+    secondValue = -secondValue
+  };
+  let temporaryValue = 0;
+  while ((secondValue > 0)) {
+    temporaryValue = secondValue;
+    secondValue = (firstValue % secondValue);
+    firstValue = temporaryValue
+  };
+  return firstValue
 }
-gcd(90, 180);
 ```
 
 ### IsEvenOrOdd
@@ -285,9 +290,8 @@ IsEvenOrOdd(43)
 /*****************
 JavaScript 
 *****************/
-function isEvenOrOdd(numericValue) {
-  return numericValue % 2 === 0 ? "Even" : "Odd";
-}
-
-isEvenOrOdd(43);
+function IsEvenOrOdd(numericValue) {
+  return (((numericValue % 2) === 0) ? "Even" : "Odd")
+};
+IsEvenOrOdd(43)
 ```
