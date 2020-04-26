@@ -19,11 +19,11 @@ const {
   TernaryExp,
   LambdaBlock,
   LambdaExp,
-  BinaryExp, //done but needs testing (0 ** 0)
+  BinaryExp, //done but needs testing
   UnaryPrefix,
   UnaryPostfix,
-  SubscriptExp,
-  MemberExp,
+  SubscriptExp, //done but needs testing
+  MemberExp, //done but needs testing
   ArrayLiteral, //done but not confident
   DictionaryLiteral,
   DictEntry,
@@ -31,7 +31,7 @@ const {
   StringLiteral, //done
   BooleanLiteral, //done
   NullLiteral, //done
-  IdExp
+  IdExp //done
 } = require("../ast");
 
 module.exports = program => program.optimize();
@@ -205,10 +205,13 @@ UnaryPostfix.prototype.optimize = function() {
 };
 
 SubscriptExp.prototype.optimize = function() {
+  this.composite = this.composite.optimize();
+  this.subscript = this.subscript.optimize();
   return this;
 };
 
 MemberExp.prototype.optimize = function() {
+  this.v = this.v.optimize();
   return this;
 };
 
