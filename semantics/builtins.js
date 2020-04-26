@@ -52,7 +52,6 @@ const standardFunctions = [
   //new FunctionDeclaration("maximum", [], NumberType),
   //new FunctionDeclaration("minimum", [], NumberType),
   new FunctionDeclaration("print", [new Parameter("s", AnyType, null)]),
-  //new FunctionDeclaration("root", [new Parameter("")], NumberType),
   new FunctionDeclaration(
     "roundDown",
     [new Parameter("n", NumberType, null)],

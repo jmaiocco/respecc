@@ -123,7 +123,6 @@ ArrayType.prototype.optimize = function() {
   return this;
 };
 
-
 DictionaryType.prototype.optimize = function() {
   return this;
 };
@@ -141,7 +140,7 @@ Constructor.prototype.optimize = function() {
 };
 
 FunctionDeclaration.prototype.optimize = function() {
-  if(this.block){
+  if (this.block) {
     this.block = this.block.optimize;
   }
   return this;
@@ -175,23 +174,28 @@ LambdaExp.prototype.optimize = function() {
 BinaryExp.prototype.optimize = function() {
   this.left = this.left.optimize();
   this.right = this.right.optimize();
-  if (makeOp(this.operator) === '+' && isZero(this.right)) return this.left;
-  if (makeOP(this.operator) === '+' && isZero(this.left)) return this.right;
-  if (makeOP(this.operator) === '*' && isZero(this.right)) return new NumberLiteral(0);
-  if (makeOP(this.operator) === '*' && isZero(this.left)) return new NumberLiteral(0);
-  if (makeOP(this.operator) === '*' && isOne(this.right)) return this.left;
-  if (makeOP(this.operator) === '*' && isOne(this.left)) return this.right;
-  if (makeOP(this.operator) === '**' && isOne(this.left)) return new NumberLiteral(1);
-  if (makeOP(this.operator) === '**' && isOne(this.right)) return this.left;
-  if (makeOP(this.operator) === '**' && isZero(this.right)) return new NumberLiteral(1);
-  if (makeOP(this.operator) === '**' && isZero(this.left)) return new NumberLiteral(0);
-  if (bothLiterals(this)) {
+  if (makeOp(this.operator) === "+" && isZero(this.right)) return this.left;
+  if (makeOp(this.operator) === "+" && isZero(this.left)) return this.right;
+  if (makeOp(this.operator) === "*" && isZero(this.right))
+    return new NumberLiteral(0);
+  if (makeOp(this.operator) === "*" && isZero(this.left))
+    return new NumberLiteral(0);
+  if (makeOp(this.operator) === "*" && isOne(this.right)) return this.left;
+  if (makeOp(this.operator) === "*" && isOne(this.left)) return this.right;
+  if (makeOp(this.operator) === "**" && isOne(this.left))
+    return new NumberLiteral(1);
+  if (makeOp(this.operator) === "**" && isOne(this.right)) return this.left;
+  if (makeOp(this.operator) === "**" && isZero(this.right))
+    return new NumberLiteral(1);
+  if (makeOp(this.operator) === "**" && isZero(this.left))
+    return new NumberLiteral(0);
+  if (bothNumberLiterals(this)) {
     const [x, y] = [this.left.value, this.right.value];
-    if (makeOP(this.operator) === '+') return new NumberLiteral(x + y);
-    if (makeOP(this.operator) === '*') return new NumberLiteral(x * y);
-    if (makeOP(this.operator) === '/') return new NumberLiteral(x / y);
-    if (makeOP(this.operator) === '**') return new NumberLiteral(x ** y);
-    if (makeOP(this.operator) === '%') return new NumberLiteral(x % y);
+    if (makeOp(this.operator) === "+") return new NumberLiteral(x + y);
+    if (makeOp(this.operator) === "*") return new NumberLiteral(x * y);
+    if (makeOp(this.operator) === "/") return new NumberLiteral(x / y);
+    if (makeOp(this.operator) === "**") return new NumberLiteral(x ** y);
+    if (makeOp(this.operator) === "%") return new NumberLiteral(x % y);
   }
   return this;
 };
@@ -247,5 +251,3 @@ NullLiteral.prototype.optimize = function() {
 IdExp.prototype.optimize = function() {
   return this;
 };
-
-

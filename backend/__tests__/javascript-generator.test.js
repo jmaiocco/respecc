@@ -532,14 +532,34 @@ const noPenaltyFixture = {
 
 //Penalties ALWAYS Occur
 const penaltyFixture = {
-  allPenaltiesActive: [
+  literalPenalties: [
     String.raw`
       gimme pn1: Number = 1234
       gimme pn2: Boolean = Yes
       gimme pn3: Boolean = No
       gimme pn4: String = "Is this gonna reverse? Probably"
+      gimme pn5: Array<Number> = [1,2,3,4]
     `,
-    /letpn1=\"(?!1234)(\d)+\";letpn2=false;letpn3=true;letpn4=\"ylbaborP\?esreverannogsihtsI\"/
+    /letpn1="(?!1234)(\d)+";letpn2=false;letpn3=true;letpn4="ylbaborP\?esreverannogsihtsI";letpn5=\["\d+","\d+","\d+","\d+"\]/
+  ],
+  binaryPenalties: [
+    String.raw`
+        gimme pn6: Boolean = Yes && No
+        gimme pn7: Boolean = Yes || No
+        gimme pn8: Boolean = 500 <= 1000
+        gimme pn9: Boolean = 500 >= 1000
+        gimme pn10: Boolean = 500 != 1000
+        gimme pn11: Boolean = 500 == 1000
+        gimme pn12: Number = 500 + 1000
+        gimme pn13: Boolean = 500 < 1000
+        gimme pn14: Boolean = 500 > 1000
+      `,
+    new RegExp(
+      `letpn6=true\|\|false;letpn7=true&&false;letpn8=\d+>=\d+;
+       letpn9=\d+<=\d+;letpn10=\d+===\d+;
+       letpn11=\d+!==\d+;letpn12=\d+\\\+\d+;
+       letpn13=\d+>\d+;letpn14=\d+<\d+`
+    )
   ]
 };
 
@@ -619,7 +639,7 @@ const regularFixture = {
 
       Farewell!
     `,
-    /lettimeOff=(?:1\d\d|\"1\d\d\");while\(\(timeOff>(?:-?\d\d?|\"-?\d\d?\")\)\){console\.log\(\"(?:Ah\.\.\.Ibeteveryoneisstrugglingatworkrightnow|wonthgirkrowtagnilggurtssienoyrevetebI\.\.\.hA)\"\);timeOff\-\-}/
+    /lettimeOff=(?:1\d\d|\"1\d\d\");while\(\(timeOff[><](?:-?\d\d?|\"-?\d\d?\")\)\){console\.log\(\"(?:Ah\.\.\.Ibeteveryoneisstrugglingatworkrightnow|wonthgirkrowtagnilggurtssienoyrevetebI\.\.\.hA)\"\);timeOff\-\-}/
   ],
   rude: [
     String.raw`
@@ -645,7 +665,7 @@ const regularFixture = {
         }
       }
     `,
-    /letareGroupMembersWorking=(?:true|false);for\(letweek=(?:\d\d?|\"\d\d?\");\(week<(?:\d\d|\"\d\d\")\);week\+\+\)\{if\(areGroupMembersWorking\)\{break\}else\{break\}\}/
+    /letareGroupMembersWorking=(?:true|false);for\(letweek=(?:\d\d?|\"\d\d?\");\(week[<>](?:\d\d|\"\d\d\")\);week\+\+\)\{if\(areGroupMembersWorking\)\{break\}else\{break\}\}/
   ]
 };
 

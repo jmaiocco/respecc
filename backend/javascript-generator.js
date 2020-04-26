@@ -61,6 +61,7 @@ let politeOps = {
   "is greater than": ">",
   "is equal to": "===",
   "==": "===",
+  "!=": "!==",
   "is not equal to": "!==",
   plus: "+",
   minus: "-",
@@ -115,8 +116,9 @@ function setScore(object) {
   }
   respecc_score = Math.max(0, Math.min(respecc_score, 100));
   respecc_level = Math.min(Math.floor(respecc_score / 20), 4);
-  //console.log(`${object.constructor.name}: ${respecc_score} is level
-  //             ${respecc_level} : ${respecc_modes[respecc_level]}`
+  //console.log(
+  //  `${object.constructor.name}: ${respecc_score} is level${respecc_level} : ${respecc_modes[respecc_level]}`
+  // );
 }
 
 class Penalty {
@@ -125,23 +127,45 @@ class Penalty {
   }
 }
 
-const NumbersAreStrings = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+const NumbersAreStrings = new Penalty([0.25, 0.15, 0.1, -1, -1], obj => {
   return `"${obj.value}"`;
 });
 
-const NumbersAreAdjusted = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+const NumbersAreAdjusted = new Penalty([0.25, 0.15, 0.1, -1, -1], obj => {
   return `${obj.value + 1 + Math.floor(Math.random() * 10)}`;
 });
 
-const BooleansAreFlipped = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+const BooleansAreFlipped = new Penalty([0.25, 0.15, 0.1, -1, -1], obj => {
   return `${obj.value === true ? false : true}`;
 });
 
-const StringsAreReversed = new Penalty([0.5, 0.25, 0.1, -1, -1], obj => {
+const StringsAreReversed = new Penalty([0.25, 0.15, 0.1, -1, -1], obj => {
   return obj.value
     .split("")
     .reverse()
     .join("");
+});
+
+const ArraysAreReversed = new Penalty([0.25, 0.15, 0.1, -1, -1], obj => {
+  return obj.exps.reverse();
+});
+
+const BinaryOpsAdjusted = new Penalty([0.1, 0.5, 0.01, -1, -1], obj => {
+  if (makeOp(obj.operator) === "&&") return "||";
+  else if (makeOp(obj.operator) === "||") return "&&";
+  //else if (makeOp(obj.operator) === "+") return "-";
+  //else if (makeOp(obj.operator) === "-") return "+";
+  //else if (makeOp(obj.operator) === "/") return "%";
+  //else if (makeOp(obj.operator) === "%") return "/";
+  //else if (makeOp(obj.operator) === "**") return "*";
+  //else if (makeOp(obj.operator) === "*") return "**";
+  else if (makeOp(obj.operator) === "===") return "!==";
+  else if (makeOp(obj.operator) === "!==") return "===";
+  else if (makeOp(obj.operator) === ">") return "<";
+  else if (makeOp(obj.operator) === "<") return ">";
+  else if (makeOp(obj.operator) === ">=") return "<=";
+  else if (makeOp(obj.operator) === "<=") return ">=";
+  else return obj.operator;
 });
 
 function enactPenalty(penalty) {
@@ -349,6 +373,9 @@ LambdaExp.prototype.gen = function() {
 };
 BinaryExp.prototype.gen = function() {
   setScore(this);
+  if (enactPenalty(BinaryOpsAdjusted)) {
+    this.operator = BinaryOpsAdjusted.generatePenalty(this);
+  }
   return `(${this.left.gen()} ${makeOp(this.operator)} ${this.right.gen()})`;
 };
 UnaryPrefix.prototype.gen = function() {
@@ -364,7 +391,11 @@ MemberExp.prototype.gen = function() {
   return `${this.v.gen()} . ${javaScriptId(this.member)}`;
 };
 ArrayLiteral.prototype.gen = function() {
-  return `[${[...this.exps].map(e => e.gen())}]`;
+  this.exps = [...this.exps].map(e => e.gen());
+  if (enactPenalty(ArraysAreReversed)) {
+    this.exps = ArraysAreReversed.generatePenalty(this);
+  }
+  return `[${this.exps}]`;
 };
 DictionaryLiteral.prototype.gen = function() {
   return `{${this.keyValuePairs.map(e => e.gen()).join(",")}}`;
