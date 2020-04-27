@@ -1,3 +1,43 @@
+gimme s : String = "Hi"
+gimme n : Number = s.length()
+gimme arr : Array<Number> = [6]
+gimme n2 : Number = arr.length()
+gimme a = 1
+gimme b = 1
+Please declare d as a Number as 1.
+Please declare c as a Number as 1.
+Please declare f as a Number as 1.
+Please declare g as a Number as 1.
+
+Farewell!
+/*
+Hello!
+
+respecc()
+Please declare word as a String as "lengthtest".
+print(word.length())
+Please declare rdup as a Number as 22.55.
+Please declare rddn as a Number as 22.55.
+rdup = roundUp(rdup)
+rddn = roundDown(rddn)
+Please declare abs as a Number as -999.
+abs = absoluteVal(abs)
+Please declare dog as a String as "dog".
+Please declare house as a String as "house".
+Please declare doghouse as a String as concatenate(dog, house).
+Bye Bye!
+
+gimme s : String = "Hi"
+gimme n : Number = s.length()
+gimme arr : Array<Number> = [6]
+gimme n2 : Number = arr.length()
+gimme a = 1
+gimme b = 1
+Please declare d as a Number as 1.
+Please declare c as a Number as 1.
+Please declare f as a Number as 1.
+Please declare g as a Number as 1.
+/*
 Hello!
   Have you ever heard of a Dog? Let's get classy...
   Please declare name as a String.
@@ -14,7 +54,7 @@ print(cc.getName())
 Bye Bye!
 
 
-/*
+
 Hello!
 Have you ever heard of a Dog? Let's get classy...
     Have you ever heard of a Ball? Let's get classy...

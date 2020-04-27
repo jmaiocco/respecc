@@ -115,16 +115,12 @@ Assignment.prototype.analyze = function(context) {
 
 Conditional.prototype.analyze = function(context) {
   this.exp.analyze(context);
-  this.bodyContext = context.createChildContextForBlock();
-  this.ifBlock.analyze(this.bodyContext);
-  if (this.exps && this.blocks) {
-    this.exps.forEach(e => e.analyze(context));
-    this.blocks.forEach(b => b.analyze(this.bodyContext));
-  }
+  this.ifBlock.analyze(context.createChildContextForBlock());
+  this.exps.forEach(e => e.analyze(context));
+  this.blocks.forEach(b => b.analyze(context.createChildContextForBlock()));
   if (this.elseBlock) {
-    this.elseBlock.analyze(this.bodyContext);
+    this.elseBlock.analyze(context.createChildContextForBlock());
   }
-  delete this.bodyContext;
 };
 
 WhileLoop.prototype.analyze = function(context) {
@@ -151,30 +147,29 @@ ForLoop.prototype.analyze = function(context) {
 };
 
 FunctionCall.prototype.analyze = function(context) {
-  if (this.id.constructor === IdExp) {
-    this.id.analyze(context);
-    this.callee = this.id.ref;
-  } else if (this.id.constructor === MemberExp) {
+  if (this.id.constructor === MemberExp) {
     this.id.analyze(context);
     let objectType = this.id.v.type;
     this.callee = objectType.locals.get(this.id.field);
+  } else {
+    //IdExp
+    this.id.analyze(context);
+    this.callee = this.id.ref;
   }
 
   check.isCallable(this.callee, "Attempt to call a non-function");
+
   if (this.args) {
     this.args.forEach(arg => arg.analyze(context));
-    if (
-      this.callee.constructor === FunctionDeclaration ||
-      (this.callee.expression &&
-        this.callee.expression.constructor === LambdaExp)
-    ) {
-      check.legalArguments(this.args, this.callee.params);
-      this.type = this.callee.type;
-    } else {
+    if (this.callee.constructor === ObjectType) {
       check.anyLegalArguments(this.args, this.callee.callingParams);
       this.type = this.callee;
+      return;
+    } else {
+      check.legalArguments(this.args, this.callee.params);
     }
   }
+  this.type = this.callee.type;
 };
 
 Parameter.prototype.analyze = function(context) {
@@ -202,8 +197,8 @@ LambdaBlock.prototype.analyze = function(context) {
 };
 
 LambdaExp.prototype.analyze = function(context) {
-  this.params.forEach(param => param.analyze(this.context));
-  this.exp.analyze(this.context);
+  this.params.forEach(param => param.analyze(context));
+  this.exp.analyze(context);
   this.type = this.exp.type;
 };
 
@@ -273,12 +268,10 @@ FunctionDeclaration.prototype.analyzeSignature = function(context) {
   } else {
     this.type = context.lookup(this.type);
   }
-  //Control Flow Analysis
   this.typeResolved = this.type === AnyType ? true : false;
 };
 FunctionDeclaration.prototype.analyze = function() {
   this.block.analyze(this.bodyContext);
-  //Control Flow Analysis
   check.functiontypeResolved(this);
   delete this.bodyContext; // This was only temporary, delete to keep output clean.
 };
@@ -312,14 +305,6 @@ ClassDeclaration.prototype.analyze = function() {
 };
 
 ClassBlock.prototype.analyzeNames = function(context) {
-  /*
-  this.members
-    .filter(d => d.constructor === ClassDeclaration)
-    .forEach(d => context.add(new ObjectType(d.id)));
-  this.members
-    .filter(d => d.constructor === ClassDeclaration)
-    .forEach(d => d.analyzeNames(context));
-    */
   this.members
     .filter(d => d.constructor === Constructor)
     .forEach(d => d.analyzeSignature(context));
@@ -332,10 +317,7 @@ ClassBlock.prototype.analyzeNames = function(context) {
 };
 
 ClassBlock.prototype.analyze = function(context) {
-  this.members.forEach(d => {
-    check.isNotClassDeclaration(d);
-    d.analyze(context);
-  });
+  this.members.forEach(d => d.analyze(context));
 };
 
 Constructor.prototype.analyzeSignature = function(context) {
@@ -376,6 +358,8 @@ SubscriptExp.prototype.analyze = function(context) {
       `Dict subscript must match key type`
     );
     this.type = this.composite.type.type2;
+  } else {
+    this.type = AnyType;
   }
 };
 

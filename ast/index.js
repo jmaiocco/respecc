@@ -200,39 +200,27 @@ class BooleanLiteral {
 class NullLiteral {}
 
 function addAllScoreProps() {
-  addScoreProps(Program, [5, 5], [-5, -5]);
-  addScoreProps(Return, 5, -5);
-  addScoreProps(Break, 5, -5);
-  addScoreProps(Conditional, 5, -5);
-  addScoreProps(WhileLoop, 5, -5);
-  addScoreProps(ForLoop, 5, -5);
-  addScoreProps(FunctionCall, 5, -5);
-  addScoreProps(Assignment, 5, 5);
-  addScoreProps(ClassDeclaration, 5, -5);
-  addScoreProps(ClassBlock, 5, -5);
-  addScoreProps(Constructor, 5, -5);
-  addScoreProps(FunctionDeclaration, 5, -5, [2, 0, -2]);
-  addScoreProps(VariableDeclaration, 5, -5, [2, 0, -2]);
-  addScoreProps(Parameter, 5, -2, [2, 0, -2]);
-  addScoreProps(Block, 5, -5);
+  addScoreProps(Program, [5, 5], [-8, -8]);
+  addScoreProps(Return, 3, -4);
+  addScoreProps(Break, 4, -7);
+  addScoreProps(Conditional, 6, -6);
+  addScoreProps(WhileLoop, 6, -6);
+  addScoreProps(ForLoop, 6, -6);
+  addScoreProps(FunctionCall, 5, -4);
+  addScoreProps(Assignment, 5, -5);
+  addScoreProps(ClassDeclaration, 4, -10);
+  addScoreProps(ClassBlock, 3, -3);
+  addScoreProps(Constructor, 4, -4);
+  addScoreProps(FunctionDeclaration, 5, -8, [3, 0, -2]);
+  addScoreProps(VariableDeclaration, 3, -4, [3, 0, -2]);
+  addScoreProps(Block, 3, -3);
+  addScoreProps(BinaryExp, 2, -3);
+  //Penalty Only
   addScoreProps(TernaryExp, 0, -5);
   addScoreProps(LambdaBlock, 0, -5);
   addScoreProps(LambdaExp, 0, -5);
-  addScoreProps(BinaryExp, 2, -2);
-  //addScoreProps(UnaryPrefix, ); //No Politness
-  //addScoreProps(UnaryPostfix, ); //No Politness
-  //addScoreProps(SubscriptExp, ); //No Politness
-  //addScoreProps(MemberExp, ); //No Politness
-  //addScoreProps(ArrayLiteral, ); //No Politness
-  //addScoreProps(DictionaryLiteral, ); //No Politness
-  //addScoreProps(ArrayType, ); //No Politness
-  //addScoreProps(DictionaryType, ); //No Politness
-  //addScoreProps(DictEntry, ); //No Politness
-  //addScoreProps(NumberLiteral, ); //No Politness
-  //addScoreProps(StringLiteral, ); //No Politness
-  //addScoreProps(BooleanLiteral, ); //No Politness
-  //addScoreProps(NullLiteral, ); //No Politness
-  //addScoreProps(IdExp, ); //No Politness
+  //Type Scoring Only
+  addScoreProps(Parameter, 0, 0, [3, 0, -2]);
 }
 
 function addScoreProps(object, politeFactor, rudeFactor, typeFactor) {
