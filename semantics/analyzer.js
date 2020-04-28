@@ -45,6 +45,7 @@ const {
 } = require("./builtins");
 const check = require("./check");
 const Context = require("./context");
+let calledFunctions = new Set();
 
 let orOperators = new Set(["||", "or"]);
 let andOperators = new Set(["&&", "and"]);
@@ -91,6 +92,7 @@ Program.prototype.analyze = function(context) {
     .filter(d => d.constructor === FunctionDeclaration)
     .forEach(d => context.add(d));
   this.statements.forEach(d => d.analyze(context));
+  this.calledFunctions = calledFunctions;
 };
 
 VariableDeclaration.prototype.analyze = function(context) {
@@ -147,6 +149,7 @@ ForLoop.prototype.analyze = function(context) {
 };
 
 FunctionCall.prototype.analyze = function(context) {
+  calledFunctions.add(this.id.ref);
   if (this.id.constructor === MemberExp) {
     this.id.analyze(context);
     let objectType = this.id.v.type;
@@ -156,7 +159,6 @@ FunctionCall.prototype.analyze = function(context) {
     this.id.analyze(context);
     this.callee = this.id.ref;
   }
-
   check.isCallable(this.callee, "Attempt to call a non-function");
 
   if (this.args) {
