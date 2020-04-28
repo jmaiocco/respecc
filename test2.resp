@@ -1,20 +1,13 @@
-Salutations!
-
-Favor MakeDonation(amount:Number) could you...
-  Please declare charityFunds as a Number as 0.
-  Please populate charityFunds with amount.
-  Kindly return charityFunds.
-Thank You.
-
-Please declare personalMoney as a Number as 100000.00.
-Do me a favor and run print with ("You had $" plus personalMoney).
-Please declare donation as a Number as 0.
-Please populate donation with personalMoney.
-Please populate personalMoney with personalMoney minus donation.
-Please declare newCharityFunds as a Number as the result of running MakeDonation with (donation).
-Do me a favor and run print with ("The charity now has $" plus newCharityFunds).
-Do me a favor and run print with ("You now have $" plus personalMoney).
-Do me a favor and run print with ("Wow, that was pretty generous of you!").
+gimme s : String = "Hi"
+gimme n : Number = s.length()
+gimme arr : Array<Number> = [6]
+gimme n2 : Number = arr.length()
+gimme a = 1
+gimme b = 1
+Please declare d as a Number as 1.
+Please declare c as a Number as 1.
+Please declare f as a Number as 1.
+Please declare g as a Number as 1.
 
 Farewell!
 /*

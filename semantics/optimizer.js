@@ -1,36 +1,36 @@
 const {
-  Program, //done but needs testing
-  Return, //done but needs testing
-  Break, //done
+  Program, 
+  Return, 
+  Break, 
   Conditional,
-  WhileLoop, //done but needs testing
-  ForLoop, //done but needs testing
-  FunctionCall, //done but needs testings
-  Assignment, //done but needs testing
-  ArrayType, //done
+  WhileLoop, 
+  ForLoop, 
+  FunctionCall, 
+  Assignment,
+  ArrayType,
   DictionaryType,
   ClassDeclaration,
   ClassBlock,
   Constructor,
-  FunctionDeclaration, //done but needs testing
-  VariableDeclaration, //done but needs testing
-  Parameter, //done
+  FunctionDeclaration,
+  VariableDeclaration, 
+  Parameter, 
   Block,
   TernaryExp,
   LambdaBlock,
   LambdaExp,
-  BinaryExp, //done but needs testing
+  BinaryExp, 
   UnaryPrefix,
   UnaryPostfix,
-  SubscriptExp, //done but needs testing
-  MemberExp, //done but needs testing
-  ArrayLiteral, //done but not confident
+  SubscriptExp, 
+  MemberExp, 
+  ArrayLiteral, 
   DictionaryLiteral,
   DictEntry,
-  NumberLiteral, //done
-  StringLiteral, //done
-  BooleanLiteral, //done
-  NullLiteral, //done
+  NumberLiteral, 
+  StringLiteral, 
+  BooleanLiteral, 
+  NullLiteral, 
   IdExp //done
 } = require("../ast");
 
@@ -136,7 +136,6 @@ Assignment.prototype.optimize = function() {
 ArrayType.prototype.optimize = function() {
   return this;
 };
-
 
 DictionaryType.prototype.optimize = function() {
   return this;
@@ -297,5 +296,3 @@ NullLiteral.prototype.optimize = function() {
 IdExp.prototype.optimize = function() {
   return this;
 };
-
-
