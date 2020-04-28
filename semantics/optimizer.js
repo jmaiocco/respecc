@@ -185,7 +185,7 @@ Parameter.prototype.optimize = function() {
 };
 
 Block.prototype.optimize = function() {
-  let lastIndex = -1;
+  let lastIndex = this.statements.length;
   for(let i = 0; i < this.statements.length; i++){
    if(this.statements[i].constructor === Break ||
     this.statements[i].constructor === Return){
