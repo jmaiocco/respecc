@@ -100,7 +100,7 @@ Conditional.prototype.optimize = function() {
   this.exps = this.exps.map(s => s.optimize());
   this.blocks = this.blocks.map(s => s.optimize());
   if(this.elseBlock){
-    this.elseBlock = this.elseBlock.optimize;
+    this.elseBlock = this.elseBlock.optimize();
   }
   return this;
 };
