@@ -127,26 +127,25 @@ class Penalty {
   }
 }
 
-const NumbersAreStrings = new Penalty([0.25, 0.15, 0.1, -1, -1], (obj) => {
+const NumbersAreStrings = new Penalty([0.5, -1, -1, -1, -1], (obj) => {
   return `"${obj.value}"`;
 });
 
-const NumbersAreAdjusted = new Penalty([0.25, 0.15, 0.1, -1, -1], (obj) => {
+const NumbersAreAdjusted = new Penalty([0.15, 0.1, 0.05, -1, -1], (obj) => {
   return `${obj.value + 1 + Math.floor(Math.random() * 10)}`;
 });
 
-const BooleansAreFlipped = new Penalty([0.25, 0.15, 0.1, -1, -1], (obj) => {
+const BooleansAreFlipped = new Penalty([0.25, 0.2, 0.1, -1, -1], (obj) => {
   return `${obj.value === true ? false : true}`;
 });
 
-const StringsAreReversed = new Penalty([0.25, 0.15, 0.1, -1, -1], (obj) => {
+const StringsAreReversed = new Penalty([0.2, 0.15, 0.05, -1, -1], (obj) => {
   return obj.value.split("").reverse().join("");
 });
 
-const ArraysAreReversed = new Penalty([0.25, 0.15, 0.1, -1, -1], (obj) => {
+const ArraysAreReversed = new Penalty([0.15, 0.1, -1, -1, -1], (obj) => {
   return obj.exps.reverse();
 });
-
 const KeyValuesAreShuffled = new Penalty([0.15, 0.05, 0.1, -1, -1], (obj) => {
   let shuffled = [];
   let keys = [...obj.map((e) => e.key)];
@@ -156,7 +155,7 @@ const KeyValuesAreShuffled = new Penalty([0.15, 0.05, 0.1, -1, -1], (obj) => {
   keys.forEach((k, val) => (shuffled[val] = new DictEntry(k, values[val])));
   return shuffled;
 });
-const BinaryOpsAdjusted = new Penalty([0.1, 0.5, 0.01, -1, -1], (obj) => {
+const BinaryOpsAdjusted = new Penalty([0.4, 0.2, -1, -1, -1], (obj) => {
   if (makeOp(obj.operator) === "&&") return "||";
   else if (makeOp(obj.operator) === "||") return "&&";
   else if (makeOp(obj.operator) === "===") return "!==";
