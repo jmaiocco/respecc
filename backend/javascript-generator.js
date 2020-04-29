@@ -117,8 +117,8 @@ function setScore(object) {
   respecc_score = Math.max(0, Math.min(respecc_score, 100));
   respecc_level = Math.min(Math.floor(respecc_score / 20), 4);
   //console.log(
-  //  `${object.constructor.name}: ${respecc_score} is level${respecc_level} : ${respecc_modes[respecc_level]}`
-  // );
+  //  `${object.constructor.name}: ${respecc_score} is Level ${respecc_level} : ${respecc_modes[respecc_level]}`
+  //);
 }
 
 class Penalty {
@@ -159,12 +159,6 @@ const KeyValuesAreShuffled = new Penalty([0.15, 0.05, 0.1, -1, -1], (obj) => {
 const BinaryOpsAdjusted = new Penalty([0.1, 0.5, 0.01, -1, -1], (obj) => {
   if (makeOp(obj.operator) === "&&") return "||";
   else if (makeOp(obj.operator) === "||") return "&&";
-  //else if (makeOp(obj.operator) === "+") return "-";
-  //else if (makeOp(obj.operator) === "-") return "+";
-  //else if (makeOp(obj.operator) === "/") return "%";
-  //else if (makeOp(obj.operator) === "%") return "/";
-  //else if (makeOp(obj.operator) === "**") return "*";
-  //else if (makeOp(obj.operator) === "*") return "**";
   else if (makeOp(obj.operator) === "===") return "!==";
   else if (makeOp(obj.operator) === "!==") return "===";
   else if (makeOp(obj.operator) === ">") return "<";
