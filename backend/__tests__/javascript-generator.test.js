@@ -22,15 +22,15 @@ const noPenaltyFixture = {
   oneVar: [String.raw`gimme x = 1`, "let x_1 = 1"],
   info: [
     String.raw`printRespeccInfo()`,
-    /console.log\(\"RespeccScore:30\\nRespeccLevel:2\(Rude\)\"\)/
+    /console.log\(\"RespeccScore:30\\nRespeccLevel:2\(Rude\)\"\)/,
   ],
   forLoopWithBreak: [
     String.raw`for (gimme i = 0; i < 10; i++) { break }`,
-    String.raw`for (let i = 0; (i < 10); i++) { break }`
+    String.raw`for (let i = 0; (i < 10); i++) { break }`,
   ],
   ternaryExp: [
     String.raw`gimme trn = Yes ? 1 : 2`,
-    String.raw`let trn = (true ? 1 : 2)`
+    String.raw`let trn = (true ? 1 : 2)`,
   ],
   null: [String.raw`gimme nl = Null`, String.raw`let nl = null`],
   lambdaBlock: [
@@ -39,7 +39,7 @@ const noPenaltyFixture = {
     `,
     String.raw`
       let doggos = (() => {return "doggos"})
-    `
+    `,
   ],
   lambdaBlockParams: [
     String.raw`
@@ -47,7 +47,7 @@ const noPenaltyFixture = {
     `,
     String.raw`
       let moreDoggos = ((doggos2) => {return doggos2})
-    `
+    `,
   ],
   lambdaBlockNoReturn: [
     String.raw`
@@ -55,7 +55,7 @@ const noPenaltyFixture = {
     `,
     String.raw`
       let sad = (() => {return})
-    `
+    `,
   ],
   lambdaExp: [
     String.raw`
@@ -63,7 +63,7 @@ const noPenaltyFixture = {
     `,
     String.raw`
       let evenMoreDoggos = (() => "MORE DOGGOS")
-    `
+    `,
   ],
   lambdaExpParams: [
     String.raw`
@@ -71,7 +71,7 @@ const noPenaltyFixture = {
     `,
     String.raw`
       let tooManyDoggos = ((doggos3) => doggos3)
-    `
+    `,
   ],
   conditional: [
     String.raw`
@@ -97,7 +97,7 @@ const noPenaltyFixture = {
       } else {
         z = (z * z)
       }
-    `
+    `,
   ],
   funcNoParams: [
     String.raw`Hey!
@@ -113,7 +113,7 @@ const noPenaltyFixture = {
       function returnFour() {
         return 4
       };
-      returnFour()`
+      returnFour()`,
   ],
   infiniteLoop: [
     String.raw`
@@ -138,7 +138,7 @@ const noPenaltyFixture = {
         F(string)
       };
       F("Oops")
-    `
+    `,
   ],
   dictionaryAccess: [
     String.raw`
@@ -166,7 +166,7 @@ const noPenaltyFixture = {
       };
       CheckIfEnglishIsFun(subjects);
       CheckIfMathIsFun(subjects)
-    `
+    `,
   ],
   arrayAccess: [
     String.raw`
@@ -190,7 +190,7 @@ const noPenaltyFixture = {
         return array
       };
       readArray(lyrics)
-    `
+    `,
   ],
   bubbleSort: [
     String.raw`
@@ -228,7 +228,7 @@ const noPenaltyFixture = {
         return array
       };
       BubbleSort(list)
-    `
+    `,
   ],
   insertionSort: [
     String.raw`
@@ -264,7 +264,7 @@ const noPenaltyFixture = {
         return array
       };
       InsertionSort(secondList)
-    `
+    `,
   ],
   changeMaker: [
     String.raw`Hello!
@@ -304,7 +304,7 @@ const noPenaltyFixture = {
           return result_4
         };
         let exampleAmount_7 = 105;
-        MakeChange_2(exampleAmount_7)`
+        MakeChange_2(exampleAmount_7)`,
   ],
 
   dogClass: [
@@ -335,7 +335,7 @@ const noPenaltyFixture = {
     }
   };
   let cc_5 = new Dog_1("cece");
-  console.log(cc_5.getName_3())`
+  console.log(cc_5.getName_3())`,
   ],
   countryClass: [
     String.raw`class Country{
@@ -365,7 +365,7 @@ const noPenaltyFixture = {
         "Wales": 200,
         "London": 500,
         "Stratford-Upon-Avon": 2
-      })`
+      })`,
   ],
   fibonacci: [
     String.raw`
@@ -398,7 +398,7 @@ const noPenaltyFixture = {
         }
       };
       Fibonacci(12,12)
-    `
+    `,
   ],
   gcd: [
     String.raw`
@@ -434,7 +434,7 @@ const noPenaltyFixture = {
         };
         return firstValue
       }
-    `
+    `,
   ],
   isEvenOrOdd: [
     String.raw`
@@ -453,7 +453,7 @@ const noPenaltyFixture = {
         return (((numericValue % 2) === 0) ? "Even" : "Odd")
       };
       IsEvenOrOdd(43)
-    `
+    `,
   ],
   isPrime: [
     String.raw`
@@ -493,7 +493,7 @@ const noPenaltyFixture = {
         };
         return true
       }
-    `
+    `,
   ],
   builtins: [
     String.raw`
@@ -526,8 +526,8 @@ const noPenaltyFixture = {
       let dog = "dog";
       let house = "house";
       let doghouse = dog.concat(house)
-    `
-  ]
+    `,
+  ],
 };
 
 //Penalties ALWAYS Occur
@@ -540,7 +540,7 @@ const penaltyFixture = {
       gimme pn4: String = "Is this gonna reverse? Probably"
       gimme pn5: Array<Number> = [1,2,3,4]
     `,
-    /letpn1="(?!1234)(\d)+";letpn2=false;letpn3=true;letpn4="ylbaborP\?esreverannogsihtsI";letpn5=\["\d+","\d+","\d+","\d+"\]/
+    /letpn1="(?!1234)(\d)+";letpn2=false;letpn3=true;letpn4="ylbaborP\?esreverannogsihtsI";letpn5=\["\d+","\d+","\d+","\d+"\]/,
   ],
   binaryPenalties: [
     String.raw`
@@ -559,8 +559,13 @@ const penaltyFixture = {
        letpn9=\d+<=\d+;letpn10=\d+===\d+;
        letpn11=\d+!==\d+;letpn12=\d+\\\+\d+;
        letpn13=\d+>\d+;letpn14=\d+<\d+`
-    )
-  ]
+    ),
+  ],
+  dictionaryPenalties: [
+    String.raw`
+    gimme shuffleDict= {"CA":"Sacramento","TX":"Austin","AZ":"Phoenix","NY":"New York"}`,
+    /letshuffleDict={("\w+":"\w+",?){4}}/,
+  ],
 };
 
 //Penalties RANDOMLY Occur
@@ -602,7 +607,7 @@ const regularFixture = {
       console.log(("The charity now has $" + newCharityFunds_6));
       console.log(("You now have $" + personalMoney_4));
       console.log("Wow, that was pretty generous of you!")
-      `
+      `,
   ],
   polite: [
     String.raw`
@@ -625,7 +630,7 @@ const regularFixture = {
      } else {
        console.log("Ok, let me know if you need anything!")
      }
-    `
+    `,
   ],
   impolite: [
     String.raw`
@@ -639,7 +644,7 @@ const regularFixture = {
 
       Farewell!
     `,
-    /lettimeOff=(?:1\d\d|\"1\d\d\");while\(\(timeOff[><](?:-?\d\d?|\"-?\d\d?\")\)\){console\.log\(\"(?:Ah\.\.\.Ibeteveryoneisstrugglingatworkrightnow|wonthgirkrowtagnilggurtssienoyrevetebI\.\.\.hA)\"\);timeOff\-\-}/
+    /lettimeOff=(?:1\d\d|\"1\d\d\");while\(\(timeOff[><](?:-?\d\d?|\"-?\d\d?\")\)\){console\.log\(\"(?:Ah\.\.\.Ibeteveryoneisstrugglingatworkrightnow|wonthgirkrowtagnilggurtssienoyrevetebI\.\.\.hA)\"\);timeOff\-\-}/,
   ],
   rude: [
     String.raw`
@@ -652,7 +657,7 @@ const regularFixture = {
 
       Bye Bye!
     `,
-    /letdebt=-(\d\d|\"\d\d\");debt=Math\.abs\(debt\);console\.log\(debt\);console\.log\(\"(?:LookslikeIdon\'toweyouanything\.\*smug\*|\*gums\*\.gnihtynauoyewot\'nodIekilskooL)\"\)/
+    /letdebt=-(\d\d|\"\d\d\");debt=Math\.abs\(debt\);console\.log\(debt\);console\.log\(\"(?:LookslikeIdon\'toweyouanything\.\*smug\*|\*gums\*\.gnihtynauoyewot\'nodIekilskooL)\"\)/,
   ],
   rudeAF: [
     String.raw`
@@ -665,13 +670,13 @@ const regularFixture = {
         }
       }
     `,
-    /letareGroupMembersWorking=(?:true|false);for\(letweek=(?:\d\d?|\"\d\d?\");\(week[<>](?:\d\d|\"\d\d\")\);week\+\+\)\{if\(areGroupMembersWorking\)\{break\}else\{break\}\}/
-  ]
+    /letareGroupMembersWorking=(?:true|false);for\(letweek=(?:\d\d?|\"\d\d?\");\(week[<>](?:\d\d|\"\d\d\")\);week\+\+\)\{if\(areGroupMembersWorking\)\{break\}else\{break\}\}/,
+  ],
 };
 
 function testGivenFixture(fixture, penaltyFlag) {
   Object.entries(fixture).forEach(([name, [source, expected]]) => {
-    test(`produces the correct output for ${name}`, done => {
+    test(`produces the correct output for ${name}`, (done) => {
       const ast = parse(source);
       analyze(ast);
       const actual = generate(ast, penaltyFlag);
