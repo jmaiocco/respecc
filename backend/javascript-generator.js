@@ -147,7 +147,7 @@ const ArraysAreReversed = new Penalty([0.25, 0.15, 0.1, -1, -1], (obj) => {
   return obj.exps.reverse();
 });
 
-const KeyValuesAreShuffled = new Penalty([0.25, 0.15, 0.1, -1, -1], (obj) => {
+const KeyValuesAreShuffled = new Penalty([0.15, 0.05, 0.1, -1, -1], (obj) => {
   let shuffled = [];
   let keys = [...obj.map((e) => e.key)];
   let values = [...obj.map((e) => e.value)];
