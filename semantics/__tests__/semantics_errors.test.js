@@ -16,22 +16,22 @@ const errors = [
   function scopeError(){
     gimme scopeVar = 1
   }
-  gimme outOfScope = scopeVar`
+  gimme outOfScope = scopeVar`,
   ],
   ["redeclaration of variable", "gimme x:Number = 1\n gimme x:Number = 2"],
   ["type mismatch in assignment rude", 'gimme x:Number = "hello"'],
   [
     "too many function arguments rude",
-    "function plusOne(x:Number){return  x+1}\n plusOne(3,1)"
+    "function plusOne(x:Number){return  x+1}\n plusOne(3,1)",
   ],
 
   [
     "too few function arguments",
-    "function plusOne(x:Number){return  x+1}\n plusOne()"
+    "function plusOne(x:Number){return  x+1}\n plusOne()",
   ],
   [
     "wrong type of function argument",
-    'function plusOne(x:Number){return  x+1}\n plusOne("hi")'
+    'function plusOne(x:Number){return  x+1}\n plusOne("hi")',
   ],
   ["redeclared field", "gimme dict = {a:1, a:Yes}"],
   ["no such field", "gimme dict1 = {a:1} \n gimme notField = dict1.b"],
@@ -40,7 +40,7 @@ const errors = [
   ["call of nonfunction", "gimme nonFunct= 1 \n nonFunct()"],
   [
     "non integer subscript",
-    "gimme arr = [1,2,3] \n gimme nonSubcript = arr[True]"
+    "gimme arr = [1,2,3] \n gimme nonSubcript = arr[True]",
   ],
   [
     "constructors have the same args",
@@ -52,7 +52,7 @@ const errors = [
         this.name = name
         this.age = 5
       }
-  }`
+  }`,
   ],
   [
     "constructor name not equal to class name",
@@ -67,13 +67,13 @@ const errors = [
       }
     }
     gimme pup = Pup("cat")
-  `
+  `,
   ],
   [
     "constructor has non-null return",
     String.raw`class Doggo {
       Doggo() { return 2 }
-  }`
+  }`,
   ],
   [
     "constructors have ambiguous arg types",
@@ -85,7 +85,7 @@ const errors = [
       Doggy(breed) {
         this.breed = breed
       }
-  }`
+  }`,
   ],
   [
     "Instantiate class with undefined constructor",
@@ -96,7 +96,7 @@ const errors = [
         Dog(name) { this.name = name }
       }
       gimme cc = Dog(10)
-  `
+  `,
   ],
   [
     "class function called outside of scope",
@@ -109,13 +109,13 @@ const errors = [
       }
       gimme cc = Dog(10)
       print(getName())
-  `
-  ]
+  `,
+  ],
 ];
 
 describe("The semantic analyzer", () => {
   errors.forEach(([scenario, program]) => {
-    test(`detects the error ${scenario}`, done => {
+    test(`detects the error ${scenario}`, (done) => {
       const astRoot = parse(program);
       expect(astRoot).toBeTruthy();
       expect(() => astRoot.analyze(Context.INITIAL)).toThrow();
