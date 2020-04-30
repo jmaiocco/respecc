@@ -1,30 +1,18 @@
-//gimme x = 3
-
-
-class Country{
-  gimme statePopulations : Dict<String, Number>
-  gimme states  : Array<String>
-
-  Country(states:Array<String>, pops:Dict<String,Number>){
-    this.states = states
-    this.statePopulations = pops
-  }
-}
-gimme calexit = Country(["The Bay", "NorCal", "SoCal"], {"Wales":200,"London":500,"Stratford-Upon-Avon":2})
 function Fibonacci(n, length) {
 if (n == 1) {
   gimme series = [0, 1]
   return series
 } else {
-  gimme series = Fibonacci(n - 1, length - 1)
+  gimme series = []
   series[length] = series[length minus 1] plus series[length minus 2]
   return series
 }
 }
 
-Fibonacci(12, 12)
-//gimme x = [1,2,3]
-//gimme y = x.length()
+
+
+gimme x = [1,2,3]
+gimme y = x.length()
 
 /*
 Hello!

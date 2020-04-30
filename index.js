@@ -3,9 +3,8 @@
  * A Respecc++ Compiler
  *
  * This module contains functions for compiling respecc++ programs into JavaScript:
- *
- * node index.js -a <filename>
- *     writes out the AST and stops
+ * npm link to do:
+ * respecc  test.resp
  */
 
 const fs = require("fs");
@@ -14,7 +13,7 @@ const yargs = require("yargs");
 const parse = require("./ast/parser");
 const analyze = require("./semantics/analyzer");
 const graphView = require("./semantics/viewer");
-//require('./semantics/optimizer');
+const optimizer = require("./semantics/optimizer");
 const generate = require("./backend/javascript-generator");
 
 // If compiling from a string, return the AST
@@ -24,9 +23,9 @@ function compile(sourceCode, { astOnly, frontEndOnly, shouldOptimize }) {
     return util.inspect(program, { depth: null });
   }
   analyze(program);
-  //if (shouldOptimize) {
-  //program = program.optimize();
-  //}
+  if (shouldOptimize) {
+    program = program.optimize();
+  }
   if (frontEndOnly) {
     return graphView(program);
   }

@@ -1,11 +1,11 @@
 const {
-  Program, 
-  Return, 
-  Break, 
+  Program,
+  Return,
+  Break,
   Conditional,
-  WhileLoop, 
-  ForLoop, 
-  FunctionCall, 
+  WhileLoop,
+  ForLoop,
+  FunctionCall,
   Assignment,
   ArrayType,
   DictionaryType,
@@ -13,24 +13,24 @@ const {
   ClassBlock,
   Constructor,
   FunctionDeclaration,
-  VariableDeclaration, 
-  Parameter, 
+  VariableDeclaration,
+  Parameter,
   Block,
   TernaryExp,
   LambdaBlock,
   LambdaExp,
-  BinaryExp, 
+  BinaryExp,
   UnaryPrefix,
   UnaryPostfix,
-  SubscriptExp, 
-  MemberExp, 
-  ArrayLiteral, 
+  SubscriptExp,
+  MemberExp,
+  ArrayLiteral,
   DictionaryLiteral,
   DictEntry,
-  NumberLiteral, 
-  StringLiteral, 
-  BooleanLiteral, 
-  NullLiteral, 
+  NumberLiteral,
+  StringLiteral,
+  BooleanLiteral,
+  NullLiteral,
   IdExp //done
 } = require("../ast");
 
@@ -75,18 +75,21 @@ let calledFunctions = new Set();
 Program.prototype.optimize = function() {
   calledFunctions = this.calledFunctions;
   let unusedFuncIndexes = [];
-  this.statements.forEach((s,i) => {
-      if(s.constructor === FunctionDeclaration && !this.calledFunctions.has(s.id)) {
-        unusedFuncIndexes.push(i);
-      }
-  })
+  this.statements.forEach((s, i) => {
+    if (
+      s.constructor === FunctionDeclaration &&
+      !this.calledFunctions.has(s.id)
+    ) {
+      unusedFuncIndexes.push(i);
+    }
+  });
   unusedFuncIndexes.forEach(i => this.statements.splice(i, 1));
   this.statements = this.statements.map(s => s.optimize());
   return this;
 };
 
 Return.prototype.optimize = function() {
-  if(this.returnValue)  this.returnValue = this.returnValue.optimize();
+  if (this.returnValue) this.returnValue = this.returnValue.optimize();
   return this;
 };
 
@@ -99,7 +102,7 @@ Conditional.prototype.optimize = function() {
   this.ifBlock = this.ifBlock.optimize();
   this.exps = this.exps.map(s => s.optimize());
   this.blocks = this.blocks.map(s => s.optimize());
-  if(this.elseBlock){
+  if (this.elseBlock) {
     this.elseBlock = this.elseBlock.optimize();
   }
   return this;
@@ -148,11 +151,14 @@ ClassDeclaration.prototype.optimize = function() {
 
 ClassBlock.prototype.optimize = function() {
   let unusedFuncIndexes = [];
-  this.members.forEach((s,i) => {
-      if(s.constructor === FunctionDeclaration && !this.calledFunctions.has(s.id)) {
-        unusedFuncIndexes.push(i);
-      }
-  })
+  this.members.forEach((s, i) => {
+    if (
+      s.constructor === FunctionDeclaration &&
+      !this.calledFunctions.has(s.id)
+    ) {
+      unusedFuncIndexes.push(i);
+    }
+  });
   unusedFuncIndexes.forEach(i => this.members.splice(i, 1));
   this.members = this.members.map(s => s.optimize());
   return this;
@@ -165,7 +171,7 @@ Constructor.prototype.optimize = function() {
 };
 
 FunctionDeclaration.prototype.optimize = function() {
-  if(this.block){
+  if (this.block) {
     this.block = this.block.optimize();
   }
   this.params = this.params.map(s => s.optimize());
@@ -173,7 +179,7 @@ FunctionDeclaration.prototype.optimize = function() {
 };
 
 VariableDeclaration.prototype.optimize = function() {
-  if(this.expression) {
+  if (this.expression) {
     this.expression = this.expression.optimize();
   }
   return this;
@@ -185,12 +191,14 @@ Parameter.prototype.optimize = function() {
 
 Block.prototype.optimize = function() {
   let lastIndex = this.statements.length;
-  for(let i = 0; i < this.statements.length; i++){
-   if(this.statements[i].constructor === Break ||
-    this.statements[i].constructor === Return){
-     lastIndex = i;
-     break;
-   }
+  for (let i = 0; i < this.statements.length; i++) {
+    if (
+      this.statements[i].constructor === Break ||
+      this.statements[i].constructor === Return
+    ) {
+      lastIndex = i;
+      break;
+    }
   }
   this.statements.splice(lastIndex + 1);
   this.statements = this.statements.map(s => s.optimize());
@@ -219,23 +227,28 @@ LambdaExp.prototype.optimize = function() {
 BinaryExp.prototype.optimize = function() {
   this.left = this.left.optimize();
   this.right = this.right.optimize();
-  if (makeOp(this.operator) === '+' && isZero(this.right)) return this.left;
-  if (makeOp(this.operator) === '+' && isZero(this.left)) return this.right;
-  if (makeOp(this.operator) === '*' && isZero(this.right)) return new NumberLiteral(0);
-  if (makeOp(this.operator) === '*' && isZero(this.left)) return new NumberLiteral(0);
-  if (makeOp(this.operator) === '*' && isOne(this.right)) return this.left;
-  if (makeOp(this.operator) === '*' && isOne(this.left)) return this.right;
-  if (makeOp(this.operator) === '**' && isOne(this.left)) return new NumberLiteral(1);
-  if (makeOp(this.operator) === '**' && isOne(this.right)) return this.left;
-  if (makeOp(this.operator) === '**' && isZero(this.right)) return new NumberLiteral(1);
-  if (makeOp(this.operator) === '**' && isZero(this.left)) return new NumberLiteral(0);
+  if (makeOp(this.operator) === "+" && isZero(this.right)) return this.left;
+  if (makeOp(this.operator) === "+" && isZero(this.left)) return this.right;
+  if (makeOp(this.operator) === "*" && isZero(this.right))
+    return new NumberLiteral(0);
+  if (makeOp(this.operator) === "*" && isZero(this.left))
+    return new NumberLiteral(0);
+  if (makeOp(this.operator) === "*" && isOne(this.right)) return this.left;
+  if (makeOp(this.operator) === "*" && isOne(this.left)) return this.right;
+  if (makeOp(this.operator) === "**" && isOne(this.left))
+    return new NumberLiteral(1);
+  if (makeOp(this.operator) === "**" && isOne(this.right)) return this.left;
+  if (makeOp(this.operator) === "**" && isZero(this.right))
+    return new NumberLiteral(1);
+  if (makeOp(this.operator) === "**" && isZero(this.left))
+    return new NumberLiteral(0);
   if (bothNumberLiterals(this)) {
     const [x, y] = [this.left.value, this.right.value];
-    if (makeOp(this.operator) === '+') return new NumberLiteral(x + y);
-    if (makeOp(this.operator) === '*') return new NumberLiteral(x * y);
-    if (makeOp(this.operator) === '/') return new NumberLiteral(x / y);
-    if (makeOp(this.operator) === '**') return new NumberLiteral(x ** y);
-    if (makeOp(this.operator) === '%') return new NumberLiteral(x % y);
+    if (makeOp(this.operator) === "+") return new NumberLiteral(x + y);
+    if (makeOp(this.operator) === "*") return new NumberLiteral(x * y);
+    if (makeOp(this.operator) === "/") return new NumberLiteral(x / y);
+    if (makeOp(this.operator) === "**") return new NumberLiteral(x ** y);
+    if (makeOp(this.operator) === "%") return new NumberLiteral(x % y);
   }
   return this;
 };

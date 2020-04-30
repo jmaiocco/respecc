@@ -32,7 +32,7 @@ const {
   StringLiteral,
   BooleanLiteral,
   NullLiteral,
-  IdExp,
+  IdExp
 } = require("../ast");
 const {
   NumberType,
@@ -41,7 +41,7 @@ const {
   BooleanType,
   AnyType,
   ObjectType,
-  standardFunctions,
+  standardFunctions
 } = require("../semantics/builtins");
 
 const INITIAL_SCORE = 50;
@@ -68,7 +68,7 @@ let politeOps = {
   times: "*",
   "divided by": "/",
   "modded with": "%",
-  "raised to the power of": "**",
+  "raised to the power of": "**"
 };
 
 function makeOp(op) {
@@ -127,35 +127,38 @@ class Penalty {
   }
 }
 
-const NumbersAreStrings = new Penalty([0.5, -1, -1, -1, -1], (obj) => {
+const NumbersAreStrings = new Penalty([0.5, -1, -1, -1, -1], obj => {
   return `"${obj.value}"`;
 });
 
-const NumbersAreAdjusted = new Penalty([0.15, 0.1, 0.05, -1, -1], (obj) => {
+const NumbersAreAdjusted = new Penalty([0.15, 0.1, 0.05, -1, -1], obj => {
   return `${obj.value + 1 + Math.floor(Math.random() * 10)}`;
 });
 
-const BooleansAreFlipped = new Penalty([0.25, 0.2, 0.1, -1, -1], (obj) => {
+const BooleansAreFlipped = new Penalty([0.25, 0.2, 0.1, -1, -1], obj => {
   return `${obj.value === true ? false : true}`;
 });
 
-const StringsAreReversed = new Penalty([0.2, 0.15, 0.05, -1, -1], (obj) => {
-  return obj.value.split("").reverse().join("");
+const StringsAreReversed = new Penalty([0.2, 0.15, 0.05, -1, -1], obj => {
+  return obj.value
+    .split("")
+    .reverse()
+    .join("");
 });
 
-const ArraysAreReversed = new Penalty([0.15, 0.1, -1, -1, -1], (obj) => {
+const ArraysAreReversed = new Penalty([0.15, 0.1, -1, -1, -1], obj => {
   return obj.exps.reverse();
 });
-const KeyValuesAreShuffled = new Penalty([0.15, 0.05, 0.1, -1, -1], (obj) => {
+const KeyValuesAreShuffled = new Penalty([0.15, 0.05, 0.1, -1, -1], obj => {
   let shuffled = [];
-  let keys = [...obj.map((e) => e.key)];
-  let values = [...obj.map((e) => e.value)];
+  let keys = [...obj.map(e => e.key)];
+  let values = [...obj.map(e => e.value)];
   keys.sort(() => Math.random() - 0.5);
   values.sort(() => Math.random() - 0.5);
   keys.forEach((k, val) => (shuffled[val] = new DictEntry(k, values[val])));
   return shuffled;
 });
-const BinaryOpsAdjusted = new Penalty([0.4, 0.2, -1, -1, -1], (obj) => {
+const BinaryOpsAdjusted = new Penalty([0.4, 0.2, -1, -1, -1], obj => {
   if (makeOp(obj.operator) === "&&") return "||";
   else if (makeOp(obj.operator) === "||") return "&&";
   else if (makeOp(obj.operator) === "===") return "!==";
@@ -182,7 +185,7 @@ function enactPenalty(penalty) {
 const javaScriptId = (() => {
   let lastId = 0;
   const map = new Map();
-  return (v) => {
+  return v => {
     if (v.id === "this") {
       return "this";
     }
@@ -227,18 +230,18 @@ const builtin = {
   },
   absoluteVal([n]) {
     return `Math.abs(${n})`;
-  },
+  }
 };
 
-module.exports = function (exp, penaltyFactor = null) {
+module.exports = function(exp, penaltyFactor = null) {
   togglePenalties = penaltyFactor;
   respecc_score = INITIAL_SCORE;
   return beautify(exp.gen(), { indent_size: 2 });
 };
 
-Program.prototype.gen = function () {
+Program.prototype.gen = function() {
   setScore(this);
-  return this.statements.map((e) => e.gen()).join(";");
+  return this.statements.map(e => e.gen()).join(";");
 };
 
 let initializers = {
@@ -249,10 +252,10 @@ let initializers = {
   NumberType: "0",
   NullType: "null",
   BooleanType: "false",
-  null: "null",
+  null: "null"
 };
 
-VariableDeclaration.prototype.gen = function (inClass) {
+VariableDeclaration.prototype.gen = function(inClass) {
   setScore(this);
   let declarator = inClass ? "" : "let";
   let exp = "";
@@ -263,15 +266,15 @@ VariableDeclaration.prototype.gen = function (inClass) {
   }
   return `${declarator} ${javaScriptId(this)} ${exp ? `= ${exp}` : ""}`;
 };
-Return.prototype.gen = function () {
+Return.prototype.gen = function() {
   setScore(this);
   return `return ${this.returnValue ? this.returnValue.gen() : ""}`;
 };
-Break.prototype.gen = function () {
+Break.prototype.gen = function() {
   setScore(this);
   return "break";
 };
-Conditional.prototype.gen = function () {
+Conditional.prototype.gen = function() {
   setScore(this);
   return `if(${this.exp.gen()}) ${this.ifBlock.gen()}
     ${this.exps
@@ -281,18 +284,18 @@ Conditional.prototype.gen = function () {
       .join("")}
     ${this.elseBlock ? `else ${this.elseBlock.gen()}` : ""}`;
 };
-WhileLoop.prototype.gen = function () {
+WhileLoop.prototype.gen = function() {
   setScore(this);
   return `while(${this.exp.gen()}) ${this.block.gen()}`;
 };
-ForLoop.prototype.gen = function () {
+ForLoop.prototype.gen = function() {
   setScore(this);
   return `for(${this.dec.gen()} ;${this.exp.gen()} ;${this.assignment.gen()}) ${this.block.gen()}`;
 };
-FunctionCall.prototype.gen = function () {
+FunctionCall.prototype.gen = function() {
   setScore(this);
   let prefix = this.id.constructor === MemberExp ? `${this.id.v.gen()} .` : "";
-  const args = this.args ? this.args.map((a) => a.gen()) : "";
+  const args = this.args ? this.args.map(a => a.gen()) : "";
   if (this.callee.builtin) {
     return `${prefix} ${builtin[this.callee.id](args)}`;
   }
@@ -303,49 +306,49 @@ FunctionCall.prototype.gen = function () {
     args.constructor === Array ? args.join(",") : ""
   })`;
 };
-Assignment.prototype.gen = function () {
+Assignment.prototype.gen = function() {
   setScore(this);
   return `${this.variable.gen()} = ${this.exp.gen()}`;
 };
-ClassDeclaration.prototype.gen = function () {
+ClassDeclaration.prototype.gen = function() {
   setScore(this);
   return `class ${javaScriptId(this)} ${this.block.gen()}`;
 };
-ClassBlock.prototype.gen = function () {
+ClassBlock.prototype.gen = function() {
   setScore(this);
   let constructorsList = this.members.filter(
-    (e) => e.constructor === Constructor
+    e => e.constructor === Constructor
   );
   return `{${this.members
-    .filter((e) => e.constructor !== Constructor)
-    .map((e) => e.gen(true))
+    .filter(e => e.constructor !== Constructor)
+    .map(e => e.gen(true))
     .join(";")} ${generateAllConstructors(constructorsList)} }`;
 };
 
 function generateAllConstructors(constructorList) {
-  constructorList.forEach((c) => c.gen());
-  return `constructor(..._) {
+  constructorList.forEach(c => c.gen());
+  return `\nconstructor(..._) {
     ${constructorList.map(
-      (c) => `if(_.length === ${c.params.length}) ${c.block.gen(c.params)}`
+      c => `if(_.length === ${c.params.length}) ${c.block.gen(c.params)}`
     )}
   }`;
 }
 
-Constructor.prototype.gen = function () {
+Constructor.prototype.gen = function() {
   setScore(this);
 };
-FunctionDeclaration.prototype.gen = function (inClass) {
+FunctionDeclaration.prototype.gen = function(inClass) {
   let declarator = inClass ? "" : "function";
   setScore(this);
   return `${declarator} ${javaScriptId(this)}(${this.params
-    .map((p) => p.gen())
+    .map(p => p.gen())
     .join(",")}) ${this.block.gen()}`;
 };
-Parameter.prototype.gen = function () {
+Parameter.prototype.gen = function() {
   setScore(this);
   return javaScriptId(this);
 };
-Block.prototype.gen = function (params) {
+Block.prototype.gen = function(params) {
   setScore(this);
   let paramsDec = "";
   if (params) {
@@ -354,62 +357,60 @@ Block.prototype.gen = function (params) {
       .join(";")} ;\n`;
   }
 
-  return `{${paramsDec} ${this.statements.map((e) => e.gen()).join(";")}}`;
+  return `{${paramsDec} ${this.statements.map(e => e.gen()).join(";")}}`;
 };
-TernaryExp.prototype.gen = function () {
+TernaryExp.prototype.gen = function() {
   setScore(this);
   return `(${this.exp1.gen()}?${this.exp2.gen()}:${this.exp3.gen()})`;
 };
-LambdaBlock.prototype.gen = function () {
+LambdaBlock.prototype.gen = function() {
   setScore(this);
   return `((${this.params
-    .map((p) => p.gen())
+    .map(p => p.gen())
     .join(",")}) => ${this.block.gen()})`;
 };
-LambdaExp.prototype.gen = function () {
+LambdaExp.prototype.gen = function() {
   setScore(this);
-  return `((${this.params
-    .map((p) => p.gen())
-    .join(",")}) => ${this.exp.gen()})`;
+  return `((${this.params.map(p => p.gen()).join(",")}) => ${this.exp.gen()})`;
 };
-BinaryExp.prototype.gen = function () {
+BinaryExp.prototype.gen = function() {
   setScore(this);
   if (enactPenalty(BinaryOpsAdjusted)) {
     this.operator = BinaryOpsAdjusted.generatePenalty(this);
   }
   return `(${this.left.gen()} ${makeOp(this.operator)} ${this.right.gen()})`;
 };
-UnaryPrefix.prototype.gen = function () {
+UnaryPrefix.prototype.gen = function() {
   return `${makeOp(this.operator)} ${this.right.gen()}`;
 };
-UnaryPostfix.prototype.gen = function () {
+UnaryPostfix.prototype.gen = function() {
   return `${this.left.gen()} ${makeOp(this.operator)}`;
 };
-SubscriptExp.prototype.gen = function () {
+SubscriptExp.prototype.gen = function() {
   return `${this.composite.gen()}[${this.subscript.gen()}]`;
 };
-MemberExp.prototype.gen = function () {
+MemberExp.prototype.gen = function() {
   return `${this.v.gen()} . ${javaScriptId(this.member)}`;
 };
-ArrayLiteral.prototype.gen = function () {
-  this.exps = [...this.exps].map((e) => e.gen());
+ArrayLiteral.prototype.gen = function() {
+  this.exps = [...this.exps].map(e => e.gen());
   if (enactPenalty(ArraysAreReversed)) {
     this.exps = ArraysAreReversed.generatePenalty(this);
   }
   return `[${this.exps}]`;
 };
-DictionaryLiteral.prototype.gen = function () {
+DictionaryLiteral.prototype.gen = function() {
   if (enactPenalty(KeyValuesAreShuffled)) {
     this.keyValuePairs = KeyValuesAreShuffled.generatePenalty(
       this.keyValuePairs
     );
   }
-  return `{${this.keyValuePairs.map((e) => e.gen()).join(",")}}`;
+  return `{${this.keyValuePairs.map(e => e.gen()).join(",")}}`;
 };
-DictEntry.prototype.gen = function () {
+DictEntry.prototype.gen = function() {
   return `${this.key.gen()} : ${this.value.gen()}`;
 };
-NumberLiteral.prototype.gen = function () {
+NumberLiteral.prototype.gen = function() {
   if (enactPenalty(NumbersAreAdjusted)) {
     this.value = NumbersAreAdjusted.generatePenalty(this);
   }
@@ -418,21 +419,21 @@ NumberLiteral.prototype.gen = function () {
   }
   return this.value;
 };
-StringLiteral.prototype.gen = function () {
+StringLiteral.prototype.gen = function() {
   if (enactPenalty(StringsAreReversed)) {
     this.value = StringsAreReversed.generatePenalty(this);
   }
   return `"${this.value}"`;
 };
-BooleanLiteral.prototype.gen = function () {
+BooleanLiteral.prototype.gen = function() {
   if (enactPenalty(BooleansAreFlipped)) {
     this.value = BooleansAreFlipped.generatePenalty(this);
   }
   return this.value;
 };
-NullLiteral.prototype.gen = function () {
+NullLiteral.prototype.gen = function() {
   return "null";
 };
-IdExp.prototype.gen = function () {
+IdExp.prototype.gen = function() {
   return javaScriptId(this.ref);
 };
