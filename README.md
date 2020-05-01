@@ -13,7 +13,7 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 
 *Created by Luis Garcia, Timothy Herrmann, Joseph Maiocco, Kevin McInerney, Bennett Shingledecker, and Kevin Solis*.
 
-## List of Features
+## Features
 
 * Two syntax styles: Polite (longhand) vs Rude (shorthand), with the ability to mix and match different syntaxes at will.
 * Politeness rating system that gauges your relationship with the compiler and discourages users from coding too much with the rude syntax.
@@ -27,6 +27,24 @@ Although slightly more verbose than some modern languages, Respecc++ boasts an i
 * Option to seperate statements with newlines or semicolons, allowing multiple statements on a single line if desired.
 * More features on the way as development progresses!
 
+## Static Semantic Rules 
+* Identifiers must be declared before they are used. 
+* Identifiers cannot be redeclared within the same scope. 
+* break statements may only appear in loops. 
+* return statements may only appear in functions. 
+* Subscripted identifiers must refer to arrays or dictionaries.
+* Arrays can only be accessed with Number subscripts. 
+* Functions must be defined before they are called. 
+* Functions must return values of the same type with which they are defined. 
+* Arguments passed to a function must match the number, typing and ordering of the parameters of that function. 
+* Arguments passed to an instance of a class must match the number, typing and ordering of the parameters/fields of the class constructor. 
+
+## Code Optimizations
+* Optimizes binary numerical operations.
+* Optimizes variable assignments to self.
+* Code after return statement is not generated.
+* Code after break statement is not generated.
+* Functions that are not called are not generated.
 
 ## Example Programs
 
@@ -295,3 +313,183 @@ function IsEvenOrOdd(numericValue) {
 };
 IsEvenOrOdd(43)
 ```
+
+## Language Grammar Specification in Ohm
+```
+respecc {
+  Program      = br* greeting? br* Statement (br+ Statement)* br* farewell? br*
+  Statement    = Assignment
+               | Declaration
+               | Conditional
+               | Loop
+               | FuncCallStmt
+               | SimpleStmt
+  SimpleStmt   = "return" Exp? "."?                              -- return_impolite
+               | "Kindly return" Exp? "."?                       -- return_polite
+               | "break"                                         -- break_impolite
+               | "You deserve a break!"                          -- break_polite
+  Conditional  = "if" "(" Exp ")" Block
+                 (br* "else if" "(" Exp ")" Block)*
+                 (br* "else" Block)?                             -- if_impolite
+               | "Excuse me, if " Exp "," Block
+                 (br* "Otherwise, if " Exp "," Block)*
+                 (br* "Otherwise," Block)?                       -- if_polite
+  Loop         = "while" "(" Exp ")" Block                       -- while_impolite
+               | "for"  "(" (VarDec)? ";" Exp?
+                 ";" Assignment? ")" Block                       -- for_impolite
+               | "Excuse me, while " Exp "," Block               -- while_polite
+  FuncCallStmt = Var Args                                         -- call_impolite
+               | "Do me a favor and run " Var
+                 ("with" Args)? "."                              -- call_polite
+  FuncCallExp  = Var Args                                         -- call_impolite
+               | "the result of running" Var
+                 ("with" Args  )?                                -- call_polite
+  Assignment   = Var "=" Exp                                     -- impolite
+               | Increment
+               | "Please populate " Var "with " Exp "."          -- polite
+  Declaration  = VarDec | FuncDec | ClassDec
+  ClassDec     = "class" id ClassBlock                           -- impolite
+               | "Have you ever heard of a"  id "?" ClassBlock   -- polite
+  ClassBlock   = br* "{" br* ClassMember?
+                 (br+ ClassMember)* br* "}"                      -- impolite
+               | br* "Let's get classy..." br* ClassMember?
+                 (br+ ClassMember)* br* "Thank You."             -- polite
+  ClassMember  = Constructor | VarDec | FuncDec
+  Constructor  =  id  Params  Block                              -- impolite
+               |  "To construct a" id "by using" Params
+                  "," Block                                      -- polite
+  Type         =  "Array" "<"Type">"                             -- array
+               |  "Dict" "<"Type","Type">"                       -- dict
+               |  primtype
+               |  id
+  FuncDec      = "Favor" id Params
+                  (("as a "|":") (Type|"Void"))? Block           -- polite
+               | "function" id Params
+                  (("as a "|":") (Type|"Void"))? Block           -- impolite
+  VarDec       = "Please declare " id
+                 (("as a "|":") Type)? ("as " Exp)? "."?         -- polite
+               | "gimme" id (("as a "|":") Type)? ("=" Exp)?     -- impolite
+  Params       = "(" ListOf<Param, ","> ")"
+  Param        = id ((":"|"as a") Type)?
+  Args         = "(" ListOf<Exp, ","> ")"
+  Block        =  "could you..."  br* Statement?
+                  (br+ Statement)* br* "Thank You."              -- polite
+               |  "{"  br* Statement? (br+ Statement)* br* "}"   -- impolite
+  Exp          =  Exp1 "?" Exp1 ":" Exp                          -- ternary
+               |  Exp1
+  Exp1         =  Params "->" Block                              -- lambda_blk
+               |  Params "->" Exp2                               -- lambda_exp
+               |  Exp2
+  Exp2         =  Exp2 orop Exp3                                 -- binary
+               |  Exp3
+  Exp3         =  Exp3 andop Exp4                                -- binary
+               |  Exp4
+  Exp4         =  Exp5 relop Exp5                                -- binary
+               |  Exp5
+  Exp5         =  Exp5 addop Exp6                                -- binary
+               |  Exp6
+  Exp6         =  Exp6 mulop Exp7                                -- binary
+               |  Exp7
+  Exp7         =  prefixop Exp9                                  -- prefix
+               |  Exp8
+  Exp8         =  Exp9 expoop Exp8                               -- binary
+               |  "-" Exp9                                       -- negate
+               |  Exp9
+  Exp9         =  Literal
+               |  FuncCallExp
+               |  Var
+               |  "(" Exp ")"                                    -- parens
+  Increment    =  incop Var                                      -- prefix
+               |  Var incop                                      -- postfix
+  Var          =  Var "[" Exp "]"                                -- subscript
+               |  Var "." id                                     -- select
+               |  id                                             -- id
+  Literal      = ArrayLit
+               | DictLit
+               | numlit
+               | stringlit
+               | boollit
+               | nulllit
+  ArrayLit     = "[" ListOf<Exp, ",">"]"
+  DictLit      = "{" ListOf<DictEntry, ","> "}"
+  DictEntry    = Exp ":" Exp
+  keyword      =  ("Boolean" | "if" | "break" | "else" | "int"
+               |  "for" | "and" | "return" | "Number" | "plus"
+               |  "null" | "while" | "true" | "String"
+               |  "or" | "Yes" | "No" | "minus" | "times" | "not"
+               |  "Favor" | "function" | "gimme" | "respecc_score"
+               |  "class" | "Null" | "Void") ~idrest
+  id           = ~keyword letter idrest*
+  idrest       = letter | digit | "_"
+  boollit      = "Yes" | "No"
+  intlit       = digit+
+  numlit       = digit+ ("." digit+)?
+  nulllit      = "Null"
+  stringlit    = "\"" char* "\"" | "\'" char* "\'"
+  char         = ~"\\" ~"\"" ~"\n" any | escape
+  escape       = "\\" ("\\" | "\"" | "n" | "t" | codepoint)
+  codepoint    = "u{" hexDigit+ "}"
+  andop        = "&&" | "and"
+  orop         = "||" | "or"
+  mulop        = "*" | "/" | "%" | "times" | "divided by" | "modded with"
+  addop        = "+" | "-" | "plus" | "minus"
+  expoop       = "**" | "raised to the power of"
+  relop        = "<=" | "<" | ">=" | ">" | "==" | "!="  | "is less than or equal to"
+               | "is greater than or equal to" | "is less than" | "is greater than"
+               | "is equal to" | "is not equal to"
+  incop        =  "++" | "--"
+  prefixop     =  ~"--" "-" | "!" | "not"
+  primtype     =  "Boolean" | "Number" | "String"
+  space        := comment | " " | "\t" | "\r"
+  comment      = "/*" (~"*/" any)* "*/"
+               | "//" (~"\n" any)* ("\n")?
+               | "BTW..." (~"\n" any)* ("\n")?
+               | "By the way..." (~"\n" any)* ("\n")?
+  br           =  "\n"
+  greeting     = "Hello!" | "Hey!" | "Hi There!" | "Salutations!"
+  farewell     = "Bye Bye!" | "Farewell!" | "Godspeed!"
+}
+```
+
+## Casual Presentation Slides (4/30/2020)
+
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide1.png">
+</p>
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide2.png">
+</p>
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide3.png">
+</p>
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide4.png">
+</p>
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide5.png">
+</p>
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide6.png">
+</p>
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide7.png">
+</p>
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide8.png">
+</p>
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide9.png">
+</p>
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide10.png">
+</p>
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide11.png">
+</p>
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide12.png">
+</p>
+<p align="center">
+  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide13.png">
+</p>
+
