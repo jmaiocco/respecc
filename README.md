@@ -469,7 +469,7 @@ respecc {
   <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide4.png">
 </p>
 <p align="center">
-  <img width="480" height="240 src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide5.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide5.png">
 </p>
 <p align="center">
   <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide6.png">
