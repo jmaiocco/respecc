@@ -454,42 +454,45 @@ respecc {
 ## Casual Presentation Slides (4/30/2020)
 
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide1.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide0.png">
 </p>
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide2.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide1.png">
 </p>
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide3.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide2.png">
 </p>
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide4.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide3.png">
 </p>
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide5.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide4.png">
 </p>
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide6.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide5.png">
 </p>
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide7.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide6.png">
 </p>
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide8.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide7.png">
 </p>
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide9.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide8.png">
 </p>
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide10.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide9.png">
 </p>
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide11.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide10.png">
 </p>
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide12.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide11.png">
 </p>
 <p align="center">
-  <img width="400" height="120" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide13.png">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide12.png">
+</p>
+<p align="center">
+  <img width="480" height="240" src="https://github.com/jmaiocco/respecc/blob/master/general_images/slide13.png">
 </p>
 
